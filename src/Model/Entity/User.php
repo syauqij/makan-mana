@@ -16,7 +16,7 @@ use Cake\ORM\Entity;
  * @property int $phone_country_code
  * @property string $phone_no
  * @property string $role
- * @property string|null $photo_path
+ * @property string|null $profile_photo
  * @property string|null $active
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -40,7 +40,7 @@ class User extends Entity
         'phone_country_code' => true,
         'phone_no' => true,
         'role' => true,
-        'photo_path' => true,
+        'profile_photo' => true,
         'active' => true,
         'created' => true,
         'modified' => true,

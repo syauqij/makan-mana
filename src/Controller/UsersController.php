@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
+
 /**
  * Users Controller
  *
@@ -34,7 +37,6 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
-
         $this->set(compact('user'));
     }
 
@@ -48,6 +50,17 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+                $dir = new Folder(WWW_ROOT . 'img');
+                $attachment = $this->request->getData('attachment');
+                $fileName = $attachment->getClientFilename();
+                $targetPath = $dir->path . DS . $fileName ;
+
+                if($fileName) {
+                    $attachment->moveTo($targetPath);
+                    $user->photo_path = $fileName;  
+                }
+            
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 

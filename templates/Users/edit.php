@@ -29,7 +29,6 @@
                     echo $this->Form->control('phone_country_code');
                     echo $this->Form->control('phone_no');
                     echo $this->Form->control('role');
-                    echo $this->Form->control('photo_path');
                     echo $this->Form->control('active');
                 ?>
             </fieldset>

@@ -82,26 +82,16 @@ class UsersTable extends Table
             ->notEmptyString('password');
 
         $validator
-            ->integer('phone_country_code')
-            ->requirePresence('phone_country_code', 'create')
-            ->notEmptyString('phone_country_code');
-
-        $validator
-            ->scalar('phone_no')
-            ->maxLength('phone_no', 15)
-            ->requirePresence('phone_no', 'create')
-            ->notEmptyString('phone_no');
-
-        $validator
-            ->scalar('role')
-            ->maxLength('role', 20)
-            ->requirePresence('role', 'create')
-            ->notEmptyString('role');
-
-        $validator
-            ->scalar('photo_path')
-            ->maxLength('photo_path', 255)
-            ->allowEmptyString('photo_path');
+            ->scalar('profile_photo')
+            ->maxLength('profile_photo', 255)
+            ->allowEmptyString('profile_photo')
+            ->add('profile_photo', 'file', [
+                'rule' => ['mimeType', ['image/jpeg', 'image/png']],
+                'on' => function ($context) {
+                    return !empty($context['data']['profile_photo']);
+                },
+                'message' => 'Please upload jpeg or png file only',
+            ]);
 
         $validator
             ->scalar('active')

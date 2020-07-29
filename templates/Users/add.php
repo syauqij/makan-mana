@@ -13,19 +13,20 @@
     </aside>
     <div class="column-responsive column-80">
         <div class="users form content">
-            <?= $this->Form->create($user) ?>
+            <?= $this->Form->create($user, ['type' => 'file']) ?>
             <fieldset>
                 <legend><?= __('Add User') ?></legend>
                 <?php
                     echo $this->Form->control('first_name');
                     echo $this->Form->control('last_name');
-                    echo $this->Form->control('email');
+                    echo $this->Form->control('email', ['type' => 'email']);
                     echo $this->Form->control('password');
                     echo $this->Form->control('phone_country_code');
                     echo $this->Form->control('phone_no');
                     echo $this->Form->control('role');
-                    echo $this->Form->control('photo_path');
-                    echo $this->Form->control('active');
+                    echo $this->Form->control('attachment', [
+                        'type' => "file"
+                    ]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
