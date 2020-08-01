@@ -159,14 +159,12 @@
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Restaurant Id') ?></th>
                             <th><?= __('Cuisine Id') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($restaurant->restaurant_cuisines as $restaurantCuisines) : ?>
                         <tr>
-                            <td><?= h($restaurantCuisines->restaurant_id) ?></td>
-                            <td><?= h($restaurantCuisines->cuisine_id) ?></td>
+                            <td><?= h($restaurantCuisines->cuisine->name) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'RestaurantCuisines', 'action' => 'view', $restaurantCuisines->restaurant_id]) ?>
                                 <?= $this->Html->link(__('Edit'), ['controller' => 'RestaurantCuisines', 'action' => 'edit', $restaurantCuisines->restaurant_id]) ?>

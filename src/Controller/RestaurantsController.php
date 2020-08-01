@@ -35,11 +35,11 @@ class RestaurantsController extends AppController
      */
     public function view($id = null)
     {
-        $restaurant = $this->Restaurants->get($id, [
-            'contain' => ['Users', 'Menus', 'Reservations', 'RestaurantCuisines', 'RestaurantGalleries', 'RestaurantTables'],
-        ]);
 
-        pr($restaurant);
+
+        $restaurant = $this->Restaurants->get($id, [
+            'contain' => ['Users', 'Menus', 'Reservations', 'RestaurantCuisines', 'RestaurantCuisines.Cuisines', 'RestaurantGalleries', 'RestaurantTables', ],
+        ]);
 
         $this->set(compact('restaurant'));
     }
