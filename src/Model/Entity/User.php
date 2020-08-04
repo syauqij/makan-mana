@@ -39,7 +39,6 @@ class User extends Entity
         'last_name' => true,
         'email' => true,
         'password' => true,
-<<<<<<< HEAD
         'phone_country_code' => true,
         'phone_no' => true,
         'role' => true,
@@ -47,12 +46,8 @@ class User extends Entity
         'active' => true,
         'created' => true,
         'modified' => true,
-=======
-        'created' => true,
-        'modifief' => true,
         'reservations' => true,
         'restaurants' => true,
->>>>>>> menu
     ];
 
     /**
