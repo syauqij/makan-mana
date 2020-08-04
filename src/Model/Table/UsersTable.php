@@ -11,6 +11,9 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @property \App\Model\Table\ReservationsTable&\Cake\ORM\Association\HasMany $Reservations
+ * @property \App\Model\Table\RestaurantsTable&\Cake\ORM\Association\HasMany $Restaurants
+ *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -44,6 +47,13 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Reservations', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Restaurants', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -60,13 +70,13 @@ class UsersTable extends Table
 
         $validator
             ->scalar('first_name')
-            ->maxLength('first_name', 100)
+            ->maxLength('first_name', 150)
             ->requirePresence('first_name', 'create')
             ->notEmptyString('first_name');
 
         $validator
             ->scalar('last_name')
-            ->maxLength('last_name', 100)
+            ->maxLength('last_name', 150)
             ->requirePresence('last_name', 'create')
             ->notEmptyString('last_name');
 
@@ -77,7 +87,7 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 100)
+            ->maxLength('password', 255)
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
 

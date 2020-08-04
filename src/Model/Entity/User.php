@@ -19,7 +19,9 @@ use Cake\ORM\Entity;
  * @property string|null $profile_photo
  * @property string|null $active
  * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \App\Model\Entity\Reservation[] $reservations
+ * @property \App\Model\Entity\Restaurant[] $restaurants
  */
 class User extends Entity
 {
@@ -37,6 +39,7 @@ class User extends Entity
         'last_name' => true,
         'email' => true,
         'password' => true,
+<<<<<<< HEAD
         'phone_country_code' => true,
         'phone_no' => true,
         'role' => true,
@@ -44,6 +47,12 @@ class User extends Entity
         'active' => true,
         'created' => true,
         'modified' => true,
+=======
+        'created' => true,
+        'modifief' => true,
+        'reservations' => true,
+        'restaurants' => true,
+>>>>>>> menu
     ];
 
     /**
