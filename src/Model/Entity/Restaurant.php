@@ -14,15 +14,17 @@ use Cake\ORM\Entity;
  * @property int $user_id
  * @property string $address_line_1
  * @property string $address_line_2
+ * @property string $city
+ * @property string $state
  * @property string $contact_no
  * @property string|null $website
- * @property string $operating_hours
  * @property float $price_range
  * @property string $payment_options
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\BusinessHour[] $business_hours
  * @property \App\Model\Entity\Menu[] $menus
  * @property \App\Model\Entity\Reservation[] $reservations
  * @property \App\Model\Entity\RestaurantCuisine[] $restaurant_cuisines
@@ -46,14 +48,16 @@ class Restaurant extends Entity
         'user_id' => true,
         'address_line_1' => true,
         'address_line_2' => true,
+        'city' => true,
+        'state' => true,
         'contact_no' => true,
         'website' => true,
-        'operating_hours' => true,
         'price_range' => true,
         'payment_options' => true,
         'created' => true,
         'modified' => true,
         'user' => true,
+        'business_hours' => true,
         'menus' => true,
         'reservations' => true,
         'restaurant_cuisines' => true,

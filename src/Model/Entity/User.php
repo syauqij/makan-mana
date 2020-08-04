@@ -13,13 +13,11 @@ use Cake\ORM\Entity;
  * @property string $last_name
  * @property string $email
  * @property string $password
- * @property int $phone_country_code
- * @property string $phone_no
- * @property string $role
  * @property string|null $profile_photo
- * @property string|null $active
- * @property \Cake\I18n\FrozenTime|null $created
+ * @property bool $active
  * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime|null $modified
+ *
  * @property \App\Model\Entity\Reservation[] $reservations
  * @property \App\Model\Entity\Restaurant[] $restaurants
  */
@@ -39,9 +37,6 @@ class User extends Entity
         'last_name' => true,
         'email' => true,
         'password' => true,
-        'phone_country_code' => true,
-        'phone_no' => true,
-        'role' => true,
         'profile_photo' => true,
         'active' => true,
         'created' => true,

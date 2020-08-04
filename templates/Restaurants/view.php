@@ -23,12 +23,24 @@
                     <td><?= h($restaurant->name) ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('User') ?></th>
+                    <td><?= $restaurant->has('user') ? $this->Html->link($restaurant->user->id, ['controller' => 'Users', 'action' => 'view', $restaurant->user->id]) : '' ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Address Line 1') ?></th>
                     <td><?= h($restaurant->address_line_1) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Address Line 2') ?></th>
                     <td><?= h($restaurant->address_line_2) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('City') ?></th>
+                    <td><?= h($restaurant->city) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('State') ?></th>
+                    <td><?= h($restaurant->state) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Contact No') ?></th>
@@ -39,12 +51,8 @@
                     <td><?= h($restaurant->website) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($restaurant->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('User Id') ?></th>
-                    <td><?= $this->Number->format($restaurant->user_id) ?></td>
+                    <th><?= __('Payment Options') ?></th>
+                    <td><?= h($restaurant->payment_options) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Price Range') ?></th>
@@ -65,17 +73,36 @@
                     <?= $this->Text->autoParagraph(h($restaurant->description)); ?>
                 </blockquote>
             </div>
-            <div class="text">
-                <strong><?= __('Operating Hours') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($restaurant->operating_hours)); ?>
-                </blockquote>
-            </div>
-            <div class="text">
-                <strong><?= __('Payment Options') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($restaurant->payment_options)); ?>
-                </blockquote>
+            <div class="related">
+                <h4><?= __('Related Business Hours') ?></h4>
+                <?php if (!empty($restaurant->business_hours)) : ?>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th><?= __('Id') ?></th>
+                            <th><?= __('Restaurant Id') ?></th>
+                            <th><?= __('Day Of Week') ?></th>
+                            <th><?= __('Open Time') ?></th>
+                            <th><?= __('Close Time') ?></th>
+                            <th class="actions"><?= __('Actions') ?></th>
+                        </tr>
+                        <?php foreach ($restaurant->business_hours as $businessHours) : ?>
+                        <tr>
+                            <td><?= h($businessHours->id) ?></td>
+                            <td><?= h($businessHours->restaurant_id) ?></td>
+                            <td><?= h($businessHours->day_of_week) ?></td>
+                            <td><?= h($businessHours->open_time) ?></td>
+                            <td><?= h($businessHours->close_time) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link(__('View'), ['controller' => 'BusinessHours', 'action' => 'view', $businessHours->id]) ?>
+                                <?= $this->Html->link(__('Edit'), ['controller' => 'BusinessHours', 'action' => 'edit', $businessHours->id]) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'BusinessHours', 'action' => 'delete', $businessHours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $businessHours->id)]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+                <?php endif; ?>
             </div>
             <div class="related">
                 <h4><?= __('Related Menus') ?></h4>
@@ -159,12 +186,14 @@
                 <div class="table-responsive">
                     <table>
                         <tr>
+                            <th><?= __('Restaurant Id') ?></th>
                             <th><?= __('Cuisine Id') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($restaurant->restaurant_cuisines as $restaurantCuisines) : ?>
                         <tr>
-                            <td><?= h($restaurantCuisines->cuisine->name) ?></td>
+                            <td><?= h($restaurantCuisines->restaurant_id) ?></td>
+                            <td><?= h($restaurantCuisines->cuisine_id) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'RestaurantCuisines', 'action' => 'view', $restaurantCuisines->restaurant_id]) ?>
                                 <?= $this->Html->link(__('Edit'), ['controller' => 'RestaurantCuisines', 'action' => 'edit', $restaurantCuisines->restaurant_id]) ?>

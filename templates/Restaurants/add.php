@@ -19,12 +19,13 @@
                 <?php
                     echo $this->Form->control('name');
                     echo $this->Form->control('description');
-                    echo $this->Form->control('user_id');
+                    echo $this->Form->control('user_id', ['options' => $users]);
                     echo $this->Form->control('address_line_1');
                     echo $this->Form->control('address_line_2');
+                    echo $this->Form->control('city');
+                    echo $this->Form->control('state');
                     echo $this->Form->control('contact_no');
                     echo $this->Form->control('website');
-                    echo $this->Form->control('operating_hours');
                     echo $this->Form->control('price_range');
                     echo $this->Form->control('payment_options');
                 ?>

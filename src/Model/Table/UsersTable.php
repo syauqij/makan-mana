@@ -94,19 +94,11 @@ class UsersTable extends Table
         $validator
             ->scalar('profile_photo')
             ->maxLength('profile_photo', 255)
-            ->allowEmptyString('profile_photo')
-            ->add('profile_photo', 'file', [
-                'rule' => ['mimeType', ['image/jpeg', 'image/png']],
-                'on' => function ($context) {
-                    return !empty($context['data']['profile_photo']);
-                },
-                'message' => 'Please upload jpeg or png file only',
-            ]);
+            ->allowEmptyFile('profile_photo');
 
         $validator
-            ->scalar('active')
-            ->maxLength('active', 1)
-            ->allowEmptyString('active');
+            ->boolean('active')
+            ->notEmptyString('active');
 
         return $validator;
     }

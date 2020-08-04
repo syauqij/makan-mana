@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * Restaurants Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\BusinessHoursTable&\Cake\ORM\Association\HasMany $BusinessHours
  * @property \App\Model\Table\MenusTable&\Cake\ORM\Association\HasMany $Menus
  * @property \App\Model\Table\ReservationsTable&\Cake\ORM\Association\HasMany $Reservations
  * @property \App\Model\Table\RestaurantCuisinesTable&\Cake\ORM\Association\HasMany $RestaurantCuisines
@@ -55,6 +56,9 @@ class RestaurantsTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
+        ]);
+        $this->hasMany('BusinessHours', [
+            'foreignKey' => 'restaurant_id',
         ]);
         $this->hasMany('Menus', [
             'foreignKey' => 'restaurant_id',
@@ -109,6 +113,18 @@ class RestaurantsTable extends Table
             ->notEmptyString('address_line_2');
 
         $validator
+            ->scalar('city')
+            ->maxLength('city', 150)
+            ->requirePresence('city', 'create')
+            ->notEmptyString('city');
+
+        $validator
+            ->scalar('state')
+            ->maxLength('state', 150)
+            ->requirePresence('state', 'create')
+            ->notEmptyString('state');
+
+        $validator
             ->scalar('contact_no')
             ->maxLength('contact_no', 12)
             ->requirePresence('contact_no', 'create')
@@ -120,17 +136,13 @@ class RestaurantsTable extends Table
             ->allowEmptyString('website');
 
         $validator
-            ->scalar('operating_hours')
-            ->requirePresence('operating_hours', 'create')
-            ->notEmptyString('operating_hours');
-
-        $validator
             ->numeric('price_range')
             ->requirePresence('price_range', 'create')
             ->notEmptyString('price_range');
 
         $validator
             ->scalar('payment_options')
+            ->maxLength('payment_options', 100)
             ->requirePresence('payment_options', 'create')
             ->notEmptyString('payment_options');
 

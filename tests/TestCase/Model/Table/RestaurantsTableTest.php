@@ -27,6 +27,7 @@ class RestaurantsTableTest extends TestCase
     protected $fixtures = [
         'app.Restaurants',
         'app.Users',
+        'app.BusinessHours',
         'app.Menus',
         'app.Reservations',
         'app.RestaurantCuisines',

@@ -11,14 +11,16 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('user_id') ?></th>
                     <th><?= $this->Paginator->sort('address_line_1') ?></th>
                     <th><?= $this->Paginator->sort('address_line_2') ?></th>
+                    <th><?= $this->Paginator->sort('city') ?></th>
+                    <th><?= $this->Paginator->sort('state') ?></th>
                     <th><?= $this->Paginator->sort('contact_no') ?></th>
                     <th><?= $this->Paginator->sort('website') ?></th>
                     <th><?= $this->Paginator->sort('price_range') ?></th>
+                    <th><?= $this->Paginator->sort('payment_options') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -27,14 +29,16 @@
             <tbody>
                 <?php foreach ($restaurants as $restaurant): ?>
                 <tr>
-                    <td><?= $this->Number->format($restaurant->id) ?></td>
                     <td><?= h($restaurant->name) ?></td>
-                    <td><?= $this->Number->format($restaurant->user_id) ?></td>
+                    <td><?= $restaurant->has('user') ? $this->Html->link($restaurant->user->id, ['controller' => 'Users', 'action' => 'view', $restaurant->user->id]) : '' ?></td>
                     <td><?= h($restaurant->address_line_1) ?></td>
                     <td><?= h($restaurant->address_line_2) ?></td>
+                    <td><?= h($restaurant->city) ?></td>
+                    <td><?= h($restaurant->state) ?></td>
                     <td><?= h($restaurant->contact_no) ?></td>
                     <td><?= h($restaurant->website) ?></td>
                     <td><?= $this->Number->format($restaurant->price_range) ?></td>
+                    <td><?= h($restaurant->payment_options) ?></td>
                     <td><?= h($restaurant->created) ?></td>
                     <td><?= h($restaurant->modified) ?></td>
                     <td class="actions">

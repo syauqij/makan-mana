@@ -3,14 +3,25 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-/**
- * Restaurants Controller
- *
- * @property \App\Model\Table\RestaurantsTable $Restaurants
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
+use Cake\Event\EventInterface;
+
 class RestaurantsController extends AppController
-{
+{   
+    public function beforeFilter(EventInterface $event)
+    {
+        $this->viewBuilder()->setLayout('default_cake');
+    }
+
+    public function home()
+    {   
+        $this->viewBuilder()->setLayout('default');
+        
+        $featured = $this->Restaurants->find('all', [
+            'contain' => ['RestaurantCuisines', 'RestaurantCuisines.Cuisines'],
+        ]);
+        
+        $this->set(compact('featured'));
+    }
     /**
      * Index method
      *
@@ -35,10 +46,8 @@ class RestaurantsController extends AppController
      */
     public function view($id = null)
     {
-
-
         $restaurant = $this->Restaurants->get($id, [
-            'contain' => ['Users', 'Menus', 'Reservations', 'RestaurantCuisines', 'RestaurantCuisines.Cuisines', 'RestaurantGalleries', 'RestaurantTables', ],
+            'contain' => ['Users', 'BusinessHours', 'Menus', 'Reservations', 'RestaurantCuisines', 'RestaurantGalleries', 'RestaurantTables'],
         ]);
 
         $this->set(compact('restaurant'));
