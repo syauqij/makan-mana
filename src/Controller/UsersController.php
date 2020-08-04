@@ -51,7 +51,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
 
-                $dir = new Folder(WWW_ROOT . 'img');
+                $dir = new Folder(WWW_ROOT . 'img\profile-photos');
                 $attachment = $this->request->getData('attachment');
                 $fileName = $attachment->getClientFilename();
                 $targetPath = $dir->path . DS . $fileName ;
