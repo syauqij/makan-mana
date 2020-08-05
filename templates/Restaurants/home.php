@@ -70,16 +70,16 @@
                     <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/>
                     <text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->name) ?></text>
                 </svg>
-                <div class="card-img-overlay">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text">Last updated 3 mins ago</p>
-                </div>
                 <div class="card-body">
                     <h5 class="card-title"><?= h($restaurant->name) ?></h5>
                     <p class="card-text"><?= h($restaurant->city) ?></p>
                     <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">9 mins</small>
+                        <div class="btn-group">                      
+                            <?php foreach ($restaurant->restaurant_cuisines as $cusines) : ?>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"><?= h($cusines->cuisine->name) ?></button>
+                            <?php endforeach; ?>
+                        </div>
+                        <small class="text-muted">9 mins</small>
                     </div>
                 </div>
                 </div>

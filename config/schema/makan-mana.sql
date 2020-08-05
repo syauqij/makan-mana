@@ -16,6 +16,22 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`makan_mana` /*!40100 DEFAULT CHARACTER 
 
 USE `makan_mana`;
 
+/*Table structure for table `business_hours` */
+
+DROP TABLE IF EXISTS `business_hours`;
+
+CREATE TABLE `business_hours` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `restaurant_id` int(11) NOT NULL,
+  `day_of_week` int(1) NOT NULL,
+  `open_time` time DEFAULT NULL,
+  `close_time` time DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `hours_restaurant_key` (`restaurant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `business_hours` */
+
 /*Table structure for table `cuisines` */
 
 DROP TABLE IF EXISTS `cuisines`;
@@ -134,9 +150,7 @@ CREATE TABLE `menus` (
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `menu_category_key` (`menu_category_id`),
-  KEY `menu_restaurant_key` (`restaurant_id`),
-  CONSTRAINT `menu_category_key` FOREIGN KEY (`menu_category_id`) REFERENCES `menu_categories` (`id`),
-  CONSTRAINT `menu_restaurant_key` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
+  KEY `menu_restaurant_key` (`restaurant_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `menus` */
@@ -170,17 +184,17 @@ DROP TABLE IF EXISTS `restaurant_cuisines`;
 CREATE TABLE `restaurant_cuisines` (
   `restaurant_id` int(11) NOT NULL,
   `cuisine_id` int(11) NOT NULL,
+  PRIMARY KEY (`restaurant_id`,`cuisine_id`),
   KEY `cuisine_key` (`cuisine_id`),
-  KEY `restaurant_key` (`restaurant_id`),
-  CONSTRAINT `cuisine_key` FOREIGN KEY (`cuisine_id`) REFERENCES `cuisines` (`id`),
-  CONSTRAINT `restaurant_key` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
+  KEY `restaurant_key` (`restaurant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `restaurant_cuisines` */
 
 insert  into `restaurant_cuisines`(`restaurant_id`,`cuisine_id`) values 
 (1,3),
-(1,4);
+(1,4),
+(2,5);
 
 /*Table structure for table `restaurant_galleries` */
 
@@ -194,8 +208,7 @@ CREATE TABLE `restaurant_galleries` (
   `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `gallery_restaurant_key` (`restaurant_id`),
-  CONSTRAINT `gallery_restaurant_key` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
+  KEY `gallery_restaurant_key` (`restaurant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `restaurant_galleries` */
@@ -210,8 +223,7 @@ CREATE TABLE `restaurant_tables` (
   `total_seats` int(2) NOT NULL,
   `restaurant_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `table_restaurant_key` (`restaurant_id`),
-  CONSTRAINT `table_restaurant_key` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
+  KEY `table_restaurant_key` (`restaurant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `restaurant_tables` */
@@ -227,20 +239,24 @@ CREATE TABLE `restaurants` (
   `user_id` int(11) NOT NULL,
   `address_line_1` varchar(150) NOT NULL,
   `address_line_2` varchar(150) NOT NULL,
+  `city` varchar(150) NOT NULL,
+  `state` varchar(150) NOT NULL,
   `contact_no` varchar(12) NOT NULL,
   `website` varchar(150) DEFAULT NULL,
-  `operating_hours` text NOT NULL,
   `price_range` float(10,2) NOT NULL,
-  `payment_options` text NOT NULL,
+  `payment_options` varchar(100) NOT NULL,
   `created` timestamp NULL DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `restaurants` */
 
-insert  into `restaurants`(`id`,`name`,`description`,`user_id`,`address_line_1`,`address_line_2`,`contact_no`,`website`,`operating_hours`,`price_range`,`payment_options`,`created`,`modified`) values 
-(1,'Restaurant A','asdasdas\r\nasdasdasd',1,'','','',NULL,'',0.00,'',NULL,NULL);
+insert  into `restaurants`(`id`,`name`,`description`,`user_id`,`address_line_1`,`address_line_2`,`city`,`state`,`contact_no`,`website`,`price_range`,`payment_options`,`created`,`modified`) values 
+(1,'Muhamad Syauqi bin Jamil','asd',1,'130, Jalan Timur 4/2C,','Timur@Enstek','Nilai','Negeri Sembilan','0123123213','asd.com',123.00,'asd','2020-08-04 15:42:14','2020-08-04 07:42:14'),
+(2,'Restaurant B','sdasd',1,'','','Kuala Lumpur','','',NULL,0.00,'','2020-08-04 13:28:21',NULL),
+(3,'Restaurant A','asdasdas\r\nasdasdasd',1,'','','Petaling Jaya','','',NULL,0.00,'','2020-08-04 13:28:18',NULL),
+(4,'Muhamad Syauqi bin Jamil','asd',1,'130, Jalan Timur 4/2C,','Timur@Enstek','Nilai','Negeri Sembilan','0123123213','asd.com',123.00,'asd','2020-08-04 15:45:21','2020-08-04 07:45:21');
 
 /*Table structure for table `users` */
 
@@ -252,15 +268,18 @@ CREATE TABLE `users` (
   `last_name` varchar(150) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `profile_photo` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
   `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `modifief` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`first_name`,`last_name`,`email`,`password`,`created`,`modifief`) values 
-(1,'Syauqi','Jamil','syauqi.j@gmail.com','5','2020-08-01 09:15:20',NULL);
+insert  into `users`(`id`,`first_name`,`last_name`,`email`,`password`,`profile_photo`,`active`,`created`,`modified`) values 
+(1,'Syauqi','Jamil','syauqi.j@gmail.com','5',NULL,0,'2020-08-01 09:15:20',NULL),
+(2,'Muhamad Syauqi','Jamil','syauqi.j@outlook.com','asd123',NULL,0,'2020-08-04 11:22:35','2020-08-04 03:22:35');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

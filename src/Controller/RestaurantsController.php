@@ -25,10 +25,31 @@ class RestaurantsController extends AppController
     }
 
     public function search()
-    {
-        if ($this->request->is('get')) {
-            pr($this->request->getQuery());
+    {   
+        $params = $this->request->getQuery();
+        if ($params) {
+            $getRestaurants = $this->Restaurants->find('all')
+                ->where([
+                    'name like' => '%' . $params['key'] . '%'
+                ]);
+            if ($getRestaurants->isEmpty()) {
+                $this->Flash->alert('No result found. Please try again.', [
+                    'params' => [
+                        'type' => "warning"
+                    ]
+                ]);
+            }
+        } else {
+            $getRestaurants = $this->Restaurants;
         }
+
+        $this->paginate = [
+            'contain' => ['RestaurantCuisines.Cuisines'],
+        ];
+        
+        $restaurants = $this->paginate($getRestaurants);
+
+        $this->set(compact('restaurants')); 
     }
 
     public function index()

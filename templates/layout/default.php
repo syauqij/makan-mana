@@ -48,7 +48,9 @@
     </header>
 
     <main role="main">
-        <?= $this->Flash->render() ?>
+         <div class="container pt-3">
+            <?= $this->Flash->render() ?>
+        </div>
         <?= $this->fetch('content') ?> 
     </main>
 
