@@ -1,11 +1,62 @@
-<section class="jumbotron text-center">
+<?php 
+    use Cake\I18n\FrozenTime;
+    $now = FrozenTime::now();
+    $time = $now->modify('+2 hours')->i18nFormat('HH:mm');
+?>
+<section class="jumbotron">
     <div class="container">
-        <h1>Album example</h1>
-        <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-        <p>
-            <a href="#" class="btn btn-primary my-2">Main call to action</a>
-            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+        <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
+        <?php
+            //change default form template. 
+            $myTemplates = [
+                'inputContainer' =>'{{content}}',
+                'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
+                'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
+            ];
+            $this->Form->setTemplates($myTemplates); 
+            $options = ['1' => '1 People', '2' => '2 People'];
+        ?>
+        <p> 
+            <?= $this->Form->create(null, [
+                'type' => 'get',
+                'url' => [
+                    'controller' => 'Restaurants',
+                    'action' => 'search'
+                ]
+            ]); ?>
+            <div class="form-row">
+                <div class="col-sm-3">
+                    <?= $this->Form->date('date', [
+                        'value' => $now
+                    ]); ?>
+                </div>
+                <div class="col-sm-2">
+                    <?= $this->Form->time('time', [
+                        'min' => '10:00',
+                        'max' => '20:00',
+                        'value' => $time
+                    ]); ?>
+                </div>
+                
+                <div class="col-sm-2">
+                    <?= $this->Form->select('total_guests', $options, [
+                        'value' => '2'
+                        ]); ?>
+                </div>
+                <div class="col">
+                    <?= $this->Form->control('key', [
+                        'label' => false, 
+                        'value' => $this->request->getQuery('key'),
+                        'placeholder' => 'Search a Location, Restaurant, or Cuisine'
+                        ]
+                    ) ?>
+                </div>
+                <?= $this->Form->submit('Search', ['class' => 'btn btn-primary']) ?>
+            </div>  
         </p>
+        <p class="text-muted">Quick Search: Birthday, BBQ, Steamboat, Dating, Family, Rooftop </p>
+        <?= $this->Form->end() ?>
+                
     </div>
 </section>
 <div class="album py-5 bg-light">

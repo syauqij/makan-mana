@@ -5,11 +5,12 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 
+
 class RestaurantsController extends AppController
 {   
     public function beforeFilter(EventInterface $event)
     {
-        $this->viewBuilder()->setLayout('default_cake');
+        //$this->viewBuilder()->setLayout('default_cake');
     }
 
     public function home()
@@ -22,11 +23,14 @@ class RestaurantsController extends AppController
         
         $this->set(compact('featured'));
     }
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
+
+    public function search()
+    {
+        if ($this->request->is('get')) {
+            pr($this->request->getQuery());
+        }
+    }
+
     public function index()
     {
         $this->paginate = [
