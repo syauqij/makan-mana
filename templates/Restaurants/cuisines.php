@@ -67,13 +67,13 @@
                 <div class="card-body">
                     <h5 class="card-title"><?= h($restaurant->name) ?></h5>
                     <p class="card-text"><?= h($restaurant->city) ?></p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">                      
-                            <?php foreach ($restaurant->restaurant_cuisines as $key => $cusines) : ?>
-                                <button type="button" class="btn btn-sm btn-outline-secondary"><?= h($cusines->cuisine->name) ?></button>
+                    <div class="cuisines">                
+                            <?php foreach ($restaurant->cuisines as $cuisine) : ?>
+                                <?= $this->Html->link($cuisine->name, 
+                                    ['controller' => 'Restaurants', 'action' => 'cuisines', $cuisine->name],
+                                    ['class' => 'badge badge-secondary']
+                                );?>
                             <?php endforeach; ?>
-                        </div>
-                        <small class="text-muted">9 mins</small>
                     </div>
                 </div>
                 </div>

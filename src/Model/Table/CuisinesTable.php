@@ -43,8 +43,10 @@ class CuisinesTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('RestaurantCuisines', [
+        $this->belongsToMany('Restaurants', [
             'foreignKey' => 'cuisine_id',
+            'targetForeignKey' => 'restaurant_id',
+            'joinTable' => 'restaurant_cuisines',
         ]);
     }
 

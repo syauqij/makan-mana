@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
-
+use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\Collection\Collection;
 
 class RestaurantsController extends AppController
 {   
@@ -16,12 +17,24 @@ class RestaurantsController extends AppController
     public function home()
     {   
         $this->viewBuilder()->setLayout('default');
-        
-        $featured = $this->Restaurants->find('all', [
-            'contain' => ['RestaurantCuisines', 'RestaurantCuisines.Cuisines'],
+
+        $getCuisines = $this->getTableLocator()->get('Cuisines');
+
+        $results = $getCuisines->find('list', [
+            'limit' => 5
         ]);
         
-        $this->set(compact('featured'));
+        $cuisines = $results->toArray();
+        
+        $featured = $this->Restaurants->find('all', [
+            'contain' => [ 'Cuisines'],
+        ]);
+
+        $query = $this->Restaurants->find();
+        $query->select(['city', 'state'])
+            ->distinct(['state']);
+        
+        $this->set(compact('featured', 'cuisines', 'query'));
     }
 
     public function search()
@@ -32,6 +45,7 @@ class RestaurantsController extends AppController
                 ->where([
                     'name like' => '%' . $params['key'] . '%'
                 ]);
+
             if ($getRestaurants->isEmpty()) {
                 $this->Flash->alert('No result found. Please try again.', [
                     'params' => [
@@ -50,6 +64,21 @@ class RestaurantsController extends AppController
         $restaurants = $this->paginate($getRestaurants);
 
         $this->set(compact('restaurants')); 
+    }
+
+    public function cuisines()
+    {
+        // The 'pass' key is provided by CakePHP and contains all
+        // the passed URL path segments in the request.
+        $tags = $this->request->getParam('pass');
+
+        // Use the ArticlesTable to find tagged articles.
+        $restaurants = $this->Restaurants->find('byCuisines', [
+            'cuisines' => $tags,
+            'contain' => ['Cuisines'],
+        ]);
+
+        $this->set(compact('restaurants', 'tags')); 
     }
 
     public function index()

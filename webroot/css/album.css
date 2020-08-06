@@ -12,6 +12,8 @@
   padding-bottom: 3rem;
   margin-bottom: 0;
   background-color: #fff;
+  background-image: url("../img/jumbotron_bg.jpg");
+  background-size: cover;
 }
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
@@ -30,6 +32,7 @@
 
 .jumbotron h1 {
   font-weight: 300;
+  color: white;
 }
 
 .jumbotron .container {
@@ -45,11 +48,15 @@ footer p {
   margin-bottom: .25rem;
 }
 
-        .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        }
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.featured .slick-slide {
+  padding: 5px;
+}

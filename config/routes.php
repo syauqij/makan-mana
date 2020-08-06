@@ -63,11 +63,11 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * to use (in this case, templates/Pages/home.php)...
      */
     $builder->connect('/', ['controller' => 'Restaurants', 'action' => 'home']);
-
-    /*
-     * ...and connect the rest of 'Pages' controller's URLs.
-     */
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    $builder->scope('/restaurants', function (RouteBuilder $builder) {
+        $builder->connect('/cuisines/*', ['controller' => 'Restaurants', 'action' => 'cuisines']);
+    });
 
     /*
      * Connect catchall routes for all controllers.

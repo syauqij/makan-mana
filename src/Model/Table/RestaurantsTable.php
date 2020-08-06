@@ -8,33 +8,6 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-/**
- * Restaurants Model
- *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\BusinessHoursTable&\Cake\ORM\Association\HasMany $BusinessHours
- * @property \App\Model\Table\MenusTable&\Cake\ORM\Association\HasMany $Menus
- * @property \App\Model\Table\ReservationsTable&\Cake\ORM\Association\HasMany $Reservations
- * @property \App\Model\Table\RestaurantCuisinesTable&\Cake\ORM\Association\HasMany $RestaurantCuisines
- * @property \App\Model\Table\RestaurantGalleriesTable&\Cake\ORM\Association\HasMany $RestaurantGalleries
- * @property \App\Model\Table\RestaurantTablesTable&\Cake\ORM\Association\HasMany $RestaurantTables
- *
- * @method \App\Model\Entity\Restaurant newEmptyEntity()
- * @method \App\Model\Entity\Restaurant newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant get($primaryKey, $options = [])
- * @method \App\Model\Entity\Restaurant findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Restaurant patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Restaurant saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
- */
 class RestaurantsTable extends Table
 {
     /**
@@ -57,6 +30,12 @@ class RestaurantsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->belongsToMany('Cuisines', [
+            'joinTable' => 'restaurant_cuisines',
+            'dependent' => true
+        ]);
+
         $this->hasMany('BusinessHours', [
             'foreignKey' => 'restaurant_id',
         ]);
@@ -162,4 +141,27 @@ class RestaurantsTable extends Table
 
         return $rules;
     }
+
+    public function findByCuisines($query, $options)
+    {
+        $columns = [
+            'Restaurants.id', 'Restaurants.name',
+        ];
+
+        $query = $query
+            ->select($columns)
+            ->distinct($columns);
+
+        if (empty($options['cuisines'])) {
+            // If there are no tags provided, find articles that have no tags.
+            $query->leftJoinWith('Cuisines')
+                ->where(['Cuisines.name IS' => null]);
+        } else {
+            // Find articles that have one or more of the provided tags.
+            $query->innerJoinWith('Cuisines')
+                ->where(['Cuisines.name IN' => $options['cuisines']]);
+        }
+    
+        return $query->group(['Restaurants.id']);
+    }    
 }
