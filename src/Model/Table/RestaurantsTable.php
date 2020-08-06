@@ -7,6 +7,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Text;
+use Cake\Event\EventInterface;
 
 class RestaurantsTable extends Table
 {
@@ -142,6 +144,15 @@ class RestaurantsTable extends Table
         return $rules;
     }
 
+    public function beforeSave(EventInterface $event, $entity, $options)
+    {
+        if ($entity->isNew() && !$entity->slug) {
+            $sluggedName = Text::slug($entity->name);
+            // trim slug to maximum length defined in schema
+            $entity->slug = substr($sluggedName, 0, 191);
+        }
+    }    
+
     public function findByCuisines($query, $options)
     {
         $columns = [
@@ -153,11 +164,9 @@ class RestaurantsTable extends Table
             ->distinct($columns);
 
         if (empty($options['cuisines'])) {
-            // If there are no tags provided, find articles that have no tags.
             $query->leftJoinWith('Cuisines')
                 ->where(['Cuisines.name IS' => null]);
         } else {
-            // Find articles that have one or more of the provided tags.
             $query->innerJoinWith('Cuisines')
                 ->where(['Cuisines.name IN' => $options['cuisines']]);
         }

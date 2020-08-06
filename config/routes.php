@@ -65,8 +65,9 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/', ['controller' => 'Restaurants', 'action' => 'home']);
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
-    $builder->scope('/restaurants', function (RouteBuilder $builder) {
-        $builder->connect('/cuisines/*', ['controller' => 'Restaurants', 'action' => 'cuisines']);
+    $builder->scope('/', function (RouteBuilder $builder) {
+        $builder->connect('/s/*', ['controller' => 'Restaurants', 'action' => 'cuisines']);
+        $builder->connect('/r/*', ['controller' => 'Restaurants', 'action' => 'view']);
     });
 
     /*

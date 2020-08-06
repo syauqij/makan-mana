@@ -3,7 +3,7 @@
     $now = FrozenTime::now();
     $time = $now->modify('+2 hours')->i18nFormat('HH:mm');
 ?>
-<section class="jumbotron">
+<section class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
         <?php
@@ -73,15 +73,19 @@
                     <svg class="bd-placeholder-img card-img-top" width="100%" height="134" xmlns="http://www.w3.org/2000/svg" 
                         preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: thumbnail">
                         <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/>
-                        <text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->name) ?></text>
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->slug) ?></text>
                     </svg>
                     <div class="card-body">
-                        <h5 class="card-title"><?= h($restaurant->name) ?></h5>
+                        <h5 class="card-title">
+                            <?= $this->Html->link($restaurant->name, 
+                                ['action' => 'view', $restaurant->slug]
+                            );?>
+                        </h5>
                         <p class="card-text"><?= h($restaurant->city) ?></p>
                         <div class="cuisines">                
                                 <?php foreach ($restaurant->cuisines as $cuisine) : ?>
                                     <?= $this->Html->link($cuisine->name, 
-                                        ['controller' => 'Restaurants', 'action' => 'cuisines', $cuisine->name],
+                                        ['action' => 'cuisines', $cuisine->name],
                                         ['class' => 'badge badge-secondary']
                                     );?>
                                 <?php endforeach; ?>
@@ -101,8 +105,6 @@
         $('.featured').slick({
             infinite: false,
             speed: 300,
-            slidesToShow: 5,
-            slidesToScroll: 4,
             responsive: [
                 {
                 breakpoint: 1024,

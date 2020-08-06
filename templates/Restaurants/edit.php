@@ -24,7 +24,6 @@
                 <?php
                     echo $this->Form->control('name');
                     echo $this->Form->control('description');
-                    echo $this->Form->control('user_id', ['options' => $users]);
                     echo $this->Form->control('address_line_1');
                     echo $this->Form->control('address_line_2');
                     echo $this->Form->control('city');

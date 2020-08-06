@@ -12,7 +12,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- slick corousel css -->
-    <?= $this->Html->css('album.css') ?>
+    <?= $this->Html->css('home.css') ?>
     <?= $this->Html->css('slick/slick.css') ?>
     <?= $this->Html->css('slick/slick-theme.css') ?>
 </head>
