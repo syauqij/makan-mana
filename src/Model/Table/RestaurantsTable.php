@@ -147,30 +147,44 @@ class RestaurantsTable extends Table
     public function beforeSave(EventInterface $event, $entity, $options)
     {
         if ($entity->isNew() && !$entity->slug) {
+
             $sluggedName = Text::slug($entity->name);
             // trim slug to maximum length defined in schema
-            $entity->slug = substr($sluggedName, 0, 191);
+            $trimSlug = substr($sluggedName, 0, 191);
+            $total = $this->find()->where(['name' => $entity->name])->count();
+            $entity->slug = $trimSlug ."(". $total . ")";
         }
     }    
 
-    public function findByCuisines($query, $options)
-    {
-        $columns = [
-            'Restaurants.id', 'Restaurants.name',
-        ];
+    public function findCuisines($query, $options)
+    {   
+        $key = $options['term'];
 
-        $query = $query
-            ->select($columns)
-            ->distinct($columns);
-
-        if (empty($options['cuisines'])) {
+         if (empty($key)) {
             $query->leftJoinWith('Cuisines')
                 ->where(['Cuisines.name IS' => null]);
         } else {
             $query->innerJoinWith('Cuisines')
-                ->where(['Cuisines.name IN' => $options['cuisines']]);
+                ->where(['Cuisines.name IN' => $key]);
         }
     
         return $query->group(['Restaurants.id']);
     }    
+
+    public function findRestaurants($query, $options)
+    {   
+        $key = $options['term'];
+
+        $query->innerJoinWith('Cuisines')
+            ->where([
+                'OR' => [
+                    ['Restaurants.name LIKE' => '%' . $key . '%'],
+                    ['Restaurants.city LIKE' => '%' . $key . '%'],
+                    ['Restaurants.state LIKE' => '%' . $key . '%'],
+                    ['Cuisines.name LIKE' => '%' . $key . '%']
+                ],
+            ]);
+
+        return $query->group(['Restaurants.id']);
+    }
 }

@@ -1,9 +1,3 @@
-<?php 
-    use Cake\I18n\FrozenTime;
-    $now = FrozenTime::now();
-    $time = $now->modify('+2 hours')->i18nFormat('HH:mm');
-?>
-
 <div class="container">
 <?php
     //change default form template. 

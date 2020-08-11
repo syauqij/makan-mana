@@ -1,8 +1,3 @@
-<?php 
-    use Cake\I18n\FrozenTime;
-    $now = FrozenTime::now();
-    $time = $now->modify('+2 hours')->i18nFormat('HH:mm');
-?>
 <section class="jumbotron">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
@@ -24,27 +19,28 @@
             ]
         ]); ?>
         <div class="form-row">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <?= $this->Form->date('date', [
-                    'value' => $now
+                    'value' => $date,
+                    'min' => $date,
+                    'id' => 'date'
                 ]); ?>
             </div>
             <div class="col-sm-2">
-                <?= $this->Form->time('time', [
-                    'min' => '10:00',
-                    'max' => '20:00',
-                    'value' => $time
-                ]); ?>
+                <?= $this->Form->select('time', $timeOptions, [
+                    'value' => $time,
+                    'id' => "time"
+                    ]); ?>
             </div>
             <div class="col-sm-2">
-                <?= $this->Form->select('total_guests', $options, [
+                <?= $this->Form->select('guests', $options, [
                     'value' => '2'
                     ]); ?>
             </div>
-            <div class="col">
-                <?= $this->Form->control('key', [
+            <div class="col-sm-4">
+                <?= $this->Form->control('term', [
                     'label' => false, 
-                    'value' => $this->request->getQuery('key'),
+                    'value' => $this->request->getQuery('term'),
                     'placeholder' => 'Search a Location, Restaurant, or Cuisine'
                     ]
                 ) ?>
@@ -54,7 +50,7 @@
         <div class="quick-searches">
             <?php foreach ($cuisines as $key => $cuisine) : ?>
                 <?= $this->Html->link($cuisine, 
-                    ['controller' => 'Restaurants', 'action' => 'cuisines',$cuisine],
+                    ['controller' => 'Restaurants', 'action' => 'search',$cuisine],
                     ['class' => 'badge badge-secondary']
                 );?>
             <?php endforeach; ?>
@@ -64,37 +60,38 @@
     </div>
 </section>
 
-
 <div class="album py-3 bg-light">
     <div class="container">
         <div class="row featured">
-            <?php foreach ($featured as $restaurant): ?>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">                    
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->slug) ?></text></svg>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <?= $this->Html->link($restaurant->name, 
-                                    ['action' => 'view', $restaurant->slug]
-                                );?>
-                            </h5>
-                            <p class="cuisines card-text">
-                                <?= h($restaurant->city) ?>
-                                <?php foreach ($restaurant->cuisines as $cuisine) : ?>
-                                    <?= $this->Html->link($cuisine->name, 
-                                        ['action' => 'cuisines', $cuisine->name],
-                                        ['class' => 'badge badge-secondary']
-                                    );?>
-                                <?php endforeach; ?>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <button type="button" class="btn btn-block btn-primary">Book</button>
-                            
-                            </div>
-                        </div>
-                    </div>
+        <?php foreach ($featured as $restaurant): ?>
+        <div class="col-sm-4">
+        <div class="card mb-4 shadow-sm">                    
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->slug) ?></text></svg>
+            <div class="card-body">
+                <h5 class="card-title">
+                    <?= $this->Html->link($restaurant->name, 
+                        ['action' => 'view', $restaurant->slug]
+                    );?>
+                </h5>
+                <p class="cuisines card-text">
+                    <?= h($restaurant->city) ?>
+                    <?php $count = 0; ?>
+                    <?php foreach ($restaurant->cuisines as $cuisine) : ?>
+                        <?php if($count < 3) : ?>
+                        <?= $this->Html->link($cuisine->name, 
+                            ['action' => 'search', $cuisine->name],
+                            ['class' => 'badge badge-secondary']
+                        );?>
+                        <?php $count++; endif; ?>
+                    <?php endforeach; ?>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-block btn-primary">Book</button>
                 </div>
-            <?php endforeach; ?>   
+            </div>
+        </div>
+        </div>
+        <?php endforeach; ?>   
         </div>        
         <hr/>
     </div>
@@ -106,16 +103,9 @@
         $('.featured').slick({
             infinite: false,
             speed: 300,
+            slidesToShow: 4,
+            arrows: true,
             responsive: [
-                {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
-                }
-                },
                 {
                 breakpoint: 600,
                 settings: {
@@ -135,6 +125,15 @@
                 // instead of a settings object
             ]
         });
+    });
+
+    var selected = $("#DD1 option:selected").val();
+    //alert(selected);
+    $('#DD1 option').each(function() {
+        
+        if ($(this).val() == selected ) {
+            return false;           
+        }
     });
 </script>
 <?php $this->end(); ?>

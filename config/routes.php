@@ -48,7 +48,7 @@ $routes->setRouteClass(DashedRoute::class);
 $routes->scope('/', function (RouteBuilder $builder) {
     // Register scoped middleware for in scopes.
     $builder->registerMiddleware('csrf', new CsrfProtectionMiddleware([
-        'httpOnly' => true,
+        'httponly' => true,
     ]));
 
     /*
@@ -66,7 +66,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     $builder->scope('/', function (RouteBuilder $builder) {
-        $builder->connect('/s/*', ['controller' => 'Restaurants', 'action' => 'cuisines']);
+        $builder->connect('/s/*', ['controller' => 'Restaurants', 'action' => 'search']);
         $builder->connect('/r/*', ['controller' => 'Restaurants', 'action' => 'view']);
     });
 

@@ -5,7 +5,9 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\ORM\Query;
 use Cake\Collection\Collection;
+use Cake\I18n\FrozenTime;
 
 class RestaurantsController extends AppController
 {   
@@ -18,10 +20,21 @@ class RestaurantsController extends AppController
     {   
         $this->viewBuilder()->setLayout('default');
 
+        $timeOptions = $this->getTimeSelections();
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd');
+        $minutes = $now->i18nFormat('mm');
+
+        if ($minutes < 15) {
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else {
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
+        }
+       
         $getCuisines = $this->getTableLocator()->get('Cuisines');
 
         $results = $getCuisines->find('list', [
-            'limit' => 5
+            'limit' => 3
         ]);
         
         $cuisines = $results->toArray();
@@ -29,41 +42,62 @@ class RestaurantsController extends AppController
         $featured = $this->Restaurants->find('all', [
             'contain' => [ 'Cuisines'],
         ]);
-
-        $query = $this->Restaurants->find();
-        $query->select(['city', 'state'])
-            ->distinct(['state']);
         
-        $this->set(compact('featured', 'cuisines', 'query'));
+        $this->set(compact('featured', 'cuisines', 'date', 'time', 'timeOptions'));
     }
 
     public function search()
     {   
         $params = $this->request->getQuery();
-        if ($params) {
-            $getRestaurants = $this->Restaurants->find('all')
-                ->where([
-                    'name like' => '%' . $params['key'] . '%'
-                ]);
+        $cuisines = $this->request->getParam('pass');
 
-            if ($getRestaurants->isEmpty()) {
-                $this->Flash->alert('No result found. Please try again.', [
-                    'params' => [
-                        'type' => "warning"
-                    ]
-                ]);
-            }
+        $timeOptions = $this->getTimeSelections();
+        $now = FrozenTime::now();
+        $date = $today = $now->i18nFormat('yyyy-MM-dd');
+        $minutes = $now->i18nFormat('mm');
+
+        if ($minutes < 15) {
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
         } else {
-            $getRestaurants = $this->Restaurants;
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
         }
 
-        $this->paginate = [
-            'contain' => ['RestaurantCuisines.Cuisines'],
-        ];
-        
-        $restaurants = $this->paginate($getRestaurants);
+        if ($params) {
 
-        $this->set(compact('restaurants')); 
+            $date = $this->request->getQuery('date');
+            $time = $this->request->getQuery('time');
+            $guests = $this->request->getQuery('guests');
+
+            $selectedDate = new FrozenTime($date . $time);
+            $times = $this->getTimeslots($selectedDate);
+
+            $term = $params['term'];         
+            
+            $restaurants = $this->Restaurants->find('restaurants', [
+                'term' => $term,
+                'contain' => ['Cuisines', 'Reservations'],
+            ]);
+
+        } else if ($cuisines) {
+
+            $restaurants = $this->Restaurants->find('cuisines', [
+                'term' => $cuisines,
+                'contain' => ['Cuisines'],
+            ]);
+                
+        }else {
+            $restaurants = $this->Restaurants;
+        }
+        
+        if ($restaurants->isEmpty()) {
+            $this->Flash->alert('No result found. Please try again.', [
+                'params' => [
+                    'type' => "warning"
+                ]
+            ]);
+        }
+
+        $this->set(compact('restaurants', 'date', 'today', 'time', 'times', 'timeOptions')); 
     }
 
     public function cuisines()
@@ -74,7 +108,7 @@ class RestaurantsController extends AppController
 
         // Use the ArticlesTable to find tagged articles.
         $restaurants = $this->Restaurants->find('byCuisines', [
-            'cuisines' => $tags,
+            'term' => $tags,
             'contain' => ['Cuisines'],
         ]);
 
@@ -93,7 +127,11 @@ class RestaurantsController extends AppController
 
     public function view($slug)
     {   
-        $restaurant = $this->Restaurants->findBySlug($slug)->firstOrFail();
+        $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
+        $restaurant = $this->Restaurants->get($query['id'], [
+            'contain' => ['Cuisines'],
+        ]);
+
         $this->set(compact('restaurant'));
     }
 
@@ -145,4 +183,40 @@ class RestaurantsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    
+    public function getTimeSelections() {
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd');
+
+        $startTime = new FrozenTime($date . ' 00:00:00');
+        $endTime = new FrozenTime($date . ' 24:00:00');
+
+        while ($startTime < $endTime) {
+            $times[$startTime->i18nFormat('HH:mm')] = $startTime->i18nFormat('h:mm a');
+            $startTime = $startTime->modify('+30 minutes');
+        }
+
+        return $times;
+    }
+
+    public function getTimeslots($selectedDate) {
+        
+        $times = null;
+        $now = FrozenTime::now();
+        
+        if ($selectedDate > $now) {
+            $startTime = $selectedDate->modify('-30 minutes');            
+            $endTime = $selectedDate->modify('+45 minutes');
+    
+            while ($startTime < $endTime) {
+                if ($startTime > $now->modify('+15 minutes')) {
+                    $times[] = $startTime->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                }
+                $startTime = $startTime->modify('+15 minutes');
+            }    
+        }
+
+        return $times;
+    }    
+
 }
