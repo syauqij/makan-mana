@@ -18,6 +18,7 @@ class ReservationsFixture extends TestFixture
     // phpcs:disable
     public $fields = [
         'id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'uuid' => ['type' => 'char', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
         'user_id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'restaurant_id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'reserved_date' => ['type' => 'datetime', 'length' => null, 'precision' => null, 'null' => false, 'default' => null, 'comment' => ''],
@@ -48,17 +49,18 @@ class ReservationsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
+                'uuid' => '',
                 'user_id' => 1,
                 'restaurant_id' => 1,
-                'reserved_date' => '2020-08-13 08:53:14',
+                'reserved_date' => '2020-08-13 11:40:26',
                 'phone_no' => 'Lorem ipsu',
                 'occasion' => 'Lorem ipsum dolor sit amet',
                 'request' => 'Lorem ipsum dolor sit amet',
                 'total_guests' => 1,
                 'restaurant_table_id' => 1,
                 'status' => 'Lorem ipsum dolor sit amet',
-                'created' => 1597279994,
-                'modified' => '2020-08-13 08:53:14',
+                'created' => 1597290026,
+                'modified' => '2020-08-13 11:40:26',
             ],
         ];
         parent::init();

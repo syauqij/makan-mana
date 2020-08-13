@@ -79,6 +79,12 @@ class ReservationsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
+            ->scalar('uuid')
+            ->maxLength('uuid', 255)
+            ->requirePresence('uuid', 'create')
+            ->notEmptyString('uuid');
+
+        $validator
             ->dateTime('reserved_date')
             ->requirePresence('reserved_date', 'create')
             ->notEmptyDateTime('reserved_date');
@@ -123,20 +129,7 @@ class ReservationsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
         $rules->add($rules->existsIn(['restaurant_id'], 'Restaurants'), ['errorField' => 'restaurant_id']);
         $rules->add($rules->existsIn(['restaurant_table_id'], 'RestaurantTables'), ['errorField' => 'restaurant_table_id']);
-        
-        $rules->add($rules->isUnique(['reserved_date', 'restaurant_id']));
 
         return $rules;
     }
-
-    public function findReserved($query, $options) 
-    {   
-        $id = $options['params']['id'];
-        $date = $options['params']['date'];
-        return 
-            $query->where([
-                    'restaurant_id' => $id, 
-                    'reserved_date >=' => $date]
-        );
-    }       
 }

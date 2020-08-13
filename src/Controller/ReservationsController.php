@@ -5,6 +5,7 @@ namespace App\Controller;
 use Cake\Collection\Collection;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\I18n\FrozenTime;
+use Cake\Utility\Text;
 
 class ReservationsController extends AppController
 {
@@ -31,7 +32,7 @@ class ReservationsController extends AppController
     {   
         $restaurants = $this->getTableLocator()->get('Restaurants');
         $users = $this->getTableLocator()->get('Users');
-
+        
         $restaurant = $restaurants->get($id, [
             'contain' => [],
         ]);
@@ -47,9 +48,6 @@ class ReservationsController extends AppController
 
         $occasions = ['birthday' => 'Birthday', 'anniversary' => 'Anniversary'];
 
-        
-        //debug($restaurant);
-
         $this->set(compact('restaurant', 'date', 'time', 'guests', 'user', 'occasions'));
 
         $reservation = $this->Reservations->newEmptyEntity();
@@ -61,13 +59,27 @@ class ReservationsController extends AppController
             $reservation->user_id = $user_id;
             $reservation->total_guests = $guests;
             $reservation->reserved_date = $selectedDate;
+            $reservation->uuid = Text::uuid();
 
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The reservation could not be saved. Please, try again.'));
+
+            //dd($reservation->errors);
+            if($reservation->getErrors('reserved_date')) {
+                $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
+                    'params' => ['type' => "warning"]
+                ]);
+
+                return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
+                
+            }
+
+            $this->Flash->alert('The reservation could not be saved. Please, try again.', [
+                'params' => ['type' => "danger"]
+            ]);
         }
         //$users = $this->Reservations->Users->find('list', ['limit' => 200]);
         $restaurants = $this->Reservations->Restaurants->find('list', ['limit' => 200]);
@@ -75,11 +87,11 @@ class ReservationsController extends AppController
         $this->set(compact('reservation'));
     }
 
-    public function edit($id = null)
-    {
-        $reservation = $this->Reservations->get($id, [
-            'contain' => [],
-        ]);
+    public function edit($uuid = null)
+    {   
+
+        $reservation = $this->Reservations->find()->where(['uuid' => $uuid])->first();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             if ($this->Reservations->save($reservation)) {

@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * Reservation Entity
  *
  * @property int $id
+ * @property string $uuid
  * @property int $user_id
  * @property int $restaurant_id
  * @property \Cake\I18n\FrozenTime $reserved_date
@@ -38,6 +39,7 @@ class Reservation extends Entity
      * @var array
      */
     protected $_accessible = [
+        'uuid' => true,
         'user_id' => true,
         'restaurant_id' => true,
         'reserved_date' => true,

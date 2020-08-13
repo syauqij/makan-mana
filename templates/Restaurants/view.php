@@ -1,6 +1,7 @@
 
 <section class="jumbotron">
     <div class="container">
+	<?= $this->Flash->render() ?>
 
     </div>
 </section>
