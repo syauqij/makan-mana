@@ -60,3 +60,7 @@ footer p {
 .featured .slick-slide {
   padding: 5px;
 }
+
+.featured .slick-prev:before, .slick-next:before { 
+  color:red !important;
+}

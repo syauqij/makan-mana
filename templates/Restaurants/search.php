@@ -49,7 +49,7 @@
     <div class="container">
     <div class="row">
     <?php foreach ($restaurants as $restaurant): ?>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
         <div class="card mb-4 shadow-sm">                    
             <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em"><?= h($restaurant->slug) ?></text></svg>
             <div class="card-body">
@@ -59,10 +59,10 @@
                     );?>
                 </h5>
                 <p class="cuisines card-text">
-                    <?= h($restaurant->city) ?>
+                    <?= h($restaurant->city) ?>, <?=h($restaurant->state) ?><br/>
                     <?php $count = 0; ?>
                     <?php foreach ($restaurant->cuisines as $cuisine) : ?>
-                        <?php if($count < 3) : ?>
+                        <?php if($count < 5) : ?>
                         <?= $this->Html->link($cuisine->name, 
                             ['action' => 'search', $cuisine->name],
                             ['class' => 'badge badge-secondary']
@@ -70,10 +70,9 @@
                         <?php $count++; endif; ?>
                     <?php endforeach; ?>
                     <br/>
-                    <?php
-                    if ($times) {
-                        $timeslots = $times;
-                        foreach ($restaurant->reservations as $reserved){
+                    <?php if ($times) : ?>
+                    <?php $timeslots = $times;
+                        foreach ($restaurant->reservations as $reserved) {
                             $reservedTime = $reserved['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
                             
                             $key = array_search($reservedTime, $times);
@@ -81,19 +80,23 @@
                                 unset($timeslots[$key]);
                             }
                         }
-    
-                        foreach ($timeslots as $timeslot){
-                            echo $timeslot."<br/>";
-                        }
-                    } else {
-                        echo "No available time slots";
-                    }
-                   
                     ?>
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-block btn-primary">Book</button>
-                </div>
+                    
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <?php foreach ($timeslots as $key => $timeslot) : ?>
+                                <?= $this->Html->link($timeslot, [
+                                    'controller' => 'reservations', 'action' => 'add', 
+                                     $restaurant->id, 
+                                     '?' => ['total_guests' => 2, 'reserved_date' => $key]],
+                                    ['class' => 'btn btn-secondary']
+                                );  ?>
+                                
+                            <?php endforeach; ?>
+                        </div>
+                    
+                    <?php else: ?>
+                        <h4>No available time slots</h4>
+                    <?php endif;?>
             </div>
         </div>
         </div>

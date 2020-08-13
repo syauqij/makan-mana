@@ -14,7 +14,7 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('user_id') ?></th>
                     <th><?= $this->Paginator->sort('restaurant_id') ?></th>
-                    <th><?= $this->Paginator->sort('time') ?></th>
+                    <th><?= $this->Paginator->sort('reserved_date') ?></th>
                     <th><?= $this->Paginator->sort('total_guests') ?></th>
                     <th><?= $this->Paginator->sort('restaurant_table_id') ?></th>
                     <th><?= $this->Paginator->sort('status') ?></th>
@@ -29,7 +29,7 @@
                     <td><?= $this->Number->format($reservation->id) ?></td>
                     <td><?= $reservation->has('user') ? $this->Html->link($reservation->user->id, ['controller' => 'Users', 'action' => 'view', $reservation->user->id]) : '' ?></td>
                     <td><?= $reservation->has('restaurant') ? $this->Html->link($reservation->restaurant->name, ['controller' => 'Restaurants', 'action' => 'view', $reservation->restaurant->id]) : '' ?></td>
-                    <td><?= h($reservation->time) ?></td>
+                    <td><?= h($reservation->reserved_date) ?></td>
                     <td><?= $this->Number->format($reservation->total_guests) ?></td>
                     <td><?= $reservation->has('restaurant_table') ? $this->Html->link($reservation->restaurant_table->name, ['controller' => 'RestaurantTables', 'action' => 'view', $reservation->restaurant_table->id]) : '' ?></td>
                     <td><?= h($reservation->status) ?></td>

@@ -27,6 +27,8 @@ class RestaurantsController extends AppController
 
         if ($minutes < 15) {
             $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else if ($minutes > 45){
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
         } else {
             $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
         }
@@ -58,6 +60,8 @@ class RestaurantsController extends AppController
 
         if ($minutes < 15) {
             $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else if ($minutes > 45){
+            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
         } else {
             $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
         }
@@ -188,6 +192,7 @@ class RestaurantsController extends AppController
         $now = FrozenTime::now();
         $date = $now->i18nFormat('yyyy-MM-dd');
 
+        //to add startime condition based on time of day
         $startTime = new FrozenTime($date . ' 00:00:00');
         $endTime = new FrozenTime($date . ' 24:00:00');
 
@@ -210,7 +215,7 @@ class RestaurantsController extends AppController
     
             while ($startTime < $endTime) {
                 if ($startTime > $now->modify('+15 minutes')) {
-                    $times[] = $startTime->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                    $times[$startTime->i18nFormat('yyyy-MM-dd HH:mm:ss')] = $startTime->i18nFormat('h:mm a');
                 }
                 $startTime = $startTime->modify('+15 minutes');
             }    

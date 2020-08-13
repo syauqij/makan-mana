@@ -11,8 +11,10 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $user_id
  * @property int $restaurant_id
- * @property \Cake\I18n\FrozenTime|null $reserved_date
- * @property \Cake\I18n\FrozenTime|null $time
+ * @property \Cake\I18n\FrozenTime $reserved_date
+ * @property string $phone_no
+ * @property string|null $occasion
+ * @property string|null $request
  * @property int $total_guests
  * @property int|null $restaurant_table_id
  * @property string $status
@@ -39,6 +41,9 @@ class Reservation extends Entity
         'user_id' => true,
         'restaurant_id' => true,
         'reserved_date' => true,
+        'phone_no' => true,
+        'occasion' => true,
+        'request' => true,
         'total_guests' => true,
         'restaurant_table_id' => true,
         'status' => true,
