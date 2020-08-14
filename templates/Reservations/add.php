@@ -1,26 +1,31 @@
 <?php 
-        $myTemplates = [
-            'inputContainer' =>'{{content}}',
-            'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-            'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
-        ];
-        $this->Form->setTemplates($myTemplates); 
+    $myTemplates = [
+        'inputContainer' =>'{{content}}',
+        'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
+        'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
+    ];
+    $this->Form->setTemplates($myTemplates); 
 ?>
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
             <div class="col-md-5 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Your cart</span>
-                    <span class="badge badge-secondary badge-pill">3</span>
+                    <span class="text-muted">Important Dining Information</span>
+                    <span class="badge badge-secondary badge-pill">!</span>
                 </h4>
+                <div class="mb-2">
+                    We have a 15 minute grace period. Please call us if you are running later than 15 minutes after your reservation time.
+                </div>
+                <div>
+                    We may contact you about this reservation, so please ensure your email and phone number are up to date.
+                </div>
             </div>
 
-            
             <div class="col-md-7 order-md-1">
                 <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <h4 class="mb-1"><?= h($restaurant->name . $restaurant->name) ?></h4>
+                        <h4 class="mb-1"><?= h($restaurant->name) ?></h4>
                         
                         <div class="mb-1 text-muted">
                             Date:<?= h($date)?><br/>
@@ -57,7 +62,7 @@
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->select('occasion', $occasions, [
                             //'value' => '',
-                            'default' => 'Select Occasion (optional)'
+                            'empty' => 'Select Occasion (optional)'
                         ]); ?>
                     </div>
                     <div class="col-md-6 mb-2">

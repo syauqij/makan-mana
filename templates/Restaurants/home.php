@@ -74,7 +74,7 @@
                     );?>
                 </h5>
                 <p class="cuisines card-text">
-                    <?= h($restaurant->city) ?>
+                    <?= h($restaurant->city) ?>, <?=h($restaurant->state) ?><br/>
                     <?php $count = 0; ?>
                     <?php foreach ($restaurant->cuisines as $cuisine) : ?>
                         <?php if($count < 3) : ?>
@@ -85,9 +85,6 @@
                         <?php $count++; endif; ?>
                     <?php endforeach; ?>
                 </p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-block btn-primary">Book</button>
-                </div>
             </div>
         </div>
         </div>

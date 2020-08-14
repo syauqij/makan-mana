@@ -8,6 +8,7 @@ use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\ORM\Query;
 use Cake\Collection\Collection;
 use Cake\I18n\FrozenTime;
+use Cake\Utility\Text;
 
 class RestaurantsController extends AppController
 {   
@@ -117,10 +118,20 @@ class RestaurantsController extends AppController
 
     public function view($slug)
     {   
+        $now = FrozenTime::now();
+        $selectedDate = $now->modify('+1 hour 30 minutes');
         $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
-        $restaurant = $this->Restaurants->get($query['id'], [
-            'contain' => ['Cuisines'],
-        ]);
+        $restaurantId = $query['id'];
+
+        $restaurant = $this->Restaurants->find()
+            ->where(['id' => $restaurantId])
+            ->contain(['Cuisines']);
+        
+        $timeslots[] = $this->getTimeslots($selectedDate, $restaurantId);
+
+        $merge = (new Collection($restaurant))->insert('timeslots', $timeslots);
+
+        $restaurant = $merge->first();
 
         $this->set(compact('restaurant'));
     }

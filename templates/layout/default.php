@@ -16,7 +16,7 @@
     <?= $this->Html->css('slick/slick.css') ?>
     <?= $this->Html->css('slick/slick-theme.css') ?>
 </head>
-<body>
+<body data-spy="scroll" data-target="#navbar-example" data-offset="56">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container">

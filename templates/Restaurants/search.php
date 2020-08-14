@@ -71,15 +71,14 @@
                     <?php endforeach; ?>
                     <br/>
                     <?php if ($restaurant->timeslots) : ?>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
-                                <?= $this->Html->link($timeslot, [
-                                    'controller' => 'reservations', 'action' => 'add',
-                                     '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
-                                    ['class' => 'btn btn-secondary']
-                                );  ?>
-                                
-                            <?php endforeach; ?>
+                        <div class="timeslots">
+                        <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
+                            <?= $this->Html->link($timeslot, [
+                                'controller' => 'reservations', 'action' => 'add',
+                                    '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
+                                ['class' => 'btn btn-secondary btn-sm mb-2']
+                            );  ?>
+                        <?php endforeach; ?>
                         </div>
                     <?php else: ?>
                         <h4>No available time slots</h4>
