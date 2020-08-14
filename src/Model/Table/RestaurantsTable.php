@@ -9,6 +9,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Utility\Text;
 use Cake\Event\EventInterface;
+use Cake\I18n\FrozenTime;
 
 class RestaurantsTable extends Table
 {
@@ -171,17 +172,21 @@ class RestaurantsTable extends Table
         return $query->group(['Restaurants.id']);
     }    
 
-    public function findRestaurants($query, $options)
+    public function findSearch($query, $options)
     {   
-        $key = $options['term'];
+        $term = $options['params']['term'];
+        $date = $options['params']['date'];
+        $time = $options['params']['time'];
+
+        $selectedDate = new FrozenTime($date . $time);
 
         $query->innerJoinWith('Cuisines')
             ->where([
                 'OR' => [
-                    ['Restaurants.name LIKE' => '%' . $key . '%'],
-                    ['Restaurants.city LIKE' => '%' . $key . '%'],
-                    ['Restaurants.state LIKE' => '%' . $key . '%'],
-                    ['Cuisines.name LIKE' => '%' . $key . '%']
+                    ['Restaurants.name LIKE' => '%' . $term . '%'],
+                    ['Restaurants.city LIKE' => '%' . $term . '%'],
+                    ['Restaurants.state LIKE' => '%' . $term . '%'],
+                    ['Cuisines.name LIKE' => '%' . $term . '%']
                 ],
             ]);
 

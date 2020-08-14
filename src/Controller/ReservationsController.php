@@ -28,32 +28,39 @@ class ReservationsController extends AppController
         $this->set(compact('reservation'));
     }
 
-    public function add($id = null)
+    public function add()
     {   
-        $restaurants = $this->getTableLocator()->get('Restaurants');
-        $users = $this->getTableLocator()->get('Users');
-        
-        $restaurant = $restaurants->get($id, [
-            'contain' => [],
-        ]);
-        
-        $selectedDate = new FrozenTime($this->request->getQuery('reserved_date'));
+        $restaurant_id = $this->request->getQuery('restaurant_id');
+        $reserved_date = $this->request->getQuery('reserved_date');
+        $guests = $this->request->getQuery('total_guests');
+
+        $restaurants = $this->getTableLocator()->get('Restaurants');            
+        $restaurant = $restaurants->get($restaurant_id);
+
+        $reservation = $this->Reservations->find()
+            ->where(['restaurant_id' => $restaurant_id, 'reserved_date' => $reserved_date])
+            ->first();
+
+        if ($reservation) {
+            $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
+                'params' => ['type' => "warning"]
+            ]);
+            return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
+        }
+
+        $selectedDate = new FrozenTime($reserved_date);
         $date = $selectedDate->i18nFormat('dd/MM/yyyy');
         $time = $selectedDate->i18nFormat('h:mm a');
-        $guests = $this->request->getQuery('total_guests');
         
         //get logged in user details
+        $users = $this->getTableLocator()->get('Users');
         $user_id = 1;
         $user = $users->get($user_id);
 
-        $occasions = ['birthday' => 'Birthday', 'anniversary' => 'Anniversary'];
-
-        $this->set(compact('restaurant', 'date', 'time', 'guests', 'user', 'occasions'));
+        $occasions = ['birthday' => 'Birthday', 'anniversary' => 'Anniversary'];     
 
         $reservation = $this->Reservations->newEmptyEntity();
-
         if ($this->request->is('post')) {
-            
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             $reservation->restaurant_id = $restaurant->id;
             $reservation->user_id = $user_id;
@@ -67,24 +74,20 @@ class ReservationsController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
 
-            //dd($reservation->errors);
             if($reservation->getErrors('reserved_date')) {
                 $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                     'params' => ['type' => "warning"]
                 ]);
 
                 return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
-                
             }
 
             $this->Flash->alert('The reservation could not be saved. Please, try again.', [
                 'params' => ['type' => "danger"]
             ]);
         }
-        //$users = $this->Reservations->Users->find('list', ['limit' => 200]);
-        $restaurants = $this->Reservations->Restaurants->find('list', ['limit' => 200]);
-        //$restaurantTables = $this->Reservations->RestaurantTables->find('list', ['limit' => 200]);
-        $this->set(compact('reservation'));
+        
+        $this->set(compact('restaurant', 'date', 'time', 'guests', 'user', 'occasions', 'reservation'));
     }
 
     public function edit($uuid = null)

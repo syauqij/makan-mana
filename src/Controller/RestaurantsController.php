@@ -24,13 +24,14 @@ class RestaurantsController extends AppController
         $now = FrozenTime::now();
         $date = $now->i18nFormat('yyyy-MM-dd');
         $minutes = $now->i18nFormat('mm');
+        $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
         if ($minutes < 15) {
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
-        } else if ($minutes > 45){
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
+            $time = $clearMinutes->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else if ($minutes > 45) {
+            $time = $clearMinutes->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
         } else {
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
+            $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
         }
        
         $getCuisines = $this->getTableLocator()->get('Cuisines');
@@ -57,13 +58,14 @@ class RestaurantsController extends AppController
         $now = FrozenTime::now();
         $date = $today = $now->i18nFormat('yyyy-MM-dd');
         $minutes = $now->i18nFormat('mm');
+        $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
         if ($minutes < 15) {
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+30 minutes')->i18nFormat('HH:mm');
-        } else if ($minutes > 45){
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
+            $time = $clearMinutes->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else if ($minutes > 45) {
+            $time = $clearMinutes->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
         } else {
-            $time = $now->modify('-' . $minutes . 'minutes')->modify('+1 hour')->i18nFormat('HH:mm');
+            $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
         }
 
         if ($params) {
@@ -72,51 +74,35 @@ class RestaurantsController extends AppController
             $time = $this->request->getQuery('time');
             $guests = $this->request->getQuery('guests');
 
-            $selectedDate = new FrozenTime($date . $time);
-            $times = $this->getTimeslots($selectedDate);
-
-            $term = $params['term'];         
+            $selectedDate = new FrozenTime($date . $time); 
             
-            $restaurants = $this->Restaurants->find('restaurants', [
-                'term' => $term,
-                'contain' => ['Cuisines', 'Reservations'],
+            $restaurants = $this->Restaurants->find('search', [
+                'params' => $params,
+                'contain' => ['Cuisines'],
             ]);
 
         } else if ($cuisines) {
-
+            $selectedDate = new FrozenTime($date . $time);
             $restaurants = $this->Restaurants->find('cuisines', [
                 'term' => $cuisines,
                 'contain' => ['Cuisines'],
             ]);
-                
-        }else {
-            $restaurants = $this->Restaurants;
+        } else {
+            return $this->redirect(['action' => 'home']);
         }
-        
+               
         if ($restaurants->isEmpty()) {
             $this->Flash->alert('No result found. Please try again.', [
-                'params' => [
-                    'type' => "warning"
-                ]
+                'params' => ['type' => "warning"]
             ]);
+        } else {     
+            foreach ($restaurants as $restaurant) {
+                $timeslots[] = $this->getTimeslots($selectedDate, $restaurant->id);
+            }   
+            $restaurants = (new Collection($restaurants))->insert('timeslots', $timeslots);
         }
 
-        $this->set(compact('restaurants', 'date', 'today', 'time', 'times', 'timeOptions')); 
-    }
-
-    public function cuisines()
-    {
-        // The 'pass' key is provided by CakePHP and contains all
-        // the passed URL path segments in the request.
-        $tags = $this->request->getParam('pass');
-
-        // Use the ArticlesTable to find tagged articles.
-        $restaurants = $this->Restaurants->find('byCuisines', [
-            'term' => $tags,
-            'contain' => ['Cuisines'],
-        ]);
-
-        $this->set(compact('restaurants', 'tags')); 
+        $this->set(compact('restaurants', 'date', 'today', 'time', 'timeOptions')); 
     }
 
     public function index()
@@ -192,7 +178,7 @@ class RestaurantsController extends AppController
         $now = FrozenTime::now();
         $date = $now->i18nFormat('yyyy-MM-dd');
 
-        //to add startime condition based on time of day
+        //to add startime condition based on tim   
         $startTime = new FrozenTime($date . ' 00:00:00');
         $endTime = new FrozenTime($date . ' 24:00:00');
 
@@ -204,24 +190,39 @@ class RestaurantsController extends AppController
         return $times;
     }
 
-    public function getTimeslots($selectedDate) {
+    public function getTimeslots($selectedDate, $restaurantId) {
         
-        $times = null;
+        $timeslots = null;
         $now = FrozenTime::now();
-        
+
         if ($selectedDate > $now) {
-            $startTime = $selectedDate->modify('-30 minutes');            
+            
+            $startTime = $selectedDate->modify('-30 minutes');
             $endTime = $selectedDate->modify('+45 minutes');
     
             while ($startTime < $endTime) {
                 if ($startTime > $now->modify('+15 minutes')) {
-                    $times[$startTime->i18nFormat('yyyy-MM-dd HH:mm:ss')] = $startTime->i18nFormat('h:mm a');
+                    $timeslots[$startTime->i18nFormat('yyyy-MM-dd HH:mm:ss')] = $startTime->i18nFormat('yyyy-MM-dd HH:mm:ss');
                 }
                 $startTime = $startTime->modify('+15 minutes');
-            }    
+            }
+           
+            $reservations = $this->getTableLocator()->get('Reservations');
+            $getReservations = $reservations->find('reserved', [
+                'params' => ['restaurant_id' => $restaurantId, 'reserved_date' => $selectedDate],
+            ]);
+
+            foreach ($getReservations as $reservation) {
+                $reserved = $reservation['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                $key = array_search($reserved, $timeslots);
+
+                if (false !== $key) {
+                    unset($timeslots[$key]);
+                }
+            }            
         }
 
-        return $times;
+        return $timeslots;
     }    
 
 }
