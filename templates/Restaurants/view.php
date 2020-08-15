@@ -9,22 +9,24 @@
 </section>
 <div class="album py-3 bg-light">
 <div class="container">
-	<nav id="navbar-example" class="navbar navbar-light bg-light sticky-top col-md-8 pl-0">
-		<div class="col-6 text-truncate pl-0">
+	<nav id="navbar-example" class="navbar navbar-light bg-light sticky-top pl-0">
+		<div class="col-12 col-md-5 text-truncate pl-0">
 			<strong><?= h($restaurant->name)?></strong>
 		</div>
-		<ul class="nav nav-pills">
-		<li class="nav-item">
-			<a class="nav-link active" href="#about">About</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#photos">Photos</a>
-		</li>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#menu">Menu</a>
-		</li>
-		</ul>
+		<div class="col-12 col-md-7">
+			<ul class="nav nav-pills">
+				<li class="nav-item">
+					<a class="nav-link active" href="#about">About</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#photos">Photos</a>
+				</li>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#menu">Menu</a>
+				</li>
+			</ul>
+		</div>
 	</nav>
 	
 	<div class="row">
