@@ -62,12 +62,21 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, templates/Pages/home.php)...
      */
+    //$builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
+    /*
+     * ...and connect the rest of 'Pages' controller's URLs.  
+     */
+    //$builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    //update routes configuration
+    
     $builder->connect('/', ['controller' => 'Restaurants', 'action' => 'home']);
-    $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     $builder->scope('/', function (RouteBuilder $builder) {
         $builder->connect('/s/*', ['controller' => 'Restaurants', 'action' => 'search']);
         $builder->connect('/r/*', ['controller' => 'Restaurants', 'action' => 'view']);
+
     });
 
     /*
