@@ -15,6 +15,7 @@ class RestaurantsController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         //$this->viewBuilder()->setLayout('default_cake');
+        $this->Authentication->addUnauthenticatedActions(['home', 'view', 'search']);
     }
 
     public function home()
