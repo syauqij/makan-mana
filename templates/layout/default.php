@@ -34,15 +34,16 @@
         </li>
     </ul>
     <div class="btn-group">
-        <button type="button" class="btn btn-secondary">Sign In</button>
+        <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>
         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Hi, Syauqi
         </button>
+        <!--To add checking if user is logged in-->
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">My Profile</a>
-            <a class="dropdown-item" href="#">My Reservation</a>
+            <?= $this->Html->link('My Profile', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
+            <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'history'], ['class' => 'dropdown-item']);?>
             <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log Out</a>
+                <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
             </div>
         </div>
     </div>

@@ -153,7 +153,11 @@ class RestaurantsTable extends Table
             // trim slug to maximum length defined in schema
             $trimSlug = substr($sluggedName, 0, 191);
             $total = $this->find()->where(['name' => $entity->name])->count();
-            $entity->slug = $trimSlug ."(". $total . ")";
+            if ($total > 0) {
+                $entity->slug = $trimSlug ."(". $total . ")";
+            } else {
+                $entity->slug = $trimSlug;
+            }
         }
     }    
 
