@@ -13,7 +13,7 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->addUnauthenticatedActions(['login', 'add']);
+        $this->Authentication->addUnauthenticatedActions(['login', 'delete', 'register']);
     }
 
     public function login()
@@ -24,12 +24,13 @@ class UsersController extends AppController
         if ($result->isValid()) {
             // redirect to /articles after login success
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Articles',
+                'controller' => 'Reservations',
                 'action' => 'index',
             ]);
     
             return $this->redirect($redirect);
         }
+
         // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error(__('Invalid username or password'));
@@ -61,7 +62,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    public function add()
+    public function register()
     {
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {

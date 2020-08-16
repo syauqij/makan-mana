@@ -115,16 +115,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "4.1.2",
+            "version": "4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "94ab7ac1b1e82a48bfec6c01b8ce603b01cb76a0"
+                "reference": "2c0273a37023044b96a4d6471092f48f51225f8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/94ab7ac1b1e82a48bfec6c01b8ce603b01cb76a0",
-                "reference": "94ab7ac1b1e82a48bfec6c01b8ce603b01cb76a0",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/2c0273a37023044b96a4d6471092f48f51225f8d",
+                "reference": "2c0273a37023044b96a4d6471092f48f51225f8d",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +208,7 @@
                 "rapid-development",
                 "validation"
             ],
-            "time": "2020-08-09T01:12:00+00:00"
+            "time": "2020-08-15T23:29:20+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -2207,16 +2207,16 @@
         },
         {
             "name": "cakephp/debug_kit",
-            "version": "4.3.1",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/debug_kit.git",
-                "reference": "6ca239b0ec403a4b0632e3a294a1e2b39ba5c57c"
+                "reference": "98eba199a847ddaae7f2fcfcb0f4df873fa71adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/debug_kit/zipball/6ca239b0ec403a4b0632e3a294a1e2b39ba5c57c",
-                "reference": "6ca239b0ec403a4b0632e3a294a1e2b39ba5c57c",
+                "url": "https://api.github.com/repos/cakephp/debug_kit/zipball/98eba199a847ddaae7f2fcfcb0f4df873fa71adf",
+                "reference": "98eba199a847ddaae7f2fcfcb0f4df873fa71adf",
                 "shasum": ""
             },
             "require": {
@@ -2263,7 +2263,7 @@
                 "debug",
                 "kit"
             ],
-            "time": "2020-07-29T15:31:40+00:00"
+            "time": "2020-08-11T20:21:51+00:00"
         },
         {
             "name": "cakephp/twig-view",
@@ -3257,16 +3257,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "3170448f5769fe19f456173d833734e0ff1b84df"
+                "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/3170448f5769fe19f456173d833734e0ff1b84df",
-                "reference": "3170448f5769fe19f456173d833734e0ff1b84df",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d870572532cd70bc3fab58f2e23ad423c8404c44",
+                "reference": "d870572532cd70bc3fab58f2e23ad423c8404c44",
                 "shasum": ""
             },
             "require": {
@@ -3305,7 +3305,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2020-07-20T20:05:34+00:00"
+            "time": "2020-08-15T11:14:08+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -3714,6 +3714,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
@@ -4498,16 +4499,16 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "ff2aa5420bfbc296cf6a0bc785fa5b35736de7c1"
+                "reference": "3d5eb71705adfa34bd34b993400622932b2f62fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/ff2aa5420bfbc296cf6a0bc785fa5b35736de7c1",
-                "reference": "ff2aa5420bfbc296cf6a0bc785fa5b35736de7c1",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/3d5eb71705adfa34bd34b993400622932b2f62fd",
+                "reference": "3d5eb71705adfa34bd34b993400622932b2f62fd",
                 "shasum": ""
             },
             "require": {
@@ -4553,7 +4554,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-30T19:05:18+00:00"
+            "time": "2020-08-13T09:07:59+00:00"
         },
         {
             "name": "seld/phar-utils",
