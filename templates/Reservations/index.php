@@ -36,9 +36,9 @@
                     <td><?= h($reservation->created) ?></td>
                     <td><?= h($reservation->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $reservation->uuid]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $reservation->uuid]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $reservation->uuid], ['confirm' => __('Are you sure you want to delete # {0}?', $reservation->id)]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $reservation->id]) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $reservation->id]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $reservation->id], ['confirm' => __('Are you sure you want to delete # {0}?', $reservation->id)]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

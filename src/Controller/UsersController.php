@@ -13,19 +13,20 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->addUnauthenticatedActions(['login', 'delete', 'register']);
+        $this->Authentication->addUnauthenticatedActions(['login', 'register']);
+        $this->Authorization->skipAuthorization('login', 'logout', 'register');
     }
 
     public function login()
-    {
+    {   
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             // redirect to /articles after login success
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Reservations',
-                'action' => 'index',
+                'controller' => 'Users',
+                'action' => 'profile',
             ]);
     
             return $this->redirect($redirect);
@@ -38,32 +39,36 @@ class UsersController extends AppController
     }
 
     public function logout()
-    {
+    {   
         $result = $this->Authentication->getResult();
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             $this->Authentication->logout();
-            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            return $this->redirect(['controller' => 'Restaurants', 'action' => 'home']);
         }
     }    
     
     public function index()
-    {
+    {   
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
     }
 
     public function view($id = null)
-    {
+    {   
         $user = $this->Users->get($id, [
             'contain' => [],
         ]);
+
+        $this->Authorization->authorize($user);
         $this->set(compact('user'));
     }
 
     public function register()
-    {
+    {   
+        $this->viewBuilder()->setLayout('default_cake');
+
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());

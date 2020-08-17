@@ -52,6 +52,8 @@ class AppController extends Controller
 
         // Check authentication result and lock your site
         $this->loadComponent('Authentication.Authentication');
+
+        $this->loadComponent('Authorization.Authorization');
     }
 
     public function beforeFilter(\Cake\Event\EventInterface $event)
@@ -60,5 +62,6 @@ class AppController extends Controller
 
         // actions public, skipping the authentication check
         $this->Authentication->addUnauthenticatedActions(['index', 'view', 'home']);
+
     }    
 }

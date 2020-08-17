@@ -43,12 +43,6 @@ class ReservationsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('uuid')
-            ->maxLength('uuid', 255)
-            ->requirePresence('uuid', 'create')
-            ->notEmptyString('uuid');
-
-        $validator
             ->dateTime('reserved_date')
             ->requirePresence('reserved_date', 'create')
             ->notEmptyDateTime('reserved_date');

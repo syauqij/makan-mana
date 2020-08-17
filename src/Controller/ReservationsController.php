@@ -8,27 +8,56 @@ use Cake\I18n\FrozenTime;
 use Cake\Utility\Text;
 
 class ReservationsController extends AppController
-{
-    public function index()
+{   
+    public function beforeFilter(\Cake\Event\EventInterface $event)
     {
+        //$this->Authorization->authorize('index', 'edit', 'view');
+        $user = $this->request->getAttribute('identity');
+
+        if (isset($user->is_admin)) {
+           // dd($user);
+            $this->Authorization->skipAuthorization();
+        }
+    }
+
+    public function index()
+    {   
+        $user = $this->request->getAttribute('identity');
+
+        $getReservations = $this->Reservations->find();
+
         $this->paginate = [
             'contain' => ['Users', 'Restaurants', 'RestaurantTables'],
-        ];
-        $reservations = $this->paginate($this->Reservations);
+        ];  
+           
+        if ($user->is_admin) {
+            $reservations = $this->paginate();
+        } else {
+            $query = $user->applyScope('index', $getReservations);
+            $reservations = $this->paginate($query);
+        }
 
         $this->set(compact('reservations'));
     }
 
-    public function view($id = null)
-    {
-        $reservation = $this->Reservations->get($id, [
-            'contain' => ['Users', 'Restaurants', 'RestaurantTables', 'ReservationLogs'],
-        ]);
+    public function view ($uuid = null)
+    {   
+        $reservation = $this->Reservations->find()
+            ->where(['Reservations.id' => $uuid])
+            ->contain(['Users', 'Restaurants'])
+            ->first();
+        //debug($reservation);
 
-        $this->set(compact('reservation'));
+        $occasions = $this->getOccassions();
+
+        $selectedDate = new FrozenTime($reservation->reserved_date);
+        $date = $selectedDate->i18nFormat('dd/MM/yyyy');
+        $time = $selectedDate->i18nFormat('h:mm a');
+               
+        $this->set(compact('reservation', 'occasions', 'date', 'time'));
     }
 
-    public function add()
+    public function create()
     {   
         $restaurant_id = $this->request->getQuery('restaurant_id');
         $reserved_date = $this->request->getQuery('reserved_date');
@@ -52,21 +81,25 @@ class ReservationsController extends AppController
         $date = $selectedDate->i18nFormat('dd/MM/yyyy');
         $time = $selectedDate->i18nFormat('h:mm a');
         
-        //get logged in user details
+        //get logged in user_id
+        $user_id = $this->request->getAttribute('identity')->getIdentifier();
+
         $users = $this->getTableLocator()->get('Users');
-        $user_id = 1;
         $user = $users->get($user_id);
 
-        $occasions = ['birthday' => 'Birthday', 'anniversary' => 'Anniversary'];     
+        $occasions = $this->getOccassions();     
 
         $reservation = $this->Reservations->newEmptyEntity();
+
+        $this->Authorization->authorize($reservation);
+        
         if ($this->request->is('post')) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
+            $reservation->id = Text::uuid();
             $reservation->restaurant_id = $restaurant->id;
             $reservation->user_id = $user_id;
             $reservation->total_guests = $guests;
             $reservation->reserved_date = $selectedDate;
-            $reservation->uuid = Text::uuid();
 
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
@@ -75,12 +108,14 @@ class ReservationsController extends AppController
             }
 
             if($reservation->getErrors('reserved_date')) {
+                dd($reservation);
                 $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                     'params' => ['type' => "warning"]
                 ]);
 
                 return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
             }
+
 
             $this->Flash->alert('The reservation could not be saved. Please, try again.', [
                 'params' => ['type' => "danger"]
@@ -92,9 +127,14 @@ class ReservationsController extends AppController
 
     public function edit($uuid = null)
     {   
+        $reservation = $this->Reservations->find()->where(['id' => $uuid])->first();
 
-        $reservation = $this->Reservations->find()->where(['uuid' => $uuid])->first();
-
+        $user = $this->request->getAttribute('identity');
+    
+        if ($user->is_admin == null) {
+            $this->Authorization->authorize($reservation);
+         }
+        //$this->Authorization->authorize($reservation);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             if ($this->Reservations->save($reservation)) {
@@ -113,13 +153,27 @@ class ReservationsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+
         $reservation = $this->Reservations->get($id);
-        if ($this->Reservations->delete($reservation)) {
-            $this->Flash->success(__('The reservation has been deleted.'));
+
+        $user = $this->request->getAttribute('identity');
+
+        // Check authorization on $reservation
+        if ($user->can('delete', $reservation)) {
+            // Do delete operation
+            if ($this->Reservations->delete($reservation)) {
+                $this->Flash->success(__('The reservation has been deleted.'));
+            } else {
+                $this->Flash->error(__('The reservation could not be deleted. Please, try again.'));
+            }
         } else {
             $this->Flash->error(__('The reservation could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function getOccassions() {
+        return $occasions = ['birthday' => 'Birthday', 'anniversary' => 'Anniversary'];  
     }
 }

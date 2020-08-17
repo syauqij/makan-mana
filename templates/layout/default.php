@@ -34,11 +34,14 @@
         </li>
     </ul>
     <div class="btn-group">
-        <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>
+        <?php $user = $this->request->getAttribute('identity'); ?>
+        <?php if ($user == null) : ?>
+            <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>
+        <?php else : ?>    
         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Hi, Syauqi
+            Hi, <?= h($user->first_name) ?>
         </button>
-        <!--To add checking if user is logged in-->
+
         <div class="dropdown-menu">
             <?= $this->Html->link('My Profile', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
             <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'history'], ['class' => 'dropdown-item']);?>
@@ -46,6 +49,7 @@
                 <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
             </div>
         </div>
+        <?php endif; ?>
     </div>
   </form>
 </div>

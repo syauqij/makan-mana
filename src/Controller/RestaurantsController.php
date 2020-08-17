@@ -11,16 +11,10 @@ use Cake\I18n\FrozenTime;
 use Cake\Utility\Text;
 
 class RestaurantsController extends AppController
-{   
-    public function beforeFilter(EventInterface $event)
-    {
-        //$this->viewBuilder()->setLayout('default_cake');
-        $this->Authentication->addUnauthenticatedActions(['home', 'view', 'search']);
-    }
-
+{       
     public function home()
     {   
-        $this->viewBuilder()->setLayout('default');
+        $this->Authorization->skipAuthorization();
 
         $timeOptions = $this->getTimeSelections();
         $now = FrozenTime::now();
@@ -53,6 +47,8 @@ class RestaurantsController extends AppController
 
     public function search()
     {   
+        $this->Authorization->skipAuthorization();
+
         $params = $this->request->getQuery();
         $cuisines = $this->request->getParam('pass');
 
@@ -119,6 +115,8 @@ class RestaurantsController extends AppController
 
     public function view($slug)
     {   
+        $this->Authorization->skipAuthorization();
+        
         $now = FrozenTime::now();
         $selectedDate = $now->modify('+1 hour 30 minutes');
         $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
@@ -186,7 +184,7 @@ class RestaurantsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
-    public function getTimeSelections() {
+    private function getTimeSelections() {
         $now = FrozenTime::now();
         $date = $now->i18nFormat('yyyy-MM-dd');
 
@@ -202,7 +200,7 @@ class RestaurantsController extends AppController
         return $times;
     }
 
-    public function getTimeslots($selectedDate, $restaurantId) {
+    private function getTimeslots($selectedDate, $restaurantId) {
         
         $timeslots = null;
         $now = FrozenTime::now();

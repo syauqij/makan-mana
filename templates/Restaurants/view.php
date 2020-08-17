@@ -81,7 +81,7 @@
 			<?php if ($restaurant->timeslots) : ?>
 				<?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
 					<?= $this->Html->link($timeslot, [
-						'controller' => 'reservations', 'action' => 'add',
+						'controller' => 'reservations', 'action' => 'create',
 							'?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
 						['class' => 'btn btn-secondary btn-sm mb-2']
 					);  ?>
