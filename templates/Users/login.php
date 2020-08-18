@@ -1,15 +1,45 @@
-<!-- in /templates/Users/login.php -->
-<div class="users form">
-    <?= $this->Flash->render() ?>
-    <h3>Login</h3>
-    <?= $this->Form->create() ?>
-    <fieldset>
-        <legend><?= __('Please enter your username and password') ?></legend>
-        <?= $this->Form->control('email', ['required' => true]) ?>
-        <?= $this->Form->control('password', ['required' => true]) ?>
-    </fieldset>
-    <?= $this->Form->submit(__('Login')); ?>
-    <?= $this->Form->end() ?>
+<?php 
+    $myTemplates = [
+        'inputContainer' =>'{{content}}',
+        'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
+        'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>',
+    ];
+    $this->Form->setTemplates($myTemplates); 
+?>
 
-    <?= $this->Html->link("Add User", ['action' => 'add']) ?>
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+        <div class="col-md-5 order-md-2 mb-4">
+            <h4>Sign In</h5 >
+            <p class="mb-3">Please sign in if you own an account</p >
+            <?= $this->Form->create() ?>
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <?= $this->Form->control('email', [
+                        'label' => false,
+                        'placeholder' => 'Email Address'
+                        ]
+                    ) ?>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <?= $this->Form->control('password', [
+                        'label' => false,
+                        'placeholder' => 'Password'
+                        ]
+                    ) ?>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <?= $this->Form->button(__('Sign In'),[
+                        'class' => 'btn btn-primary btn-lg'
+                    ]) ?>
+                    <p class="pt-2"><?= $this->Html->link("Create an Account", [
+                        'action' => 'register',
+                        '?' => ['redirect' => $redirect]
+                    ]) ?></p>
+                </div>
+                <?= $this->Form->end(); ?>
+            </div>
+        </div>
+    </div>
 </div>

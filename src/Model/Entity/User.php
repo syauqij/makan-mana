@@ -40,6 +40,7 @@ class User extends Entity
         'password' => true,
         'profile_photo' => true,
         'active' => true,
+        'role' => true,
         'created' => true,
         'modified' => true,
         'reservations' => true,

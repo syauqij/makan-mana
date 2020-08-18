@@ -12,7 +12,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- slick corousel css -->
-    <?= $this->Html->css('home.css') ?>
+    <?= $this->Html->css('custom.css') ?>
     <?= $this->Html->css('slick/slick.css') ?>
     <?= $this->Html->css('slick/slick-theme.css') ?>
 </head>
@@ -34,21 +34,21 @@
         </li>
     </ul>
     <div class="btn-group">
-        <?php $user = $this->request->getAttribute('identity'); ?>
-        <?php if ($user == null) : ?>
-            <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>
-        <?php else : ?>    
-        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Hi, <?= h($user->first_name) ?>
-        </button>
+        <?php if ($this->Identity->isLoggedIn()) : ?>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hi, <?= h($this->Identity->get('first_name')) ?>
+            </button>
 
-        <div class="dropdown-menu">
-            <?= $this->Html->link('My Profile', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
-            <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'history'], ['class' => 'dropdown-item']);?>
-            <div class="dropdown-divider"></div>
-                <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
+            <div class="dropdown-menu">
+                <?= $this->Html->link('My Profile', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
+                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'history'], ['class' => 'dropdown-item']);?>
+                <div class="dropdown-divider"></div>
+                    <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
+                </div>
             </div>
-        </div>
+        <?php else : ?>
+            <?= $this->Html->link('Register', ['controller' => 'Users', 'action' => 'register'], ['class' => 'btn btn-danger']);?>
+            <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>        
         <?php endif; ?>
     </div>
   </form>

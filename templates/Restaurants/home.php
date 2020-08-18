@@ -1,4 +1,4 @@
-<section class="jumbotron">
+<section class="jumbotron" id="home-banner">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
         <?php

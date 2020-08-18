@@ -11,7 +11,6 @@ class ReservationsController extends AppController
 {   
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
-        //$this->Authorization->authorize('index', 'edit', 'view');
         $user = $this->request->getAttribute('identity');
 
         if (isset($user->is_admin)) {
@@ -23,19 +22,18 @@ class ReservationsController extends AppController
     public function index()
     {   
         $user = $this->request->getAttribute('identity');
-
-        $getReservations = $this->Reservations->find();
+           
+        if ($user->is_admin == null) {
+            $filter = $this->Authorization->applyScope($this->Reservations->find());
+        } else {
+            $filter = null;
+        }
 
         $this->paginate = [
             'contain' => ['Users', 'Restaurants', 'RestaurantTables'],
-        ];  
-           
-        if ($user->is_admin) {
-            $reservations = $this->paginate();
-        } else {
-            $query = $user->applyScope('index', $getReservations);
-            $reservations = $this->paginate($query);
-        }
+        ];
+
+        $reservations = $this->paginate($filter);
 
         $this->set(compact('reservations'));
     }
@@ -90,7 +88,6 @@ class ReservationsController extends AppController
         $occasions = $this->getOccassions();     
 
         $reservation = $this->Reservations->newEmptyEntity();
-
         $this->Authorization->authorize($reservation);
         
         if ($this->request->is('post')) {
@@ -108,7 +105,7 @@ class ReservationsController extends AppController
             }
 
             if($reservation->getErrors('reserved_date')) {
-                dd($reservation);
+               
                 $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                     'params' => ['type' => "warning"]
                 ]);
@@ -134,8 +131,8 @@ class ReservationsController extends AppController
         if ($user->is_admin == null) {
             $this->Authorization->authorize($reservation);
          }
-        //$this->Authorization->authorize($reservation);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+
+         if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));

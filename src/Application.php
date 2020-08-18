@@ -67,12 +67,12 @@ class Application extends BaseApplication
          */
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit');
+            Configure::write('DebugKit.ignoreAuthorization', true);
         }
 
         // Load more plugins here
         $this->addPlugin('Authorization');
-        Configure::write('DebugKit.ignoreAuthorization', true);
-
+        
     }
 
     /**
@@ -134,12 +134,13 @@ class Application extends BaseApplication
     }
     
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
-    {
+    {   
+        
         $authenticationService = new AuthenticationService([
             'unauthenticatedRedirect' => '/users/login',
             'queryParam' => 'redirect',
         ]);
-    
+        
         // Load identifiers, check email and password
         $authenticationService->loadIdentifier('Authentication.Password', [
             'fields' => [

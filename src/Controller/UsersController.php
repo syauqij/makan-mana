@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\Utility\Security;
 
 class UsersController extends AppController
 {
@@ -21,14 +22,14 @@ class UsersController extends AppController
     {   
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
+        
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             // redirect to /articles after login success
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Users',
-                'action' => 'profile',
+                'controller' => 'Reservations',
+                'action' => 'index',
             ]);
-    
             return $this->redirect($redirect);
         }
 
@@ -36,6 +37,10 @@ class UsersController extends AppController
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error(__('Invalid username or password'));
         }
+
+        $redirect = $this->request->getQuery('redirect');
+
+        $this->set('redirect', $redirect);
     }
 
     public function logout()
@@ -67,14 +72,19 @@ class UsersController extends AppController
 
     public function register()
     {   
-        $this->viewBuilder()->setLayout('default_cake');
-
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
+            //generate token for email validation and authenticate user
+            $token = Security::hash(Security::randomBytes(32));
+
             $user = $this->Users->patchEntity($user, $this->request->getData());
 
-                $dir = new Folder(WWW_ROOT . 'img\profile-photos');
-                $attachment = $this->request->getData('attachment');
+            $user->token = $token;
+            $user->role = "member";
+
+            $dir = new Folder(WWW_ROOT . 'img\profile-photos');
+            $attachment = $this->request->getData('attachment');
+            if($attachment) {
                 $fileName = $attachment->getClientFilename();
                 $targetPath = $dir->path . DS . $fileName ;
 
@@ -82,13 +92,38 @@ class UsersController extends AppController
                     $attachment->moveTo($targetPath);
                     $user->photo_path = $fileName;  
                 }
-            
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+
+            if ($this->Users->save($user)) {
+                $user = $this->Users->find('byToken', ['token' => $token])->first();
+
+                $this->Authentication->setIdentity($user);
+
+                $redirect = $this->request->getQuery('redirect');
+
+                //dd($redirect);
+        
+                // regardless of POST or GET, redirect if user is logged in
+                if ($redirect) {
+
+                    $this->Flash->alert('Registration successful. Please, complete your reservation.', [
+                        'params' => ['type' => "success"]
+                    ]);
+
+                    return $this->redirect($redirect);
+                }
+
+                $this->Flash->alert('Registration successful. Please, sign in.', [
+                    'params' => ['type' => "success"]
+                ]);
+
+                return $this->redirect(['controller' => 'Reservations', 'action' => 'index']);
+
+            } else {
+                $this->Flash->alert('Registration not successful. Please, try again.', [
+                    'params' => ['type' => "warning"]
+                ]);
+            }
         }
         $this->set(compact('user'));
     }

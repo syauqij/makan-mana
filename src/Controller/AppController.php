@@ -61,7 +61,7 @@ class AppController extends Controller
         parent::beforeFilter($event);
 
         // actions public, skipping the authentication check
-        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'home']);
+        $this->Authentication->addUnauthenticatedActions(['home', 'search']);
 
     }    
 }

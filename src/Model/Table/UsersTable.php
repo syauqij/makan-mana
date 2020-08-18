@@ -92,6 +92,17 @@ class UsersTable extends Table
             ->notEmptyString('password');
 
         $validator
+            ->scalar('token')
+            ->maxLength('token', 255)
+            ->requirePresence('token', 'create')
+            ->notEmptyString('token');
+
+        $validator
+            ->scalar('role')
+            ->requirePresence('role', 'create')
+            ->notEmptyString('role');
+
+        $validator
             ->scalar('profile_photo')
             ->maxLength('profile_photo', 255)
             ->allowEmptyFile('profile_photo');
@@ -116,4 +127,11 @@ class UsersTable extends Table
 
         return $rules;
     }
+
+    public function findByToken($query, $token)
+    {   
+        $query->where(['Users.token' => $token['token']]);
+
+        return $query;
+    }        
 }
