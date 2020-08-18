@@ -86,6 +86,12 @@ class UsersTable extends Table
             ->notEmptyString('email');
 
         $validator
+            ->scalar('phone_no')
+            ->requirePresence('phone_no', 'create')
+            ->minLength('phone_no', 10)
+            ->notEmptyString('phone_no');
+
+        $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
@@ -124,6 +130,7 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['phone_no']));
 
         return $rules;
     }

@@ -29,28 +29,15 @@ class UserPolicy
      * @param App\Model\Entity\User $resource
      * @return bool
      */
-    public function canUpdate(IdentityInterface $user, User $resource)
+    public function canEdit(IdentityInterface $user, User $resource)
     {
+        return $this->isOwner($user, $resource);
     }
 
-    /**
-     * Check if $user can delete User
-     *
-     * @param Authorization\IdentityInterface $user The user.
-     * @param App\Model\Entity\User $resource
-     * @return bool
-     */
     public function canDelete(IdentityInterface $user, User $resource)
     {
     }
 
-    /**
-     * Check if $user can view User
-     *
-     * @param Authorization\IdentityInterface $user The user.
-     * @param App\Model\Entity\User $resource
-     * @return bool
-     */
     public function canView(IdentityInterface $user, User $resource)
     {
         return $this->isOwner($user, $resource);

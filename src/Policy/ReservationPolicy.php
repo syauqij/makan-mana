@@ -5,12 +5,20 @@ namespace App\Policy;
 
 use App\Model\Entity\Reservation;
 use Authorization\IdentityInterface;
+use Authorization\Policy\BeforePolicyInterface;
 
-/**
- * Reservation policy
- */
-class ReservationPolicy
-{   
+class ReservationPolicy implements BeforePolicyInterface
+{  
+    public function before($user, $resource, $action)
+    {
+        //dd($user->getOriginalData());
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        }
+        // fall through
+    }
+ 
     public function canCreate(IdentityInterface $user, Reservation $reservation)
     {
         return true;

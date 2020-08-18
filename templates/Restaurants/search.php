@@ -1,48 +1,49 @@
-<div class="container">
-<?php
-    //change default form template. 
-    $myTemplates = [
-        'inputContainer' =>'{{content}}',
-        'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-        'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
-    ];
-    $this->Form->setTemplates($myTemplates); 
-    $options = ['1' => '1 People', '2' => '2 People'];
-?>
-<p> 
-    <?= $this->Form->create(null, [
-        'type' => 'get',
-        'url' => [
-            'controller' => 'Restaurants',
-            'action' => 'search'
-        ]
-    ]); ?>
-    <div class="form-row">
-        <div class="col-sm-2">
-            <?= $this->Form->date('date', [
-                'value' => $date,
-                'min' => $today
-            ]); ?>
-        </div>
-        <div class="col-sm-2">
-            <?= $this->Form->select('time', $timeOptions, [
-                'value' => $time
+<div class="page-header">
+    <div class="container">
+        <?php
+            //change default form template. 
+            $myTemplates = [
+                'inputContainer' =>'{{content}}',
+                'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
+                'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
+            ];
+            $this->Form->setTemplates($myTemplates); 
+            $options = ['1' => '1 People', '2' => '2 People'];
+        ?>
+        <?= $this->Form->create(null, [
+            'type' => 'get',
+            'url' => [
+                'controller' => 'Restaurants',
+                'action' => 'search'
+            ]
+        ]); ?>
+        <div class="form-row pt-4 pb-2">
+            <div class="col-sm-2">
+                <?= $this->Form->date('date', [
+                    'value' => $date,
+                    'min' => $today
                 ]); ?>
+            </div>
+            <div class="col-sm-2">
+                <?= $this->Form->select('time', $timeOptions, [
+                    'value' => $time
+                    ]); ?>
+            </div>
+            <div class="col-sm-2">
+                <?= $this->Form->select('guests', $options, [
+                    'value' => $guests
+                    ]); ?>
+            </div>
+            <div class="col-sm-4">
+                <?= $this->Form->control('term', [
+                    'label' => false, 
+                    'value' => $this->request->getQuery('term'),
+                    'placeholder' => 'Search a Location, Restaurant, or Cuisine'
+                    ]
+                ) ?>
+            </div>
+            <?= $this->Form->submit('Search', ['class' => 'btn btn-primary']) ?>
         </div>
-        <div class="col-sm-2">
-            <?= $this->Form->select('guests', $options, [
-                'value' => '2'
-                ]); ?>
-        </div>
-        <div class="col-sm-4">
-            <?= $this->Form->control('term', [
-                'label' => false, 
-                'value' => $this->request->getQuery('term'),
-                'placeholder' => 'Search a Location, Restaurant, or Cuisine'
-                ]
-            ) ?>
-        </div>
-        <?= $this->Form->submit('Search', ['class' => 'btn btn-primary']) ?>
     </div>
 </div>
 <div class="album py-5 bg-light">
@@ -75,7 +76,7 @@
                         <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
                             <?= $this->Html->link($timeslot, [
                                 'controller' => 'reservations', 'action' => 'create',
-                                    '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
+                                    '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => $guests, 'reserved_date' => $key]],
                                 ['class' => 'btn btn-secondary btn-sm mb-2']
                             );  ?>
                         <?php endforeach; ?>

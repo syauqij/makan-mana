@@ -40,8 +40,8 @@
             </button>
 
             <div class="dropdown-menu">
-                <?= $this->Html->link('My Profile', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
-                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'history'], ['class' => 'dropdown-item']);?>
+                <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
+                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'index'], ['class' => 'dropdown-item']);?>
                 <div class="dropdown-divider"></div>
                     <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
                 </div>
@@ -54,7 +54,6 @@
   </form>
 </div>
 </nav>
-
     <main role="main">
         <?= $this->Flash->render() ?>
         <?= $this->fetch('content') ?> 

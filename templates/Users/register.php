@@ -1,8 +1,10 @@
 <?php 
     $myTemplates = [
-        'inputContainer' =>'{{content}}',
-        'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-        'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>',
+        'formGroup' => '{{label}}{{input}}',
+        'input' => '<input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/>',
+        'inputContainer' =>'<div class="form-group input {{type}}{{required}}">{{content}}</div>',
+        'label' => '<label{{attrs}}>{{text}}</label>',
+        'error' => '<div class="invalid-feedback">{{content}}</div>'
     ];
     $this->Form->setTemplates($myTemplates); 
 ?>
@@ -26,14 +28,14 @@
                 <div class="row">
                     <div class="col-md-12 mb-2">
                         <?= $this->Form->control('email', [
-                            'label' => false,
+                            //'label' => false,
                             'placeholder' => 'Email Address'
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-12 mb-2">
                         <?= $this->Form->control('password', [
-                            'label' => false,
+                            //'label' => false,
                             'placeholder' => 'Password'
                             ]
                         ) ?>
@@ -50,39 +52,43 @@
             <div class="col-md-7 order-md-1">
                 <h5>Sign Up</h5 >
                 <p class="mb-3">It's free and only takes a minute.</p >
-                <?= $this->Form->create($user) ?>
+                <?php echo $this->Form->create($user, 
+                    ['class' => ($user->hasErrors()) ? 'was-validated' : 'need-validation', 
+                    ]);
+                ?>
                 <div class="row">
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('first_name', [
-                            'label' => false, 
+                            //'label' => false, 
                             'placeholder' => 'First Name'
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('last_name', [
-                            'label' => false, 
+                            //'label' => false, 
                             'placeholder' => 'Last Name'
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('email', [
-                            'label' => false,
-                            'placeholder' => 'Email address'
+                            //'label' => false,
+                            'placeholder' => 'Email address',
+                            'autocomplete' => 'off'
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('phone_no', [
-                            'label' => false,
+                            //'label' => false,
                             'placeholder' => 'Phone number'
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('password', [
-                            'label' => false,
+                           // 'label' => false,
                             'placeholder' => 'Enter password'
                             ]
                         ) ?>
@@ -90,7 +96,7 @@
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('reEnter-password', [
                             'type' => 'password',
-                            'label' => false,
+                            'label' => "Re-enter Password",
                             'placeholder' => 'Re-enter password'
                             ]
                         ) ?>

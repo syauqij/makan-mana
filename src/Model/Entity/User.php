@@ -53,8 +53,10 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password',
+        'password', 'token'
     ];
+
+    protected $_virtual = ['full_name'];
 
     //password hashing with bcrypt
     protected function _setPassword(string $password) : ?string
@@ -63,5 +65,9 @@ class User extends Entity
             return (new DefaultPasswordHasher())->hash($password);
         }
     }
+
+    protected function _getFullName() {
+        return $this->first_name . ' ' . $this->last_name;
+    }    
 
 }

@@ -12,8 +12,13 @@ use Cake\Utility\Text;
 
 class RestaurantsController extends AppController
 {       
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        $this->Authentication->addUnauthenticatedActions(['home', 'search', 'view']);
+    }  
+
     public function home()
-    {   
+    {     
         $this->Authorization->skipAuthorization();
 
         $timeOptions = $this->getTimeSelections();
@@ -98,9 +103,10 @@ class RestaurantsController extends AppController
                 $timeslots[] = $this->getTimeslots($selectedDate, $restaurant->id);
             }   
             $restaurants = (new Collection($restaurants))->insert('timeslots', $timeslots);
+            //dd($restaurants);
         }
 
-        $this->set(compact('restaurants', 'date', 'today', 'time', 'timeOptions')); 
+        $this->set(compact('restaurants', 'date', 'today', 'time', 'timeOptions', 'guests')); 
     }
 
     public function index()

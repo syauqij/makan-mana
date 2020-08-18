@@ -9,31 +9,19 @@ use Cake\Utility\Text;
 
 class ReservationsController extends AppController
 {   
-    public function beforeFilter(\Cake\Event\EventInterface $event)
-    {
-        $user = $this->request->getAttribute('identity');
-
-        if (isset($user->is_admin)) {
-           // dd($user);
-            $this->Authorization->skipAuthorization();
-        }
-    }
-
     public function index()
     {   
+        //dd($this->event);
         $user = $this->request->getAttribute('identity');
-           
-        if ($user->is_admin == null) {
-            $filter = $this->Authorization->applyScope($this->Reservations->find());
-        } else {
-            $filter = null;
-        }
+
+        $filter = $this->Authorization->applyScope($this->Reservations->find());
 
         $this->paginate = [
             'contain' => ['Users', 'Restaurants', 'RestaurantTables'],
         ];
 
         $reservations = $this->paginate($filter);
+        
 
         $this->set(compact('reservations'));
     }
@@ -45,6 +33,7 @@ class ReservationsController extends AppController
             ->contain(['Users', 'Restaurants'])
             ->first();
         //debug($reservation);
+        $this->Authorization->authorize($reservation);
 
         $occasions = $this->getOccassions();
 
@@ -125,12 +114,8 @@ class ReservationsController extends AppController
     public function edit($uuid = null)
     {   
         $reservation = $this->Reservations->find()->where(['id' => $uuid])->first();
-
-        $user = $this->request->getAttribute('identity');
     
-        if ($user->is_admin == null) {
-            $this->Authorization->authorize($reservation);
-         }
+        $this->Authorization->authorize($reservation);
 
          if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
