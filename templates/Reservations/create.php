@@ -1,11 +1,3 @@
-<?php 
-    $myTemplates = [
-        'inputContainer' =>'{{content}}',
-        'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-        'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
-    ];
-    $this->Form->setTemplates($myTemplates); 
-?>
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">

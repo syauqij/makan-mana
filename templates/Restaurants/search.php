@@ -1,13 +1,6 @@
 <div class="page-header">
     <div class="container">
         <?php
-            //change default form template. 
-            $myTemplates = [
-                'inputContainer' =>'{{content}}',
-                'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-                'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
-            ];
-            $this->Form->setTemplates($myTemplates); 
             $options = ['1' => '1 People', '2' => '2 People'];
         ?>
         <?= $this->Form->create(null, [

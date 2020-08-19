@@ -1,14 +1,3 @@
-<?php 
-    $myTemplates = [
-        'formGroup' => '{{label}}{{input}}',
-        'input' => '<input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/>',
-        'inputContainer' =>'<div class="form-group input {{type}}{{required}}">{{content}}</div>',
-        'label' => '<label{{attrs}}>{{text}}</label>',
-        'error' => '<div class="invalid-feedback">{{content}}</div>'
-    ];
-    $this->Form->setTemplates($myTemplates); 
-?>
-
 <section class="jumbotron" id="register-member-banner">
     <div class="container">
 		<div class="row">
