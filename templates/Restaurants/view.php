@@ -1,5 +1,12 @@
 
-<section class="jumbotron">
+<style>
+	/*to fetch image from restaurant data*/
+	#restaurant-banner {
+		background-image: url("../img/jumbotron_register_member.jpg");
+	}
+</style>
+
+<section class="jumbotron" id="restaurant-banner">
     <div class="container">
 		<div class="row">
 			<?= $this->Flash->render() ?>
@@ -70,9 +77,35 @@
 				</div>
 			<div id="menu" class="py-4">
 				<h4>Menu</h4><hr/>
-				<p>Occaecat commodo aliqua delectus. Fap craft beer deserunt skateboard ea. Lomo bicycle rights adipisicing banh mi, velit ea sunt next level locavore single-origin coffee in magna veniam. High life id vinyl, echo park consequat quis aliquip banh mi pitchfork. Vero VHS est adipisicing. Consectetur nisi DIY minim messenger bag. Cred ex in, sustainable delectus consectetur fanny pack iphone.
-				<p>Occaecat commodo aliqua delectus. Fap craft beer deserunt skateboard ea. Lomo bicycle rights adipisicing banh mi, velit ea sunt next level locavore single-origin coffee in magna veniam. High life id vinyl, echo park consequat quis aliquip banh mi pitchfork. Vero VHS est adipisicing. Consectetur nisi DIY minim messenger bag. Cred ex in, sustainable delectus consectetur fanny pack iphone.
-				<p>Occaecat commodo aliqua delectus. Fap craft beer deserunt skateboard ea. Lomo bicycle rights adipisicing banh mi, velit ea sunt next level locavore single-origin coffee in magna veniam. High life id vinyl, echo park consequat quis aliquip banh mi pitchfork. Vero VHS est adipisicing. Consectetur nisi DIY minim messenger bag. Cred ex in, sustainable delectus consectetur fanny pack iphone.</p>
+				<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<?php foreach($menuCategories as $key => $category) : ?>
+						<a class="nav-link id="nav-<?=h($category->id)?>-tab" 
+							data-toggle="tab" href="#nav-<?=h($category->id)?>" role="tab" aria-controls="nav-<?=h($category->id)?>" 
+							aria-selected="<?php echo ($key < 1) ? 'true' : "false"?>">
+							<?= h($category->name)?></a>
+					<?php endforeach; ?>
+				</div>
+				</nav>
+				<div class="tab-content" id="nav-tabContent">
+					<?php foreach($menuCategories as  $key => $category) : ?>
+						<div class="tab-pane fade <?php echo ($key < 1) ? 'show active' : ""?>" id="nav-<?=h($category->id)?>" role="tabpanel" aria-labelledby="nav-<?=h($category->id)?>-tab">
+						<?php foreach($category->menus as $menu) : ?>
+								<h4 class="py-3"><?= h($menu->name)?></h3>
+								<div class="row">
+								<?php foreach($menu->menu_items as $item) : ?>
+									<div class="col-6">
+										<h5><?= h($item->name)?> </h5>
+										<p><?= h($item->description)?> </p>
+										<p>RM <?= h($item->price)?> </p>
+									</div> 
+								<?php endforeach; ?>
+								</div>
+								<hr/>
+						<?php endforeach; ?>
+						</div>
+					<?php endforeach; ?>
+				</div>				
 			</div>
 		</div>
 		<div class="col-md-4">

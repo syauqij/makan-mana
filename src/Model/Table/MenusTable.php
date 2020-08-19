@@ -86,9 +86,9 @@ class MenusTable extends Table
             ->allowEmptyString('description');
 
         $validator
-            ->integer('order')
-            ->requirePresence('order', 'create')
-            ->notEmptyString('order');
+            ->integer('sequence')
+            ->requirePresence('sequence', 'create')
+            ->notEmptyString('sequence');
 
         return $validator;
     }

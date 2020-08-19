@@ -42,7 +42,7 @@
                     <td><?= h($restaurant->created) ?></td>
                     <td><?= h($restaurant->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $restaurant->id]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $restaurant->slug]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $restaurant->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $restaurant->id], ['confirm' => __('Are you sure you want to delete # {0}?', $restaurant->id)]) ?>
                     </td>

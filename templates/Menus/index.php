@@ -16,7 +16,7 @@
                     <th><?= $this->Paginator->sort('description') ?></th>
                     <th><?= $this->Paginator->sort('restaurant_id') ?></th>
                     <th><?= $this->Paginator->sort('menu_category_id') ?></th>
-                    <th><?= $this->Paginator->sort('order') ?></th>
+                    <th><?= $this->Paginator->sort('sequence') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -30,7 +30,7 @@
                     <td><?= h($menu->description) ?></td>
                     <td><?= $menu->has('restaurant') ? $this->Html->link($menu->restaurant->name, ['controller' => 'Restaurants', 'action' => 'view', $menu->restaurant->id]) : '' ?></td>
                     <td><?= $menu->has('menu_category') ? $this->Html->link($menu->menu_category->name, ['controller' => 'MenuCategories', 'action' => 'view', $menu->menu_category->id]) : '' ?></td>
-                    <td><?= $this->Number->format($menu->order) ?></td>
+                    <td><?= $this->Number->format($menu->sequence) ?></td>
                     <td><?= h($menu->created) ?></td>
                     <td><?= h($menu->modified) ?></td>
                     <td class="actions">

@@ -8,11 +8,11 @@ use Cake\ORM\Entity;
 /**
  * MenuItem Entity
  *
- * @property int $int
+ * @property int $id
  * @property string $name
  * @property string|null $description
  * @property string $price
- * @property int $order
+ * @property int $sequence
  * @property int $menu_id
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
@@ -34,7 +34,7 @@ class MenuItem extends Entity
         'name' => true,
         'description' => true,
         'price' => true,
-        'order' => true,
+        'sequence' => true,
         'menu_id' => true,
         'created' => true,
         'modified' => true,

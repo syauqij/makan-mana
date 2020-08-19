@@ -15,6 +15,7 @@ class RestaurantsController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         $this->Authentication->addUnauthenticatedActions(['home', 'search', 'view']);
+        $this->Authorization->skipAuthorization();
     }  
 
     public function home()
@@ -130,7 +131,7 @@ class RestaurantsController extends AppController
 
         $restaurant = $this->Restaurants->find()
             ->where(['id' => $restaurantId])
-            ->contain(['Cuisines']);
+            ->contain(['Cuisines', 'Menus']);
         
         $timeslots[] = $this->getTimeslots($selectedDate, $restaurantId);
 
@@ -138,7 +139,16 @@ class RestaurantsController extends AppController
 
         $restaurant = $merge->first();
 
-        $this->set(compact('restaurant'));
+        $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
+        $menuCategories = $tableMenuCategories->find()
+        ->contain(['Menus.MenuItems'])
+        ->contain('Menus', function (Query $q) use ($restaurantId) {
+            return $q
+                //->select(['body', 'author_id'])
+                ->where(['Menus.restaurant_id' => $restaurantId]);
+        });
+
+        $this->set(compact('restaurant', 'menuCategories'));
     }
 
     public function add()

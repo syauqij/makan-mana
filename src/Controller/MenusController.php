@@ -11,13 +11,15 @@ namespace App\Controller;
  */
 class MenusController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
+    public function beforeFilter(\Cake\Event\EventInterface $event)
     {
+        $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout('default_cake');
+    }  
+    
+    public function index()
+    {   
+        $this->Authorization->skipAuthorization();
         $this->paginate = [
             'contain' => ['Restaurants', 'MenuCategories'],
         ];
@@ -34,7 +36,8 @@ class MenusController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
-    {
+    {   
+        $this->Authorization->skipAuthorization();
         $menu = $this->Menus->get($id, [
             'contain' => ['Restaurants', 'MenuCategories', 'MenuItems'],
         ]);
@@ -48,7 +51,8 @@ class MenusController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
+    {   
+        $this->Authorization->skipAuthorization();
         $menu = $this->Menus->newEmptyEntity();
         if ($this->request->is('post')) {
             $menu = $this->Menus->patchEntity($menu, $this->request->getData());
@@ -72,7 +76,8 @@ class MenusController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
-    {
+    {   
+        $this->Authorization->skipAuthorization();
         $menu = $this->Menus->get($id, [
             'contain' => [],
         ]);

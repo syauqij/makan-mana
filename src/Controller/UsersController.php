@@ -15,7 +15,8 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         $this->Authentication->addUnauthenticatedActions(['login', 'register']);
-        $this->Authorization->skipAuthorization('login', 'logout', 'register');
+        //$this->Authorization->skipAuthorization('login', 'logout', 'register');
+        $this->Authorization->skipAuthorization();
     }
 
     public function login()
@@ -136,7 +137,7 @@ class UsersController extends AppController
             'contain' => [],
         ]);
         
-        dd($this->Authorization->authorize($user));
+        //dd($this->Authorization->authorize($user));
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {

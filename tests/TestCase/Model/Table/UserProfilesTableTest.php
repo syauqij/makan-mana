@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\MenuItemsTable;
+use App\Model\Table\UserProfilesTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\MenuItemsTable Test Case
+ * App\Model\Table\UserProfilesTable Test Case
  */
-class MenuItemsTableTest extends TestCase
+class UserProfilesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\MenuItemsTable
+     * @var \App\Model\Table\UserProfilesTable
      */
-    protected $MenuItems;
+    protected $UserProfiles;
 
     /**
      * Fixtures
@@ -24,8 +24,8 @@ class MenuItemsTableTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'app.MenuItems',
-        'app.Menus',
+        'app.UserProfiles',
+        'app.Users',
     ];
 
     /**
@@ -36,8 +36,8 @@ class MenuItemsTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('MenuItems') ? [] : ['className' => MenuItemsTable::class];
-        $this->MenuItems = $this->getTableLocator()->get('MenuItems', $config);
+        $config = $this->getTableLocator()->exists('UserProfiles') ? [] : ['className' => UserProfilesTable::class];
+        $this->UserProfiles = $this->getTableLocator()->get('UserProfiles', $config);
     }
 
     /**
@@ -47,7 +47,7 @@ class MenuItemsTableTest extends TestCase
      */
     public function tearDown(): void
     {
-        unset($this->MenuItems);
+        unset($this->UserProfiles);
 
         parent::tearDown();
     }

@@ -43,7 +43,7 @@ class MenuItemsTable extends Table
 
         $this->setTable('menu_items');
         $this->setDisplayField('name');
-        $this->setPrimaryKey('int');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
@@ -62,8 +62,8 @@ class MenuItemsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('int')
-            ->allowEmptyString('int', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('name')
@@ -81,9 +81,9 @@ class MenuItemsTable extends Table
             ->notEmptyString('price');
 
         $validator
-            ->integer('order')
-            ->requirePresence('order', 'create')
-            ->notEmptyString('order');
+            ->integer('sequence')
+            ->requirePresence('sequence', 'create')
+            ->notEmptyString('sequence');
 
         return $validator;
     }
@@ -97,7 +97,7 @@ class MenuItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['menu_id'], 'Menus'));
+        $rules->add($rules->existsIn(['menu_id'], 'Menus'), ['errorField' => 'menu_id']);
 
         return $rules;
     }

@@ -71,9 +71,9 @@ class MenuCategoriesTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->integer('order')
-            ->requirePresence('order', 'create')
-            ->notEmptyString('order');
+            ->integer('sequence')
+            ->requirePresence('sequence', 'create')
+            ->notEmptyString('sequence');
 
         return $validator;
     }
