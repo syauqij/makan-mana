@@ -9,7 +9,6 @@ use Cake\Utility\Security;
 
 class UsersController extends AppController
 {
-    
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -78,7 +77,8 @@ class UsersController extends AppController
             //generate token for email validation and authenticate user
             $token = Security::hash(Security::randomBytes(32));
 
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user = $this->Users->patchEntity($user, $this->request->getData(),
+            ['validate' => 'passwords']);
 
             $user->token = $token;
             $user->role = "member";

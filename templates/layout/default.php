@@ -74,6 +74,14 @@
     <!-- slick corousel css -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     
+    <script>
+        $(document).ready(function(){
+            $( ".invalid-feedback" ).each(function() {
+                $( this ).prev('input').addClass( "is-invalid" );
+            });
+        });
+    </script>
+
     <?= $this->fetch('script'); ?>
     
 </body>

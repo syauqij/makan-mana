@@ -54,6 +54,9 @@ class UsersTable extends Table
         $this->hasMany('Restaurants', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasOne('Profiles', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -134,6 +137,16 @@ class UsersTable extends Table
 
         return $rules;
     }
+
+    public function validationPasswords($validator)
+    {
+        $validator->add('confirm_password', 'no-misspelling', [
+            'rule' => ['compareWith', 'password'],
+            'message' => 'Passwords are not equal',
+        ]);
+        
+        return $validator;
+    }    
 
     public function findByToken($query, $token)
     {   
