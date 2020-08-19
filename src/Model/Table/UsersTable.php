@@ -54,7 +54,7 @@ class UsersTable extends Table
         $this->hasMany('Restaurants', [
             'foreignKey' => 'user_id',
         ]);
-        $this->hasOne('Profiles', [
+        $this->hasOne('UserProfiles', [
             'foreignKey' => 'user_id',
         ]);
     }
@@ -92,6 +92,7 @@ class UsersTable extends Table
             ->scalar('phone_no')
             ->requirePresence('phone_no', 'create')
             ->minLength('phone_no', 10)
+            ->maxLength('token', 12)
             ->notEmptyString('phone_no');
 
         $validator
@@ -110,11 +111,6 @@ class UsersTable extends Table
             ->scalar('role')
             ->requirePresence('role', 'create')
             ->notEmptyString('role');
-
-        $validator
-            ->scalar('profile_photo')
-            ->maxLength('profile_photo', 255)
-            ->allowEmptyFile('profile_photo');
 
         $validator
             ->boolean('active')

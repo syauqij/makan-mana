@@ -134,7 +134,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => [],
+            'contain' => ['UserProfiles'],
         ]);
         
         //dd($this->Authorization->authorize($user));

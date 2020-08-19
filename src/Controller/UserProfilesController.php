@@ -11,11 +11,13 @@ namespace App\Controller;
  */
 class UserProfilesController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authorization->skipAuthorization();
+    }
+    
     public function index()
     {
         $this->paginate = [

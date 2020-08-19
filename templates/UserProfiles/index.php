@@ -28,7 +28,7 @@
                 <?php foreach ($userProfiles as $userProfile): ?>
                 <tr>
                     <td><?= $this->Number->format($userProfile->id) ?></td>
-                    <td><?= $userProfile->has('user') ? $this->Html->link($userProfile->user->id, ['controller' => 'Users', 'action' => 'view', $userProfile->user->id]) : '' ?></td>
+                    <td><?= $userProfile->has('user') ? $this->Html->link($userProfile->user->full_name, ['controller' => 'Users', 'action' => 'view', $userProfile->user->id]) : '' ?></td>
                     <td><?= h($userProfile->profile_photo) ?></td>
                     <td><?= h($userProfile->phone_no_2) ?></td>
                     <td><?= $this->Number->format($userProfile->gender) ?></td>

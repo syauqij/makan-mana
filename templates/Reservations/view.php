@@ -1,5 +1,13 @@
-<div class="album py-5 bg-light">
-    <div class="container">
+<?php
+    $this->extend('/Common/members_page');
+
+    $this->start('sidebar');
+        echo $this->element('sidebar/members', ['active' => 'reservations']);
+    $this->end(); 
+?>
+
+<?php $this->start('page-content'); ?>
+
         <div class="row">
             <div class="col-md-5 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -66,11 +74,11 @@
                 </div>
 
                 <hr class="mb-4">
-                <?= $this->Form->button(__('Submit Reservation'),[
+                <?= $this->Form->button(__('Modify Reservation'),[
                     'class' => 'btn btn-primary btn-lg btn-block'
                 ]) ?>
 
             </div>
         </div>
-    </div>
-</div>
+
+<?php $this->end(); ?>

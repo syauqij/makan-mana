@@ -94,6 +94,19 @@ class ReservationsTable extends Table
             $query->where([
                 'restaurant_id' => $id, 
                 'reserved_date >=' => $date]
+                
         );
+    }        
+
+    public function findUpcoming($query, $options) 
+    {   
+        $date = $options['params'];
+
+        return 
+            $query
+                ->limit(3)
+                ->where(['reserved_date >=' => $date])
+                ->contain(['Restaurants'])
+                ->order(['Reservations.reserved_date' => 'ASC']);
     }        
 }

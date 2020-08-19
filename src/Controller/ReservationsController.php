@@ -17,11 +17,29 @@ class ReservationsController extends AppController
         $filter = $this->Authorization->applyScope($this->Reservations->find());
 
         $this->paginate = [
+            'limit' => 5,
+            'order' => [
+                'Reservations.reserved_date' => 'desc'],
             'contain' => ['Users', 'Restaurants', 'RestaurantTables'],
         ];
 
         $reservations = $this->paginate($filter);
+
+        $this->set(compact('reservations'));
+    }
+
+    public function members()
+    {   
+        $user = $this->request->getAttribute('identity');
+
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd HH:mm:ss');
+
+        $reservations = $this->Reservations->find('upcoming', [
+            'params' => $date
+        ]);
         
+        $reservations = $this->Authorization->applyScope($reservations, 'index');
 
         $this->set(compact('reservations'));
     }

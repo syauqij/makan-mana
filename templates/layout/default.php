@@ -32,6 +32,9 @@
         <li class="nav-item">
             <a class="nav-link" href="#">For Businesses</a>
         </li>
+        <li>
+            <a class="nav-link" href="#"><?= h($this->Identity->get('role')) ?>:<?= h($this->Identity->get('id')) ?></a>
+        </li>
     </ul>
     <div class="btn-group">
         <?php if ($this->Identity->isLoggedIn()) : ?>

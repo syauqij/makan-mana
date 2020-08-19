@@ -141,12 +141,12 @@ class RestaurantsController extends AppController
 
         $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
         $menuCategories = $tableMenuCategories->find()
-        ->contain(['Menus.MenuItems'])
-        ->contain('Menus', function (Query $q) use ($restaurantId) {
-            return $q
-                //->select(['body', 'author_id'])
-                ->where(['Menus.restaurant_id' => $restaurantId]);
-        });
+            ->contain(['Menus.MenuItems'])
+            ->contain('Menus', function (Query $q) use ($restaurantId) {
+                return $q
+                    //->select(['body', 'author_id'])
+                    ->where(['Menus.restaurant_id' => $restaurantId]);
+            });
 
         $this->set(compact('restaurant', 'menuCategories'));
     }

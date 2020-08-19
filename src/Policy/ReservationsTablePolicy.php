@@ -20,9 +20,9 @@ class ReservationsTablePolicy
             case 'owner' :
                 return $query->where(['Restaurants.user_id' => $user->getIdentifier()]);
             case 'admin' :
-                return null;
+                return $query;
             default :
-                return false;
+                return null;
         }
     }
 }
