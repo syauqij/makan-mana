@@ -13,37 +13,11 @@
             <div class="col-md-5 order-md-2 mb-4">
                 <h4>Sign In</h5 >
                 <p class="mb-3">Please sign in if you own an account</p >
-                <?= $this->Form->create($user, ['url' => ['contoller' => 'Users', 'action' => 'login']]) ?>
-                <div class="row">
-                    <div class="col-md-12 mb-2">
-                        <?= $this->Form->control('_email', [
-                            //'label' => false,
-                            'id' => '_email',
-                            'placeholder' => 'Email Address'
-                            ]
-                        ) ?>
-                    </div>
-                    <div class="col-md-12 mb-2">
-                        <?= $this->Form->control('_password', [
-                            //'label' => false,
-                            'type' => 'password',
-                            'id' => '_password',
-                            'placeholder' => 'Password'
-                            ]
-                        ) ?>
-                    </div>
-                    <div class="col-md-12 mb-2">
-                        <?= $this->Form->button(__('Sign In'),[
-                            'id' => "login-button",
-                            'class' => 'btn btn-primary btn-lg'
-                        ]) ?>
-                    </div>
-                    <?= $this->Form->end(); ?>
-                </div>
+                <?php echo $this->element('form/login'); ?>
             </div>
 
             <div class="col-md-7 order-md-1">
-                <h5>Sign Up</h5 >
+                <h4>Register</h4>
                 <p class="mb-3">It's free and only takes a minute.</p >
                 <?php echo $this->Form->create($user);
                 ?>
@@ -99,7 +73,7 @@
                 </div>
 
                 <hr class="mb-4">
-                <?= $this->Form->button(__('Sign Up'),[
+                <?= $this->Form->button(__('Register'),[
                     'class' => 'btn btn-primary btn-lg btn-block'
                 ]) ?>
                 <?= $this->Form->end(); ?>

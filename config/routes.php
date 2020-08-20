@@ -76,7 +76,9 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->scope('/', function (RouteBuilder $builder) {
         $builder->connect('/s/*', ['controller' => 'Restaurants', 'action' => 'search']);
         $builder->connect('/r/*', ['controller' => 'Restaurants', 'action' => 'view']);
-        $builder->connect('/register/*', ['controller' => 'Users', 'action' => 'register']);
+        $builder->connect('/register/*', ['controller' => 'Register', 'action' => 'member']);
+        $builder->connect('/register/restaurant-step-1/*', ['controller' => 'Register', 'action' => 'owner']);
+        $builder->connect('/register/restaurant-step-2/*', ['controller' => 'Register', 'action' => 'restaurant']);
     });
 
     /*

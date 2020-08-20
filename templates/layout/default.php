@@ -30,10 +30,7 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
      <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="#">For Businesses</a>
-        </li>
-        <li>
-            <a class="nav-link" href="#"><?= h($this->Identity->get('role')) ?>:<?= h($this->Identity->get('id')) ?></a>
+            <?= $this->Html->link('For Businesses', ['controller' => 'Register', 'action' => 'owner'], ['class' => 'nav-link']);?>
         </li>
     </ul>
     <div class="btn-group">
@@ -43,14 +40,14 @@
             </button>
 
             <div class="dropdown-menu">
-                <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'profile'], ['class' => 'dropdown-item']);?>
-                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'index'], ['class' => 'dropdown-item']);?>
+                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'members'], ['class' => 'dropdown-item']);?>
+                <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
                 <div class="dropdown-divider"></div>
                     <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
                 </div>
             </div>
         <?php else : ?>
-            <?= $this->Html->link('Register', ['controller' => 'Users', 'action' => 'register'], ['class' => 'btn btn-danger']);?>
+            <?= $this->Html->link('Register', ['controller' => 'Register', 'action' => 'member'], ['class' => 'btn btn-danger']);?>
             <?= $this->Html->link('Sign In', ['controller' => 'Users', 'action' => 'login'], ['class' => 'btn btn-secondary']);?>        
         <?php endif; ?>
     </div>

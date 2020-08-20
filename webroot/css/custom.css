@@ -27,6 +27,10 @@ body {
   background-image: url("../img/jumbotron_register_member.jpg");
 }
 
+#register-restaurant-banner {
+  background-image: url("../img/jumbotron_register_restaurant.jpg");
+}
+
 .page-header {
   position: relative;
   background: #fff;

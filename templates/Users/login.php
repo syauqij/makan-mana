@@ -25,7 +25,8 @@
                         'class' => 'btn btn-primary btn-lg'
                     ]) ?>
                     <p class="pt-2"><?= $this->Html->link("Create an Account", [
-                        'action' => 'register',
+                        'controller' => 'register',
+                        'action' => 'member',
                         '?' => ['redirect' => $redirect]
                     ]) ?></p>
                 </div>
