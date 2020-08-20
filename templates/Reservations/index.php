@@ -1,13 +1,14 @@
 <?php
-    $this->extend('/Common/members_page');
+    $this->extend('/Common/registered');
     
     $this->start('sidebar');
-        echo $this->element('sidebar/members', ['active' => 'dining-history']);
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'reservations']);
     $this->end(); 
 ?>
 
 <?php $this->start('page-content'); ?>
-    <h3>My Reservations</h3><hr/>
+    <h3>Manage Reservations</h3>
     <?php if($reservations->isEmpty()) : ?>
         <p>No records found.</p>
     <?php else: ?> 
@@ -20,7 +21,6 @@
                     <th scope="col"><?= $this->Paginator->sort('reserved_date') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('total_guests', 'Guests') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('status') ?></th>
-                    <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                     <th scope="actions col"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -32,9 +32,7 @@
                     <td><?= h($reservation->reserved_date) ?></td>
                     <td><?= $this->Number->format($reservation->total_guests) ?></td>
                     <td><?= h($reservation->status) ?></td>
-                    <td><?= h($reservation->created) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $reservation->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $reservation->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $reservation->id], ['confirm' => __('Are you sure you want to delete # {0}?', $reservation->id)]) ?>
                     </td>

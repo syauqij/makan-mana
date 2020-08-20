@@ -48,6 +48,7 @@ class Restaurant extends Entity
         'user_id' => true,
         'address_line_1' => true,
         'address_line_2' => true,
+        'postcode' => true,
         'city' => true,
         'state' => true,
         'contact_no' => true,
@@ -64,4 +65,11 @@ class Restaurant extends Entity
         'restaurant_galleries' => true,
         'restaurant_tables' => true,
     ];
+
+    protected $_virtual = ['full_address'];
+
+    protected function _getFullAddress() {
+        return $this->address_line_1 . ' ' . $this->address_line_2 . ' ' . 
+             $this->city. ', ' . $this->postcode . ', ' . $this->state . '.';
+    } 
 }

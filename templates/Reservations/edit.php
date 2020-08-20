@@ -1,8 +1,9 @@
 <?php
-    $this->extend('/Common/members_page');
+    $this->extend('/Common/registered');
 
     $this->start('sidebar');
-        echo $this->element('sidebar/members', ['active' => 'reservations']);
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'reservations']);
     $this->end(); 
 ?>
 

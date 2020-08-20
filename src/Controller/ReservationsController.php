@@ -28,7 +28,7 @@ class ReservationsController extends AppController
         $this->set(compact('reservations'));
     }
 
-    public function members()
+    public function upcoming()
     {   
         $user = $this->request->getAttribute('identity');
 

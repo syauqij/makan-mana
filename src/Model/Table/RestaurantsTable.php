@@ -78,11 +78,6 @@ class RestaurantsTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->scalar('description')
-            ->requirePresence('description', 'create')
-            ->notEmptyString('description');
-
-        $validator
             ->scalar('address_line_1')
             ->maxLength('address_line_1', 150)
             ->requirePresence('address_line_1', 'create')
@@ -116,17 +111,6 @@ class RestaurantsTable extends Table
             ->scalar('website')
             ->maxLength('website', 150)
             ->allowEmptyString('website');
-
-        $validator
-            ->numeric('price_range')
-            ->requirePresence('price_range', 'create')
-            ->notEmptyString('price_range');
-
-        $validator
-            ->scalar('payment_options')
-            ->maxLength('payment_options', 100)
-            ->requirePresence('payment_options', 'create')
-            ->notEmptyString('payment_options');
 
         return $validator;
     }

@@ -86,7 +86,7 @@ class RegisterController extends AppController
                 //authenticate newly registered owner and log them in 
                 $this->Authentication->setIdentity($user);
 
-                $this->Flash->alert('Your account has been created. Please, complete your restaurant details.', [
+                $this->Flash->alert('Your account has been created. Please, fill-in your restaurant basic information.', [
                     'params' => ['type' => "success"]
                 ]);
 
@@ -107,29 +107,19 @@ class RegisterController extends AppController
 
         $restaurant = $restaurantsTable->newEmptyEntity();
         if ($this->request->is('post')) {
-            //generate token for email validation and authenticate restaurant
-            $token = Security::hash(Security::randomBytes(32));
-
-            $restaurant = $restaurantsTable->patchEntity($restaurant, $this->request->getData(),
-            ['validate' => 'passwords']);
-
-            $restaurant->token = $token;
-            $restaurant->role = "owner";
+            $restaurant->user_id = $this->request->getAttribute('identity')->getIdentifier();
+            $restaurant = $restaurantsTable->patchEntity($restaurant, $this->request->getData());
 
             if ($restaurantsTable->save($restaurant)) {
-                $restaurant = $restaurantsTable->find('byToken', ['token' => $token])->first();
 
-                //authenticate newly registered owner and log them in 
-                $this->Authentication->setIdentity($restaurant);
-
-                $this->Flash->alert('Your account has been created. Please, complete your restaurant details.', [
+                $this->Flash->alert('Almost there. Please, complete your restaurant details.', [
                     'params' => ['type' => "success"]
                 ]);
 
-                return $this->redirect(['controller' => 'Register', 'action' => 'restaurant']);
+                return $this->redirect(['controller' => 'Restaurants', 'action' => 'edit', $restaurant->id]);
 
             } else {
-                $this->Flash->alert('Registration not successful. Please, try again.', [
+                $this->Flash->alert('The restaurant information could not be saved. Please, try again.', [
                     'params' => ['type' => "warning"]
                 ]);
             }

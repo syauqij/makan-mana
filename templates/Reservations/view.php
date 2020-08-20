@@ -2,7 +2,8 @@
     $this->extend('/Common/members_page');
 
     $this->start('sidebar');
-        echo $this->element('sidebar/members', ['active' => 'reservations']);
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'reservations']);
     $this->end(); 
 ?>
 
@@ -48,16 +49,14 @@
                             'label' => false, 
                             'value' => 'Muhamad Syauqi bin Jamil',
                             'placeholder' => 'Full Name'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('phone_no', [
                             'label' => false, 
                             'value' => '0182569784',
                             'placeholder' => 'Phone Number'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->select('occasion', $occasions, [

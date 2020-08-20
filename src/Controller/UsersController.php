@@ -25,10 +25,24 @@ class UsersController extends AppController
         
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
-            // redirect to /articles after login success
+            
+            $identity = $this->request->getAttribute('identity');
+            $role = $identity->get('role');
+
+            if ($role == 'member') {
+                $contoller = 'Reservations';
+                $action = 'upcoming';
+            } elseif ($role == 'owner'){
+                $contoller = 'Reservations';
+                $action = 'index';
+            } else {
+                $contoller = 'Restaurants';
+                $action = 'index';
+            }
+
             $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Reservations',
-                'action' => 'index',
+                'controller' => $contoller,
+                'action' => $action,
             ]);
             return $this->redirect($redirect);
         }

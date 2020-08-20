@@ -1,8 +1,9 @@
 <?php
-    $this->extend('/Common/members_page');
+    $this->extend('/Common/registered');
 
     $this->start('sidebar');
-        echo $this->element('sidebar/members', ['active' => 'account-details']);
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'account-details']);
     $this->end(); 
 ?>
 

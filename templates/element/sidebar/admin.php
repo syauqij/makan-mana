@@ -3,16 +3,16 @@
 ?>
 <?php //debug($active)?>
 <?= $this->Html->link('Reservations', [
-    'controller' => 'reservations', 'action' => 'members'],
+    'controller' => 'reservations', 'action' => 'index'],
     ['class' => 'nav-link', 'id' => 'reservations']
 ); ?>
-<?= $this->Html->link('Dining History', [
-    'controller' => 'reservations', 'action' => 'index'],
-    ['class' => 'nav-link', 'id' => 'dining-history']
+<?= $this->Html->link('Restaurants', [
+    'controller' => 'restaurants', 'action' => 'index'],
+    ['class' => 'nav-link', 'id' => 'restaurants']
 ); ?>
-<?= $this->Html->link('Favourites', [
-    'controller' => 'restaurants', 'action' => 'favourites'],
-    ['class' => 'nav-link', 'id' => 'favourites']
+<?= $this->Html->link('Reports', [
+    'controller' => 'reports', 'action' => 'index'],
+    ['class' => 'nav-link', 'id' => 'reports']
 ); ?>
 <?= $this->Html->link('Account Details', [
     'controller' => 'users', 'action' => 'edit', $user_id],

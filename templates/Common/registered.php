@@ -11,9 +11,9 @@
 <div class="container">
     <div class="row">
     <div class="col-md-3 pb-3">
-        <nav class="nav nav-pills flex-column">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <?= $this->fetch('sidebar') ?>
-        </nav>
+        </div>
     </div>
     <div class="col-md-9">
         <div class="tab-content" id="v-pills-tabContent">

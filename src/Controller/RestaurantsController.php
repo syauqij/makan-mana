@@ -104,7 +104,6 @@ class RestaurantsController extends AppController
                 $timeslots[] = $this->getTimeslots($selectedDate, $restaurant->id);
             }   
             $restaurants = (new Collection($restaurants))->insert('timeslots', $timeslots);
-            //dd($restaurants);
         }
 
         $this->set(compact('restaurants', 'date', 'today', 'time', 'timeOptions', 'guests')); 
@@ -174,6 +173,7 @@ class RestaurantsController extends AppController
         $restaurant = $this->Restaurants->get($id, [
             'contain' => [],
         ]);
+        //dd($restaurant);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
             if ($this->Restaurants->save($restaurant)) {
@@ -183,8 +183,7 @@ class RestaurantsController extends AppController
             }
             $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
         }
-        $users = $this->Restaurants->Users->find('list', ['limit' => 200]);
-        $this->set(compact('restaurant', 'users'));
+        $this->set(compact('restaurant'));
     }
 
     public function delete($id = null)

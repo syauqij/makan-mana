@@ -19,36 +19,31 @@
             <div class="col-md-7 order-md-1">
                 <h4>Register</h4>
                 <p class="mb-3">It's free and only takes a minute.</p >
-                <?php echo $this->Form->create($user);
-                ?>
+                <?php echo $this->Form->create($user);?>
                 <div class="row">
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('first_name', [
                             //'label' => false, 
                             'placeholder' => 'First Name'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('last_name', [
                             //'label' => false, 
                             'placeholder' => 'Last Name'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('email', [
                             //'label' => false,
                             'placeholder' => 'Email address'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('phone_no', [
                             //'label' => false,
                             'placeholder' => 'Phone number'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('password', [
@@ -56,8 +51,7 @@
                             'id' => 'password',
                             'placeholder' => 'Enter password',
                             'autocomplete' => 'new-password'
-                            ]
-                        ) ?>
+                        ])?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('confirm_password', [
@@ -67,8 +61,7 @@
                             'placeholder' => 'Re-enter password',
                             'required' => true,
                             'autocomplete' => 'new-password'
-                            ]
-                        ) ?>
+                        ])?>
                     </div>
                 </div>
 
