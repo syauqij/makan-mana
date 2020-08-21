@@ -62,7 +62,9 @@ class UsersController extends AppController
 
         // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->alert(__('Invalid username or password'), [
+                'params' => ['type' => "warning"]
+            ]);
         }
 
         $redirect = $this->request->getQuery('redirect');
@@ -168,11 +170,15 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->alert(__('The user has been saved.'), [
+                    'params' => ['type' => "success"]
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->alert(__('The user could not be saved. Please, try again.'), [
+                'params' => ['type' => "warning"]
+            ]);
         }
         $this->set(compact('user'));
     }

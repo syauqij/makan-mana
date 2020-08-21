@@ -219,9 +219,13 @@ class RestaurantsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $restaurant = $this->Restaurants->get($id);
         if ($this->Restaurants->delete($restaurant)) {
-            $this->Flash->success(__('The restaurant has been deleted.'));
+            $this->Flash->alert(__('The restaurant has been deleted.'), [
+                'params' => ['type' => "success"]
+            ]);
         } else {
-            $this->Flash->error(__('The restaurant could not be deleted. Please, try again.'));
+            $this->Flash->alert(__('The restaurant could not be deleted. Please, try again.'), [
+                'params' => ['type' => "warning"]
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);
@@ -260,7 +264,7 @@ class RestaurantsController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
+            $this->Flash->alert(__('The restaurant could not be saved. Please, try again.'));
         }
         $this->set(compact('restaurant'));        
     }
