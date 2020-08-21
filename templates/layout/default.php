@@ -18,8 +18,8 @@
     
     <?= $this->Html->css('custom.css') ?>
 </head>
-<body data-spy="scroll" data-target="#navbar-example" data-offset="56">
 
+<body data-spy="scroll" data-target="#navbar-home" data-offset="56">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,13 +72,9 @@
         <?= $this->fetch('content') ?> 
     </main>
 
-    <footer class="text-muted">
-        <div class="container">
-            <p class="float-right">
-                <a href="#">Back to top</a>
-            </p>
-            <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-        </div>
+    <footer class="container">
+        <p class="float-right"><a href="#">Back to top</a></p>
+        <p>© 2020 Makan Mana Sdn. Bhd.</a></p>
     </footer>
 
     <!-- Bootstrap & jQuery JS-->
