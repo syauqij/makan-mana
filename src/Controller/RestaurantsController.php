@@ -175,7 +175,7 @@ class RestaurantsController extends AppController
         $restaurant = $this->Restaurants->get($id, [
             'contain' => ['RestaurantCuisines'],
         ]);
-        
+
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
         $cuisines = $cuisinesTable->find('list');
 
@@ -220,6 +220,42 @@ class RestaurantsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function gallery($id = nul)
+    {
+        $restaurant = $this->Restaurants->get($id, [
+            'contain' => ['RestaurantCuisines'],
+        ]);
+        
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            //dd($this->request);
+            $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
+            
+            $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
+            $attachment = $this->request->getData('photo');
+  
+            if($attachment) {
+                $fileName = $attachment->getClientFilename();
+                $targetPath = $dir->path . DS . $fileName ;
+
+                if($fileName) {
+                    //dd($targetPath);
+                    $attachment->moveTo($targetPath);
+                    $restaurant->image_file = $fileName;  
+                }
+            }
+
+            if ($this->Restaurants->save($restaurant)) {
+                $this->Flash->alert('Restaurant details updated.', [
+                    'params' => ['type' => "success"]
+                ]);
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
+        }
+        $this->set(compact('restaurant'));        
     }
     
     private function getTimeSelections() {
