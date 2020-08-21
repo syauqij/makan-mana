@@ -108,7 +108,7 @@ class ReservationsController extends AppController
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->success(__('The reservation has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'upcoming']);
             }
 
             if($reservation->getErrors('reserved_date')) {
@@ -131,8 +131,11 @@ class ReservationsController extends AppController
 
     public function edit($uuid = null)
     {   
-        $reservation = $this->Reservations->find()->where(['id' => $uuid])->first();
-    
+        $reservation = $this->Reservations->find()
+            ->where(['Reservations.id' => $uuid])
+            ->contain('Restaurants')
+            ->first();
+        
         $this->Authorization->authorize($reservation);
 
          if ($this->request->is(['patch', 'post', 'put'])) {

@@ -21,7 +21,7 @@
                     <th scope="col"><?= $this->Paginator->sort('reserved_date') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('total_guests', 'Guests') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('status') ?></th>
-                    <th scope="actions col"><?= __('Actions') ?></th>
+                    <th scope="actions col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -32,10 +32,18 @@
                     <td><?= h($reservation->reserved_date) ?></td>
                     <td><?= $this->Number->format($reservation->total_guests) ?></td>
                     <td><?= h($reservation->status) ?></td>
+                    <?php if($this->Identity->get('role') == "owner") : ?>
                     <td class="actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $reservation->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $reservation->id], ['confirm' => __('Are you sure you want to delete # {0}?', $reservation->id)]) ?>
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                            Update
+                        </button>
+                        <div class="dropdown-menu">
+                            <?= $this->Html->link('Accept', ['controller' => 'Reservation', 'action' => 'update'], ['class' => 'dropdown-item']);?>
+                            <?= $this->Html->link('Decline', ['controller' => 'Restaurants', 'action' => 'update'], ['class' => 'dropdown-item']);?>
+                            <?= $this->Html->link('Complete', ['controller' => 'Menus', 'action' => 'update'], ['class' => 'dropdown-item']);?>
+                        </div>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

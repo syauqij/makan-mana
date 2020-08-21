@@ -21,7 +21,10 @@ class ReservationPolicy implements BeforePolicyInterface
  
     public function canCreate(IdentityInterface $user, Reservation $reservation)
     {
-        return true;
+        $role = $user->getOriginalData()->role;
+        if ($role == 'member') {
+            return true;
+        }
     }
 
     public function canEdit(IdentityInterface $user, Reservation $reservation)
@@ -38,7 +41,6 @@ class ReservationPolicy implements BeforePolicyInterface
     public function canView(IdentityInterface $user, Reservation $reservation)
     {
         return $this->isOwner($user, $reservation);
-
     }
 
     protected function isOwner(IdentityInterface $user, Reservation $reservation)

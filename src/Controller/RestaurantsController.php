@@ -57,13 +57,11 @@ class RestaurantsController extends AppController
     {   
         $this->Authorization->skipAuthorization();
 
-        $params = $this->request->getQuery();
-        $cuisines = $this->request->getParam('pass');
-
         $timeOptions = $this->getTimeSelections();
         $now = FrozenTime::now();
         $date = $today = $now->i18nFormat('yyyy-MM-dd');
         $minutes = $now->i18nFormat('mm');
+        $guests = 2;
         $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
         if ($minutes < 15) {
@@ -73,6 +71,9 @@ class RestaurantsController extends AppController
         } else {
             $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
         }
+
+        $params = $this->request->getQuery();
+        $cuisines = $this->request->getParam('pass');
 
         if ($params) {
 

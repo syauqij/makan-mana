@@ -9,27 +9,27 @@
 
 <div class="album py-5 bg-light">
     <div class="container">
+        <?= $this->Form->create($restaurant, ['type' => 'file']); ?>
         <div class="row">
             <div class="col-12">
                 <h4>Step 2: Restaurant Details</h4>
-                <?= $this->Form->create($restaurant, ['type' => 'file']); ?>
             </div>
             <div class="col-md-6">
                 <p class="mb-3">Fill in your restaurant basic information.</p >
-                <!-- Fectch restaurant basic info form -->
+                <!-- Fetch restaurant_info form -->
                 <?php echo $this->element('form/restaurant_info'); ?>
             </div>
             <div class="col-md-6">
                 <p class="mb-3">Then your restaurant profiles.</p >
-                <!-- Fectch restaurant profile form -->
+                <!-- Fetch restaurant_profiles form -->
                 <?php echo $this->element('form/restaurant_profiles'); ?>
             </div>
             <div class="col-12">
                 <?= $this->Form->button(__('Submit for Review'),[
                     'class' => 'btn btn-primary'
                     ]) ?>
-                <?= $this->Form->end(); ?>
             </div>
         </div>
+        <?= $this->Form->end(); ?>
     </div>
 </div>

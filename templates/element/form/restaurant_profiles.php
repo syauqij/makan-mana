@@ -1,4 +1,3 @@
-<?php echo $this->Form->create($restaurant); ?>
 <div class="row">
     <div class="col-md-10">
         <?= $this->Form->control('description', [
@@ -10,9 +9,9 @@
 
 <div class="row">
     <div class="col-md-7">
+        <?= $this->Form->label('Select Cuisines')?>
         <?= $this->Form->select('RestaurantCuisines.cuisine_id', $cuisines, [
-            'label' => 'Select Cuisines', 
-            'placeholder' => 'Choose at least one'
+                'placeholder' => 'Choose at least one'
             ]) ?>
     </div>
     <div class="col-md-7">
@@ -26,7 +25,7 @@ Closed on Mondays'
 
 <div class="row">
     <div class="col-md-7">
-    <?= $this->Form->control('payment_options', [
+        <?= $this->Form->control('payment_options', [
             'default' => 'eWallet, MasterCard, Visa, AMEX',
         ]) ?>    
     </div>

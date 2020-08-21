@@ -1,4 +1,3 @@
-<?php echo $this->Form->create($restaurant); ?>
 <div class="row">
     <div class="col-md-12 mb-2">
         <?= $this->Form->control('name', [

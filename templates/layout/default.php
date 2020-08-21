@@ -29,9 +29,11 @@
   <div class="login">
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
      <ul class="nav">
+         <?php if ($this->Identity->isLoggedIn() == false) : ?>
         <li class="nav-item">
             <?= $this->Html->link('For Businesses', ['controller' => 'Register', 'action' => 'owner'], ['class' => 'nav-link']);?>
         </li>
+         <?php endif; ?>
     </ul>
     <div class="btn-group">
         <?php if ($this->Identity->isLoggedIn()) : ?>
@@ -62,7 +64,9 @@
 </div>
 </nav>
     <main role="main">
-        <?= $this->Flash->render() ?>
+        <?php if($this->Flash) : ?>
+            <div class='container'> <?= $this->Flash->render()?> </div>
+        <?php endif; ?>
         <?= $this->fetch('content') ?> 
     </main>
 

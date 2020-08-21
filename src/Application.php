@@ -135,8 +135,8 @@ class Application extends BaseApplication
     
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {   
-        
         $authenticationService = new AuthenticationService([
+            //to fix url when not using cake server 
             'unauthenticatedRedirect' => '/users/login',
             'queryParam' => 'redirect',
         ]);
@@ -157,6 +157,7 @@ class Application extends BaseApplication
                 'username' => 'email',
                 'password' => 'password',
             ],
+            //to fix url when not using cake server
             'loginUrl' => '/users/login',
         ]);
     
