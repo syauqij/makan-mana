@@ -86,7 +86,7 @@ class RegisterController extends AppController
                 //authenticate newly registered owner and log them in 
                 $this->Authentication->setIdentity($user);
 
-                $this->Flash->alert('Your account has been created. Please, fill-in your restaurant basic information.', [
+                $this->Flash->alert('Your account has been created. Please, fill-in your restaurant information.', [
                     'params' => ['type' => "success"]
                 ]);
 
@@ -104,11 +104,27 @@ class RegisterController extends AppController
     public function restaurant()
     {   
         $restaurantsTable = $this->getTableLocator()->get('Restaurants');
+        $cuisinesTable = $this->getTableLocator()->get('Cuisines');
+        
+        $cuisines = $cuisinesTable->find('list');
 
         $restaurant = $restaurantsTable->newEmptyEntity();
         if ($this->request->is('post')) {
             $restaurant->user_id = $this->request->getAttribute('identity')->getIdentifier();
             $restaurant = $restaurantsTable->patchEntity($restaurant, $this->request->getData());
+            
+            $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
+            $attachment = $this->request->getData('photo');
+            dd($attachment);
+            if($attachment) {
+                $fileName = $attachment->getClientFilename();
+                $targetPath = $dir->path . DS . $fileName ;
+
+                if($fileName) {
+                    $attachment->moveTo($targetPath);
+                    $restaurant->profile_photo = $fileName;  
+                }
+            }
 
             if ($restaurantsTable->save($restaurant)) {
 
@@ -124,7 +140,7 @@ class RegisterController extends AppController
                 ]);
             }
         }
-        $this->set(compact('restaurant'));        
+        $this->set(compact('restaurant', 'cuisines'));        
     }
 
 }

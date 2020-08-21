@@ -38,11 +38,18 @@
             <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Hi, <?= h($this->Identity->get('first_name')) ?>
             </button>
-
             <div class="dropdown-menu">
-                <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'members'], ['class' => 'dropdown-item']);?>
-                <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
-                <div class="dropdown-divider"></div>
+                <?php if ($this->Identity->get('role') == "member") : ?>
+                    <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link('My Saved Restaurants', ['controller' => 'Restaurants', 'action' => 'favourites'], ['class' => 'dropdown-item']);?>
+                <?php elseif ($this->Identity->get('role') == "owner") : ?>
+                    <?= $this->Html->link('Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link('Restaurants', ['controller' => 'Restaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
+                <?php else: ?>
+                    <?= $this->Html->link('Manage Restaurants', ['controller' => 'Restaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
+                <?php endif; ?>
+                    <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
+                    <div class="dropdown-divider"></div>
                     <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
                 </div>
             </div>

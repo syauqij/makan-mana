@@ -92,9 +92,8 @@ class ReservationsTable extends Table
 
         return 
             $query->where([
-                'restaurant_id' => $id, 
+                'restaurant_id' => $id,
                 'reserved_date >=' => $date]
-                
         );
     }        
 

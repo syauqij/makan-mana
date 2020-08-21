@@ -4,13 +4,13 @@
 <?php //debug($active)?>
 <?= $this->Html->link('Reservations', [
     'controller' => 'reservations', 'action' => 'upcoming'],
-    ['class' => 'nav-link', 'id' => 'reservations']
+    ['class' => 'nav-link', 'id' => 'upcoming']
 ); ?>
 <?= $this->Html->link('Dining History', [
     'controller' => 'reservations', 'action' => 'index'],
-    ['class' => 'nav-link', 'id' => 'dining-history']
+    ['class' => 'nav-link', 'id' => 'reservations']
 ); ?>
-<?= $this->Html->link('Favourites', [
+<?= $this->Html->link('Saved Restaurants', [
     'controller' => 'restaurants', 'action' => 'favourites'],
     ['class' => 'nav-link', 'id' => 'favourites']
 ); ?>

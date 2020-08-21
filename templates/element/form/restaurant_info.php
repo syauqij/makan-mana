@@ -60,7 +60,7 @@
         ]) ?>
     </div>
     <div class="col-md-12 mb-2">
-        <?= $this->Form->control('profile_photo', [
+        <?= $this->Form->control('photo', [
             'label' => "Restaurant Profile Photo",
             'type' => 'file',
         ]); ?>

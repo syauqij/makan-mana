@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-md-7">
-        <?= $this->Form->control('Cuisines', [
+        <?= $this->Form->select('RestaurantCuisines.cuisine_id', $cuisines, [
             'label' => 'Select Cuisines', 
             'placeholder' => 'Choose at least one'
             ]) ?>
@@ -18,8 +18,7 @@
     <div class="col-md-7">
         <?= $this->Form->control('operation_hours', [
             'rows' => 3,
-            'placeholder' =>'Example:
-Tue - Sun: 10:00 am - 11:00 pm
+            'default' =>'Tue - Sun: 10:00 am - 11:00 pm
 Closed on Mondays'
         ]) ?>
     </div>
@@ -28,12 +27,12 @@ Closed on Mondays'
 <div class="row">
     <div class="col-md-7">
     <?= $this->Form->control('payment_options', [
-            'placeholder' => 'E.g. eWallet, MasterCard, Visa, AMEX',
+            'default' => 'eWallet, MasterCard, Visa, AMEX',
         ]) ?>    
     </div>
     <div class="col-md-7">
         <?= $this->Form->control('price_range', [
-            'placeholder' => 'E.g. Avg spending: RM 50 per pax',
+            'default' => 'Avg spending: RM 50 per pax',
         ]) ?>
     </div>
 </div>

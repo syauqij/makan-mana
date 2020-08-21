@@ -3,7 +3,7 @@
 
     $this->start('sidebar');
         $role = $this->Identity->get('role');
-        echo $this->element('sidebar/'.$role, ['active' => 'reservations']);
+        echo $this->element('sidebar/'.$role, ['active' => 'upcoming']);
     $this->end(); 
 ?>
 

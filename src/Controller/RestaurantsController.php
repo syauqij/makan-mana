@@ -9,6 +9,8 @@ use Cake\ORM\Query;
 use Cake\Collection\Collection;
 use Cake\I18n\FrozenTime;
 use Cake\Utility\Text;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 class RestaurantsController extends AppController
 {       
@@ -39,15 +41,15 @@ class RestaurantsController extends AppController
         $getCuisines = $this->getTableLocator()->get('Cuisines');
 
         $results = $getCuisines->find('list', [
-            'limit' => 3
+            'limit' => 5
         ]);
         
         $cuisines = $results->toArray();
         
-        $featured = $this->Restaurants->find('all', [
-            'contain' => [ 'Cuisines'],
-        ]);
-        
+        $featured = $this->Restaurants->find('all')
+            ->contain([ 'Cuisines'])
+            ->where(['Restaurants.status' => 'approved']);
+
         $this->set(compact('featured', 'cuisines', 'date', 'time', 'timeOptions'));
     }
 
@@ -171,19 +173,40 @@ class RestaurantsController extends AppController
     public function edit($id = null)
     {
         $restaurant = $this->Restaurants->get($id, [
-            'contain' => [],
+            'contain' => ['RestaurantCuisines'],
         ]);
-        //dd($restaurant);
+        
+        $cuisinesTable = $this->getTableLocator()->get('Cuisines');
+        $cuisines = $cuisinesTable->find('list');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
+            //dd($this->request);
             $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
+            
+            $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
+            $attachment = $this->request->getData('photo');
+  
+            if($attachment) {
+                $fileName = $attachment->getClientFilename();
+                $targetPath = $dir->path . DS . $fileName ;
+
+                if($fileName) {
+                    //dd($targetPath);
+                    $attachment->moveTo($targetPath);
+                    $restaurant->image_file = $fileName;  
+                }
+            }
+
             if ($this->Restaurants->save($restaurant)) {
-                $this->Flash->success(__('The restaurant has been saved.'));
+                $this->Flash->alert('Restaurant details updated.', [
+                    'params' => ['type' => "success"]
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
         }
-        $this->set(compact('restaurant'));
+        $this->set(compact('restaurant', 'cuisines'));
     }
 
     public function delete($id = null)

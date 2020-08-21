@@ -32,9 +32,22 @@ class UsersController extends AppController
             if ($role == 'member') {
                 $contoller = 'Reservations';
                 $action = 'upcoming';
-            } elseif ($role == 'owner'){
-                $contoller = 'Reservations';
-                $action = 'index';
+            } elseif ($role == 'owner') {
+                $restaurantsTable = $this->getTableLocator()->get('Restaurants');
+                $hasRestaurant = $restaurantsTable->find('hasRestaurant', [
+                    'user_id' => $identity->get('id'),
+                ]);
+                if ($hasRestaurant->isEmpty()) {
+                    $this->Flash->alert('Welcome back. Please continue filling-in your restaurant information.', [
+                        'params' => ['type' => "info"]
+                    ]);
+
+                    $contoller = 'Register';
+                    $action = 'restaurant';
+                } else {
+                    $contoller = 'Reservations';
+                    $action = 'index';
+                }
             } else {
                 $contoller = 'Restaurants';
                 $action = 'index';

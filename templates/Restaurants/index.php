@@ -19,7 +19,7 @@
                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('full_address') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('status') ?></th>
-                    <th scope="actions col"><?= __('Actions') ?></th>
+                    <th scope="actions col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -29,8 +29,14 @@
                     <td><?= h($restaurant->full_address) ?></td>
                     <td><?= h($restaurant->status) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $restaurant->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $restaurant->id], ['confirm' => __('Are you sure you want to delete # {0}?', $restaurant->id)]) ?>
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                            Edit
+                        </button>
+                        <div class="dropdown-menu">
+                            <?= $this->Html->link('Details', ['controller' => 'Restaurants', 'action' => 'edit', $restaurant->id], ['class' => 'dropdown-item']);?>
+                            <?= $this->Html->link('Gallery', ['controller' => 'Restaurants', 'action' => 'gallery', $restaurant->id], ['class' => 'dropdown-item']);?>
+                            <?= $this->Html->link('Menus', ['controller' => 'Menus', 'action' => 'index', $restaurant->id], ['class' => 'dropdown-item']);?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>

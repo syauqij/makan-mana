@@ -10,6 +10,7 @@
 <?php $this->start('page-content'); ?>   
     <div class="col-md-12">
         <h3>Edit <?= h($restaurant->name) ?></h3>
+        <?= $this->Form->create($restaurant, ['type' => 'file']); ?>
         <?php echo $this->element('form/restaurant_info'); ?>
     </div>
 
@@ -18,7 +19,7 @@
     </div>    
 
     <hr class="mb-4">
-    <?= $this->Form->button(__('Save'),[
+        <?= $this->Form->button(__('Save'),[
             'class' => 'btn btn-primary btn-lg btn-block'
         ]) ?>
     <?= $this->Form->end(); ?>

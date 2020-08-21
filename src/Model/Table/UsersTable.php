@@ -149,5 +149,6 @@ class UsersTable extends Table
         $query->where(['Users.token' => $token['token']]);
 
         return $query;
-    }        
+    }
+
 }
