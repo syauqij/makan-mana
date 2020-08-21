@@ -1,4 +1,4 @@
-<?= $this->Form->create($user, ['url' => ['contoller' => 'Users', 'action' => 'login']]) ?>
+<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'login']]) ?>
 <div class="row">
     <div class="col-md-12 mb-2">
         <?= $this->Form->control('_email', [
