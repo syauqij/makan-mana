@@ -47,6 +47,7 @@
         <div class="card mb-4 shadow-sm">                    
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
+                    'url' => ['action' => 'view', $restaurant->slug],
                     'alt' =>  $restaurant->image_file,
                     'class' => 'bd-placeholder-img card-img-top'
                 ]);?>

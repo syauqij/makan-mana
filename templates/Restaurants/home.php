@@ -62,13 +62,14 @@
 
 <div class="album py-3 bg-light">
     <div class="container">
-        <!-- to replace slick js-->
+        <!-- to replace slick-->
         <div class="row ">
         <?php foreach ($featured as $restaurant): ?>
         <div class="col-sm-3">
         <div class="card mb-4 shadow-sm">                    
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
+                    'url' => ['action' => 'view', $restaurant->slug],
                     'alt' =>  $restaurant->image_file,
                     'class' => 'bd-placeholder-img card-img-top'
                 ]);?>
