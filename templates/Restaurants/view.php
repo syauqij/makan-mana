@@ -16,7 +16,7 @@
 </section>
 <div class="album py-3 bg-light">
 <div class="container">
-	<nav id="navbar-example" class="navbar navbar-light bg-light sticky-top pl-0">
+	<nav id="navbar-restaurant" class="navbar navbar-light bg-light sticky-top pl-0">
 		<div class="col-12 col-md-5 text-truncate pl-0">
 			<strong><?= h($restaurant->name)?></strong>
 		</div>

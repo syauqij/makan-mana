@@ -60,7 +60,8 @@
     </div>
 </section>
 
-<div class="album py-3 bg-light">
+<section class="bg-light home-content">
+<div class="py-3">
     <div class="container">
         <!-- to replace slick-->
         <div class="row ">
@@ -100,6 +101,7 @@
         <hr/>
     </div>
 </div>
+</section>
 
 <?php $this->start('script'); ?>
 <script>

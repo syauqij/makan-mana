@@ -1,4 +1,4 @@
-<div class="album py-5 bg-light">
+<div class="album py-5 bg-light login-content">
     <div class="container">
         <div class="row">
         <div class="col-md-5 order-md-2 mb-4">

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Restaurant Booking System">
-    <meta name="author" content="Syauqi Jamil">
+    <meta name="author" content="Muhamad Syauqi bin Jamil">
     <meta name="generator" content="Makan Mana v0.1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->Html->meta('icon') ?>
@@ -19,7 +19,7 @@
     <?= $this->Html->css('custom.css') ?>
 </head>
 
-<body data-spy="scroll" data-target="#navbar-home" data-offset="56">
+<body data-spy="scroll" data-target="#navbar-restaurant" data-offset="56">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">

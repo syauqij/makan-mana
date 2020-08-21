@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<div class="album py-3 bg-light">
+<div class="registered-content py-3 bg-light">
 <div class="container">
     <div class="row">
     <div class="col-md-3 pb-3">
