@@ -80,7 +80,6 @@ class ReservationsTable extends Table
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
         $rules->add($rules->existsIn(['restaurant_id'], 'Restaurants'), ['errorField' => 'restaurant_id']);
-        $rules->add($rules->existsIn(['restaurant_table_id'], 'RestaurantTables'), ['errorField' => 'restaurant_table_id']);
         $rules->add($rules->isUnique(['reserved_date', 'restaurant_id']));
 
         return $rules;

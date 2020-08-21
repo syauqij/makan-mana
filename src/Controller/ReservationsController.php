@@ -17,7 +17,7 @@ class ReservationsController extends AppController
             'limit' => 5,
             'order' => [
                 'Reservations.reserved_date' => 'desc'],
-            'contain' => ['Users', 'Restaurants', 'RestaurantTables'],
+            'contain' => ['Users', 'Restaurants'],
         ];
 
         $reservations = $this->paginate($filter);
@@ -144,7 +144,6 @@ class ReservationsController extends AppController
         }
         $users = $this->Reservations->Users->find('list', ['limit' => 200]);
         $restaurants = $this->Reservations->Restaurants->find('list', ['limit' => 200]);
-        $restaurantTables = $this->Reservations->RestaurantTables->find('list', ['limit' => 200]);
         $this->set(compact('reservation', 'users', 'restaurants', 'restaurantTables'));
     }
 

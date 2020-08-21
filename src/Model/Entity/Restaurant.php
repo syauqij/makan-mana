@@ -69,12 +69,10 @@ class Restaurant extends Entity
         'modified' => true,
         'user' => true,
         'cuisines' => true,
-        'business_hours' => true,
         'menus' => true,
         'reservations' => true,
         'restaurant_cuisines' => true,
-        'restaurant_galleries' => true,
-        'restaurant_tables' => true,
+        'restaurant_galleries' => true
     ];
 
     protected $_virtual = ['full_address'];

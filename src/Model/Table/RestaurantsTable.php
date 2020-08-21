@@ -11,41 +11,8 @@ use Cake\Utility\Text;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 
-/**
- * Restaurants Model
- *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\BusinessHoursTable&\Cake\ORM\Association\HasMany $BusinessHours
- * @property \App\Model\Table\MenusTable&\Cake\ORM\Association\HasMany $Menus
- * @property \App\Model\Table\ReservationsTable&\Cake\ORM\Association\HasMany $Reservations
- * @property \App\Model\Table\RestaurantCuisinesTable&\Cake\ORM\Association\HasMany $RestaurantCuisines
- * @property \App\Model\Table\RestaurantGalleriesTable&\Cake\ORM\Association\HasMany $RestaurantGalleries
- * @property \App\Model\Table\RestaurantTablesTable&\Cake\ORM\Association\HasMany $RestaurantTables
- *
- * @method \App\Model\Entity\Restaurant newEmptyEntity()
- * @method \App\Model\Entity\Restaurant newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant get($primaryKey, $options = [])
- * @method \App\Model\Entity\Restaurant findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Restaurant patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Restaurant|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Restaurant saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
- */
 class RestaurantsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -66,9 +33,6 @@ class RestaurantsTable extends Table
             'dependent' => true
         ]);
 
-        $this->hasMany('BusinessHours', [
-            'foreignKey' => 'restaurant_id',
-        ]);
         $this->hasMany('Menus', [
             'foreignKey' => 'restaurant_id',
         ]);
@@ -81,20 +45,11 @@ class RestaurantsTable extends Table
         $this->hasMany('RestaurantGalleries', [
             'foreignKey' => 'restaurant_id',
         ]);
-        $this->hasMany('RestaurantTables', [
-            'foreignKey' => 'restaurant_id',
-        ]);
         $this->hasMany('SavedRestaurants', [
             'foreignKey' => 'restaurant_id',
         ]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -211,13 +166,6 @@ class RestaurantsTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);

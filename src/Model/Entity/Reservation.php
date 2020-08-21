@@ -53,7 +53,6 @@ class Reservation extends Entity
         'modified' => true,
         'user' => true,
         'restaurant' => true,
-        'restaurant_table' => true,
         'reservation_logs' => true,
     ];
 }
