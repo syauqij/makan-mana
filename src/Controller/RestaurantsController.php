@@ -17,7 +17,7 @@ class RestaurantsController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         $this->Authentication->addUnauthenticatedActions(['home', 'search', 'view']);
-        $this->Authorization->skipAuthorization();
+        //$this->Authorization->skipAuthorization();
     }  
 
     public function home()
@@ -114,10 +114,13 @@ class RestaurantsController extends AppController
 
     public function index()
     {
+        $filter = $this->Authorization->applyScope($this->Restaurants->find());
+
         $this->paginate = [
             'contain' => ['Users'],
         ];
-        $restaurants = $this->paginate($this->Restaurants);
+
+        $restaurants = $this->paginate($filter);
 
         $this->set(compact('restaurants'));
     }
@@ -153,36 +156,28 @@ class RestaurantsController extends AppController
         $this->set(compact('restaurant', 'menuCategories'));
     }
 
-    public function add()
-    {
-        $this->viewBuilder()->setLayout('default_cake');
-
-        $restaurant = $this->Restaurants->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
-            if ($this->Restaurants->save($restaurant)) {
-                $this->Flash->success(__('The restaurant has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
-        }
-        $users = $this->Restaurants->Users->find('list', ['limit' => 200]);
-        $this->set(compact('restaurant', 'users'));
-    }
-
     public function edit($id = null)
-    {
-        $restaurant = $this->Restaurants->get($id, [
-            'contain' => ['RestaurantCuisines'],
-        ]);
-
+    {   
+        $restaurant = $this->Restaurants->find()
+            ->where(['Restaurants.id' => $id])
+            ->contain('RestaurantCuisines')
+            ->first();
+        
+        $this->Authorization->authorize($restaurant);
+        
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
         $cuisines = $cuisinesTable->find('list');
-
+                        
         if ($this->request->is(['patch', 'post', 'put'])) {
-            //dd($this->request);
-            $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
+            $data = $this->request->getData();
+  
+            foreach($data['cuisine_ids'] as $cuisine) {
+                $data['restaurant_cuisines'][]['cuisine_id'] = $cuisine;
+            }
+
+            $restaurant = $this->Restaurants->patchEntity($restaurant, $data, [
+                'associated' => 'RestaurantCuisines'
+            ]);
             
             $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
             $attachment = $this->request->getData('photo');
@@ -199,13 +194,22 @@ class RestaurantsController extends AppController
             }
 
             if ($this->Restaurants->save($restaurant)) {
-                $this->Flash->alert('Restaurant details updated.', [
-                    'params' => ['type' => "success"]
+                //dd($restaurant);
+                $this->Flash->alert('Restaurant details updated', [
+                    'params' => [
+                        'type' => "success",
+                        'name' => $restaurant->name
+                    ]
                 ]);
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The restaurant could not be saved. Please, try again.'));
+            $this->Flash->alert('Restaurant details could not be saved. Please, try again.', [
+                'params' => [
+                    'type' => "warning",
+                    'name' => $restaurant->name
+                ]
+            ]);
         }
         $this->set(compact('restaurant', 'cuisines'));
     }
@@ -228,6 +232,8 @@ class RestaurantsController extends AppController
         $restaurant = $this->Restaurants->get($id, [
             'contain' => ['RestaurantCuisines'],
         ]);
+
+        $this->Authorization->authorize($restaurant, 'edit');
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             //dd($this->request);

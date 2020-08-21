@@ -103,36 +103,7 @@
 
 <?php $this->start('script'); ?>
 <script>
-    $(document).ready(function(){
-        $('.featured').slick({
-            infinite: false,
-            speed: 300,
-            slidesToShow: 4,
-            arrows: true,
-            responsive: [
-                {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2
-                }
-                },
-                {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-                }
-                // You can unslick at a given breakpoint now by adding:
-                // settings: "unslick"
-                // instead of a settings object
-            ]
-        });
-    });
-
     var selected = $("#DD1 option:selected").val();
-    //alert(selected);
     $('#DD1 option').each(function() {
         
         if ($(this).val() == selected ) {

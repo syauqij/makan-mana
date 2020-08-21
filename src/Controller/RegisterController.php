@@ -106,23 +106,35 @@ class RegisterController extends AppController
         $restaurantsTable = $this->getTableLocator()->get('Restaurants');
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
         
+        $restaurant = $restaurantsTable->newEmptyEntity([
+            'associated' => 'RestaurantCuisines'
+        ]);
+
         $cuisines = $cuisinesTable->find('list');
 
-        $restaurant = $restaurantsTable->newEmptyEntity();
         if ($this->request->is('post')) {
+            $data = $this->request->getData();
+  
+            foreach($data['cuisine_ids'] as $cuisine) {
+                $data['restaurant_cuisines'][]['cuisine_id'] = $cuisine;
+            }
+
             $restaurant->user_id = $this->request->getAttribute('identity')->getIdentifier();
-            $restaurant = $restaurantsTable->patchEntity($restaurant, $this->request->getData());
-            
+
+            $restaurant = $restaurantsTable->patchEntity($restaurant, $data, [
+                'associated' => 'RestaurantCuisines'
+            ]);
+
             $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
             $attachment = $this->request->getData('photo');
-            dd($attachment);
+           
             if($attachment) {
                 $fileName = $attachment->getClientFilename();
                 $targetPath = $dir->path . DS . $fileName ;
 
                 if($fileName) {
                     $attachment->moveTo($targetPath);
-                    $restaurant->profile_photo = $fileName;  
+                    $restaurant->image_file = $fileName;  
                 }
             }
 
@@ -135,10 +147,13 @@ class RegisterController extends AppController
                 return $this->redirect(['controller' => 'Restaurants', 'action' => 'edit', $restaurant->id]);
 
             } else {
-                $this->Flash->alert('The restaurant information could not be saved. Please, try again.', [
-                    'params' => ['type' => "warning"]
+                $this->Flash->alert('The details could not be saved. Please, try again.', [
+                    'params' => [
+                        'type' => "warning",
+                        'name' => $restaurant->name
+                    ]
                 ]);
-            }
+            } 
         }
         $this->set(compact('restaurant', 'cuisines'));        
     }

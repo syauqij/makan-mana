@@ -10,20 +10,26 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property string $slug
+ * @property string|null $description
  * @property int $user_id
  * @property string $address_line_1
  * @property string $address_line_2
+ * @property string $postcode
  * @property string $city
  * @property string $state
  * @property string $contact_no
  * @property string|null $website
- * @property float $price_range
- * @property string $payment_options
+ * @property string|null $operation_hours
+ * @property string|null $price_range
+ * @property string|null $payment_options
+ * @property string|null $image_file
+ * @property string $status
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Cuisine[] $cuisines
  * @property \App\Model\Entity\BusinessHour[] $business_hours
  * @property \App\Model\Entity\Menu[] $menus
  * @property \App\Model\Entity\Reservation[] $reservations
@@ -44,6 +50,7 @@ class Restaurant extends Entity
      */
     protected $_accessible = [
         'name' => true,
+        'slug' => true,
         'description' => true,
         'user_id' => true,
         'address_line_1' => true,
@@ -53,11 +60,15 @@ class Restaurant extends Entity
         'state' => true,
         'contact_no' => true,
         'website' => true,
+        'operation_hours' => true,
         'price_range' => true,
         'payment_options' => true,
+        'image_file' => true,
+        'status' => true,
         'created' => true,
         'modified' => true,
         'user' => true,
+        'cuisines' => true,
         'business_hours' => true,
         'menus' => true,
         'reservations' => true,

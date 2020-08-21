@@ -17,16 +17,15 @@ class RestaurantCuisinesFixture extends TestFixture
      */
     // phpcs:disable
     public $fields = [
-        'restaurant_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'cuisine_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'restaurant_id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'cuisine_id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'cuisine_key' => ['type' => 'index', 'columns' => ['cuisine_id'], 'length' => []],
             'restaurant_key' => ['type' => 'index', 'columns' => ['restaurant_id'], 'length' => []],
         ],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['restaurant_id', 'cuisine_id'], 'length' => []],
-            'cuisine_key' => ['type' => 'foreign', 'columns' => ['cuisine_id'], 'references' => ['cuisines', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'restaurant_key' => ['type' => 'foreign', 'columns' => ['restaurant_id'], 'references' => ['restaurants', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -43,6 +42,7 @@ class RestaurantCuisinesFixture extends TestFixture
     {
         $this->records = [
             [
+                'id' => 1,
                 'restaurant_id' => 1,
                 'cuisine_id' => 1,
             ],

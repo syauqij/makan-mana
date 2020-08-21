@@ -8,8 +8,9 @@ use Cake\ORM\Entity;
 /**
  * RestaurantCuisine Entity
  *
- * @property int $restaurant_id
- * @property int $cuisine_id
+ * @property int $id
+ * @property int|null $restaurant_id
+ * @property int|null $cuisine_id
  *
  * @property \App\Model\Entity\Restaurant $restaurant
  * @property \App\Model\Entity\Cuisine $cuisine
@@ -26,6 +27,8 @@ class RestaurantCuisine extends Entity
      * @var array
      */
     protected $_accessible = [
+        'restaurant_id' => true,
+        'cuisine_id' => true,
         'restaurant' => true,
         'cuisine' => true,
     ];

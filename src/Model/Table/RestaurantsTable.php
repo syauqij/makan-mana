@@ -9,8 +9,34 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Utility\Text;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 
+/**
+ * Restaurants Model
+ *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\BusinessHoursTable&\Cake\ORM\Association\HasMany $BusinessHours
+ * @property \App\Model\Table\MenusTable&\Cake\ORM\Association\HasMany $Menus
+ * @property \App\Model\Table\ReservationsTable&\Cake\ORM\Association\HasMany $Reservations
+ * @property \App\Model\Table\RestaurantCuisinesTable&\Cake\ORM\Association\HasMany $RestaurantCuisines
+ * @property \App\Model\Table\RestaurantGalleriesTable&\Cake\ORM\Association\HasMany $RestaurantGalleries
+ * @property \App\Model\Table\RestaurantTablesTable&\Cake\ORM\Association\HasMany $RestaurantTables
+ *
+ * @method \App\Model\Entity\Restaurant newEmptyEntity()
+ * @method \App\Model\Entity\Restaurant newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Restaurant[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Restaurant get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Restaurant findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Restaurant patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Restaurant[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Restaurant|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Restaurant saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Restaurant[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
 class RestaurantsTable extends Table
 {
     /**
@@ -57,6 +83,9 @@ class RestaurantsTable extends Table
         $this->hasMany('RestaurantTables', [
             'foreignKey' => 'restaurant_id',
         ]);
+        $this->hasMany('SavedRestaurants', [
+            'foreignKey' => 'restaurant_id',
+        ]);
     }
 
     /**
@@ -78,6 +107,10 @@ class RestaurantsTable extends Table
             ->notEmptyString('name');
 
         $validator
+            ->scalar('description')
+            ->allowEmptyString('description');
+
+        $validator
             ->scalar('address_line_1')
             ->maxLength('address_line_1', 150)
             ->requirePresence('address_line_1', 'create')
@@ -88,6 +121,12 @@ class RestaurantsTable extends Table
             ->maxLength('address_line_2', 150)
             ->requirePresence('address_line_2', 'create')
             ->notEmptyString('address_line_2');
+
+        $validator
+            ->scalar('postcode')
+            ->maxLength('postcode', 5)
+            ->requirePresence('postcode', 'create')
+            ->notEmptyString('postcode');
 
         $validator
             ->scalar('city')
@@ -112,6 +151,20 @@ class RestaurantsTable extends Table
             ->maxLength('website', 150)
             ->allowEmptyString('website');
 
+        $validator
+            ->scalar('operation_hours')
+            ->maxLength('operation_hours', 255)
+            ->allowEmptyString('operation_hours');
+
+        $validator
+            ->scalar('price_range')
+            ->maxLength('price_range', 50)
+            ->allowEmptyString('price_range');
+
+        $validator
+            ->scalar('payment_options')
+            ->maxLength('payment_options', 100)
+            ->allowEmptyString('payment_options');
 
         $validator
             ->notEmptyFile('image_file')
@@ -149,6 +202,11 @@ class RestaurantsTable extends Table
                 'rule' => ['extension', ['png', 'jpeg', 'jpg']] // .png file extension only
             ]);
 
+        $validator
+            ->scalar('status')
+            ->maxLength('status', 50)
+            ->notEmptyString('status');
+
         return $validator;
     }
 
@@ -161,7 +219,7 @@ class RestaurantsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }
@@ -173,7 +231,7 @@ class RestaurantsTable extends Table
             $sluggedName = Text::slug($entity->name);
             // trim slug to maximum length defined in schema
             $trimSlug = substr($sluggedName, 0, 191);
-            $total = $this->find()->where(['name' => $entity->name])->count();
+            $total = $this->find()->where(['Restaurants.name' => $entity->name])->count();
             if ($total > 0) {
                 $entity->slug = $trimSlug ."(". $total . ")";
             } else {

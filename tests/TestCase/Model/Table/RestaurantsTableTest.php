@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\RestaurantsTable;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -27,6 +26,7 @@ class RestaurantsTableTest extends TestCase
     protected $fixtures = [
         'app.Restaurants',
         'app.Users',
+        'app.Cuisines',
         'app.BusinessHours',
         'app.Menus',
         'app.Reservations',
@@ -43,8 +43,8 @@ class RestaurantsTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Restaurants') ? [] : ['className' => RestaurantsTable::class];
-        $this->Restaurants = TableRegistry::getTableLocator()->get('Restaurants', $config);
+        $config = $this->getTableLocator()->exists('Restaurants') ? [] : ['className' => RestaurantsTable::class];
+        $this->Restaurants = $this->getTableLocator()->get('Restaurants', $config);
     }
 
     /**
@@ -75,6 +75,46 @@ class RestaurantsTableTest extends TestCase
      * @return void
      */
     public function testBuildRules(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test beforeSave method
+     *
+     * @return void
+     */
+    public function testBeforeSave(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test findCuisines method
+     *
+     * @return void
+     */
+    public function testFindCuisines(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test findSearch method
+     *
+     * @return void
+     */
+    public function testFindSearch(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test findHasRestaurant method
+     *
+     * @return void
+     */
+    public function testFindHasRestaurant(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

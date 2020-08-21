@@ -63,9 +63,10 @@
             'label' => "Restaurant Profile Photo",
             'type' => 'file',
         ]); ?>
+        <?php if ($restaurant->image_file):?>
         <div class="row">
             <div class="col-md-6 mb-2">
-            <?php if ($restaurant->image_file):?>
+
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
                     'alt' =>  $restaurant->image_file,
                     'class' => 'img-fluid img-thumbnail'

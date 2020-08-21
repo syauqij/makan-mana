@@ -11,9 +11,6 @@ class ReservationsController extends AppController
 {   
     public function index()
     {   
-        //dd($this->event);
-        $user = $this->request->getAttribute('identity');
-
         $filter = $this->Authorization->applyScope($this->Reservations->find());
 
         $this->paginate = [
@@ -30,8 +27,6 @@ class ReservationsController extends AppController
 
     public function upcoming()
     {   
-        $user = $this->request->getAttribute('identity');
-
         $now = FrozenTime::now();
         $date = $now->i18nFormat('yyyy-MM-dd HH:mm:ss');
 
@@ -50,8 +45,8 @@ class ReservationsController extends AppController
             ->where(['Reservations.id' => $uuid])
             ->contain(['Users', 'Restaurants'])
             ->first();
-        //debug($reservation);
-        $this->Authorization->authorize($reservation);
+
+            $this->Authorization->authorize($reservation);
 
         $occasions = $this->getOccassions();
 

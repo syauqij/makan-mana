@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\RestaurantCuisinesTable;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -38,8 +37,8 @@ class RestaurantCuisinesTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('RestaurantCuisines') ? [] : ['className' => RestaurantCuisinesTable::class];
-        $this->RestaurantCuisines = TableRegistry::getTableLocator()->get('RestaurantCuisines', $config);
+        $config = $this->getTableLocator()->exists('RestaurantCuisines') ? [] : ['className' => RestaurantCuisinesTable::class];
+        $this->RestaurantCuisines = $this->getTableLocator()->get('RestaurantCuisines', $config);
     }
 
     /**
