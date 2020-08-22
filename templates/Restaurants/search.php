@@ -47,10 +47,11 @@
                     <?php if ($restaurant->timeslots) : ?>
                         <div class="timeslots">
                         <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
-                            <?= $this->Html->link($timeslot, [
+                            <?php $timeFormatted = $this->Time->format($timeslot, 'h:mm a'); ?>
+						    <?= $this->Html->link($timeFormatted, [
                                 'controller' => 'reservations', 'action' => 'create',
                                     '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => $guests, 'reserved_date' => $key]],
-                                ['class' => 'btn btn-secondary btn-sm mb-2']
+                                ['class' => 'btn btn-danger btn-sm mb-2']
                             );  ?>
                         <?php endforeach; ?>
                         </div>

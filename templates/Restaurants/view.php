@@ -1,4 +1,6 @@
 
+<?php use Cake\I18n\FrozenTime; ?>
+
 <style>
 	/*to fetch image from restaurant data*/
 	#restaurant-banner {
@@ -37,7 +39,7 @@
 	</nav>
 	
 	<div class="row">
-		<div class="col-md-8" data-spy="scroll">
+		<div class="col-md-9" data-spy="scroll">
 
 			<div id="about" class="py-4">
 				<div class="details pb-4">
@@ -96,7 +98,7 @@
 			</div>
 		</div>
 
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<div id="reservation" class="sticky-top py-2">
 			
 				<?= $this->Form->create(null, [
@@ -108,51 +110,49 @@
 				]); ?>
 						
 				<h4>Make a Resevation</h4><hr/>
-
-				<div class="col">
-					<?= $this->Form->date('date', [
-						'value' => $date,
-						'min' => $date,
-						'id' => 'date'
-					]); ?>
-				</div>
-				<div class="col">
-					<?= $this->Form->select('time', $timeOptions, [
-						'value' => $time,
-						'id' => "time"
+				
+				<div class="row">
+					<div class="col-12">
+						<?= $this->Form->date('date', [
+							'value' => $date,
+							'min' => $date,
+							'id' => 'date'
 						]); ?>
-				</div>
-				<div class="col">
-					<?= $this->Form->select('guests', $options, [
-						'value' => '2'
+					</div>
+					<div class="col-12">
+						<?= $this->Form->select('time', $timeOptions, [
+							'value' => $time,
+							'id' => "time"
 						]); ?>
+					</div>
+					<div class="col-12">
+						<?= $this->Form->select('guests', $options, [
+							'value' => '2'
+							]); ?>
+					</div>
+					<div class="col-12">
+						<?= $this->Form->submit('Search', ['class' => 'btn btn-primary btn-block']) ?>
+					</div>
 				</div>
-				<div class="col">
-					<?= $this->Form->submit('Search', ['class' => 'btn btn-primary btn-block']) ?>
-				</div>
-
-			<?= $this->Form->end() ?>
-
-			</div>
-
-			<?php if ($restaurant->timeslots) : ?>
-			<div class="timeslots p-3">
-				<?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
-					<?= $this->Html->link($timeslot, [
-						'controller' => 'reservations', 'action' => 'create',
-							'?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
-						['class' => 'btn btn-secondary btn-sm mb-2']
-					);  ?>
-				<?php endforeach; ?>
-				</div>
+				<?= $this->Form->end() ?>
+				<?php if ($restaurant->timeslots) : ?>
+				<div class="timeslots pt-2">
+					<?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
+						<?php $timeFormatted = $this->Time->format($timeslot, 'h:mm a'); ?>
+						<?= $this->Html->link($timeFormatted, [
+							'controller' => 'reservations', 'action' => 'create',
+								'?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
+							['class' => 'btn btn-danger btn-sm mb-2']
+						);  ?>
+					<?php endforeach; ?>
+					</div>
 				<?php else: ?>
-					<h4>No available time slots</h4>
+					<p>No available time slots. Please select a different date or time.</p>
+				</div>
+				<?php endif;?>
+				
 			</div>
-			<?php endif;?>
-
-
 		</div>
-
 	</div>
 </div>
 </div>

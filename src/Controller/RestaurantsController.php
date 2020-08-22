@@ -149,9 +149,9 @@ class RestaurantsController extends AppController
             $date = $params['date'];
             $time = $params['time'];
             $guests = $params['guests'];
-
-            $selectedDate = new FrozenTime($date . $time);
         }
+
+        $selectedDate = new FrozenTime($date . $time);
         
         $restaurant = $this->Restaurants->find()
         ->where(['id' => $restaurantId])
@@ -162,7 +162,7 @@ class RestaurantsController extends AppController
         $merge = (new Collection($restaurant))->insert('timeslots', $timeslots);
         //dd($merge);
         $restaurant = $merge->first();
-
+        
         $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
         $menuCategories = $tableMenuCategories->find()
             ->contain(['Menus.MenuItems'])
