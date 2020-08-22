@@ -18,15 +18,11 @@ class RestaurantsController extends AppController
     {
         $this->Authentication->addUnauthenticatedActions(['home', 'search', 'view']);
         //$this->Authorization->skipAuthorization();
-    }  
+    }
 
-    public function home()
-    {     
-        $this->Authorization->skipAuthorization();
-
-        $timeOptions = $this->getTimeSelections();
+    public function getDefaultTime()
+    {   
         $now = FrozenTime::now();
-        $date = $now->i18nFormat('yyyy-MM-dd');
         $minutes = $now->i18nFormat('mm');
         $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
@@ -37,10 +33,22 @@ class RestaurantsController extends AppController
         } else {
             $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
         }
-       
-        $getCuisines = $this->getTableLocator()->get('Cuisines');
 
-        $results = $getCuisines->find('list', [
+        return $time;
+    }
+
+    public function home()
+    {     
+        $this->Authorization->skipAuthorization();
+
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd');
+        $timeOptions = $this->getTimeSelections();
+        $time = $this->getDefaultTime();
+       
+        $cuisinesTable = $this->getTableLocator()->get('Cuisines');
+
+        $results = $cuisinesTable->find('list', [
             'limit' => 5
         ]);
         
@@ -48,7 +56,7 @@ class RestaurantsController extends AppController
         
         $featured = $this->Restaurants->find('all')
             ->contain([ 'Cuisines'])
-            ->where(['Restaurants.status' => 'approved']);
+            ->where(['Restaurants.status' => 'featured']);
 
         $this->set(compact('featured', 'cuisines', 'date', 'time', 'timeOptions'));
     }
@@ -57,29 +65,21 @@ class RestaurantsController extends AppController
     {   
         $this->Authorization->skipAuthorization();
 
-        $timeOptions = $this->getTimeSelections();
         $now = FrozenTime::now();
         $date = $today = $now->i18nFormat('yyyy-MM-dd');
-        $minutes = $now->i18nFormat('mm');
+        $timeOptions = $this->getTimeSelections();
+        $time = $this->getDefaultTime();
         $guests = 2;
-        $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
-        if ($minutes < 15) {
-            $time = $clearMinutes->modify('+30 minutes')->i18nFormat('HH:mm');
-        } else if ($minutes > 45) {
-            $time = $clearMinutes->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
-        } else {
-            $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
-        }
-
+        //using search 
         $params = $this->request->getQuery();
+        //selected cuisines
         $cuisines = $this->request->getParam('pass');
 
         if ($params) {
-
-            $date = $this->request->getQuery('date');
-            $time = $this->request->getQuery('time');
-            $guests = $this->request->getQuery('guests');
+            $date = $params['date'];
+            $time = $params['time'];
+            $guests = $params['guests'];
 
             $selectedDate = new FrozenTime($date . $time); 
             
@@ -94,6 +94,7 @@ class RestaurantsController extends AppController
                 'term' => $cuisines,
                 'contain' => ['Cuisines'],
             ]);
+
         } else {
             return $this->redirect(['action' => 'home']);
         }
@@ -102,10 +103,12 @@ class RestaurantsController extends AppController
             $this->Flash->alert('No result found. Please try again.', [
                 'params' => ['type' => "warning"]
             ]);
-        } else {     
+
+        } else {
+            //get timeslots for each restaurant
             foreach ($restaurants as $restaurant) {
                 $timeslots[] = $this->getTimeslots($selectedDate, $restaurant->id);
-            }   
+            }
             $restaurants = (new Collection($restaurants))->insert('timeslots', $timeslots);
         }
 
@@ -113,7 +116,8 @@ class RestaurantsController extends AppController
     }
 
     public function index()
-    {
+    {   
+        //filter results based on user's role and authorization
         $filter = $this->Authorization->applyScope($this->Restaurants->find());
 
         $this->paginate = [
@@ -127,21 +131,36 @@ class RestaurantsController extends AppController
 
     public function view($slug)
     {   
+        $options = ['1' => '1 People', '2' => '2 People'];
+
         $this->Authorization->skipAuthorization();
         
         $now = FrozenTime::now();
-        $selectedDate = $now->modify('+1 hour 30 minutes');
+        $date = $today = $now->i18nFormat('yyyy-MM-dd');
+        $timeOptions = $this->getTimeSelections();
+        $time = $this->getDefaultTime();
+        
         $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
         $restaurantId = $query['id'];
 
+        $params = $this->request->getQuery();
+
+        if ($params) {
+            $date = $params['date'];
+            $time = $params['time'];
+            $guests = $params['guests'];
+
+            $selectedDate = new FrozenTime($date . $time);
+        }
+        
         $restaurant = $this->Restaurants->find()
-            ->where(['id' => $restaurantId])
-            ->contain(['Cuisines', 'Menus']);
+        ->where(['id' => $restaurantId])
+        ->contain(['Cuisines', 'Menus']);
         
         $timeslots[] = $this->getTimeslots($selectedDate, $restaurantId);
 
         $merge = (new Collection($restaurant))->insert('timeslots', $timeslots);
-
+        //dd($merge);
         $restaurant = $merge->first();
 
         $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
@@ -153,7 +172,7 @@ class RestaurantsController extends AppController
                     ->where(['Menus.restaurant_id' => $restaurantId]);
             });
 
-        $this->set(compact('restaurant', 'menuCategories'));
+        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'timeOptions', 'options'));
     }
 
     public function edit($id = null)
@@ -286,7 +305,6 @@ class RestaurantsController extends AppController
     }
 
     private function getTimeslots($selectedDate, $restaurantId) {
-        
         $timeslots = null;
         $now = FrozenTime::now();
 

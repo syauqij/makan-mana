@@ -101,7 +101,9 @@ class ReservationsController extends AppController
             $reservation->reserved_date = $selectedDate;
 
             if ($this->Reservations->save($reservation)) {
-                $this->Flash->alert(__('The reservation has been saved.'));
+                $this->Flash->alert(__('The reservation has been saved.'), [
+                    'params' => ['type' => "success"]
+                ]);
 
                 return $this->redirect(['action' => 'upcoming']);
             }
@@ -136,11 +138,15 @@ class ReservationsController extends AppController
          if ($this->request->is(['patch', 'post', 'put'])) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             if ($this->Reservations->save($reservation)) {
-                $this->Flash->alert(__('The reservation has been saved.'));
+                $this->Flash->alert(__('The reservation has been saved.'), [
+                    'params' => ['type' => "success"]
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->alert(__('The reservation could not be saved. Please, try again.'));
+            $this->Flash->alert(__('The reservation could not be saved. Please, try again.'), [
+                'params' => ['type' => "danger"]
+            ]);
         }
         $users = $this->Reservations->Users->find('list', ['limit' => 200]);
         $restaurants = $this->Reservations->Restaurants->find('list', ['limit' => 200]);

@@ -1,16 +1,6 @@
 <section class="jumbotron" id="home-banner">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
-        <?php
-            //change default form template. 
-            $myTemplates = [
-                'inputContainer' =>'{{content}}',
-                'input' => '<div class="form-group"><input class="form-control" type="{{type}}" name="{{name}}"{{attrs}}/></div>',
-                'select' => '<div class="form-group"><select class="form-control" name="{{name}}"{{attrs}}>{{content}}</select></div>'
-            ];
-            $this->Form->setTemplates($myTemplates); 
-            $options = ['1' => '1 People', '2' => '2 People'];
-        ?>
         <?= $this->Form->create(null, [
             'type' => 'get',
             'url' => [
@@ -18,45 +8,10 @@
                 'action' => 'search'
             ]
         ]); ?>
-        <div class="form-row">
-            <div class="col-sm-2">
-                <?= $this->Form->date('date', [
-                    'value' => $date,
-                    'min' => $date,
-                    'id' => 'date'
-                ]); ?>
-            </div>
-            <div class="col-sm-2">
-                <?= $this->Form->select('time', $timeOptions, [
-                    'value' => $time,
-                    'id' => "time"
-                    ]); ?>
-            </div>
-            <div class="col-sm-2">
-                <?= $this->Form->select('guests', $options, [
-                    'value' => '2'
-                    ]); ?>
-            </div>
-            <div class="col-sm-4">
-                <?= $this->Form->control('term', [
-                    'label' => false, 
-                    'value' => $this->request->getQuery('term'),
-                    'placeholder' => 'Search a Location, Restaurant, or Cuisine'
-                    ]
-                ) ?>
-            </div>
-            <?= $this->Form->submit('Search', ['class' => 'btn btn-primary']) ?>
-        </div> 
-        <div class="quick-searches">
-            <?php foreach ($cuisines as $key => $cuisine) : ?>
-                <?= $this->Html->link($cuisine, 
-                    ['controller' => 'Restaurants', 'action' => 'search',$cuisine],
-                    ['class' => 'badge badge-secondary']
-                );?>
-            <?php endforeach; ?>
-        </p>
+        <div class="form-row pt-4 pb-2">  
+            <?php echo $this->element('form/search'); ?>
+        </div>
         <?= $this->Form->end() ?>
-                
     </div>
 </section>
 

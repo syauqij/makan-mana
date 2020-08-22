@@ -1,8 +1,5 @@
 <div class="page-header">
-    <div class="container">
-        <?php
-            $options = ['1' => '1 People', '2' => '2 People'];
-        ?>
+    <div class="container">  
         <?= $this->Form->create(null, [
             'type' => 'get',
             'url' => [
@@ -10,33 +7,10 @@
                 'action' => 'search'
             ]
         ]); ?>
-        <div class="form-row pt-4 pb-2">
-            <div class="col-sm-2">
-                <?= $this->Form->date('date', [
-                    'value' => $date,
-                    'min' => $today
-                ]); ?>
-            </div>
-            <div class="col-sm-2">
-                <?= $this->Form->select('time', $timeOptions, [
-                    'value' => $time
-                    ]); ?>
-            </div>
-            <div class="col-sm-2">
-                <?= $this->Form->select('guests', $options, [
-                    'value' => $guests
-                    ]); ?>
-            </div>
-            <div class="col-sm-4">
-                <?= $this->Form->control('term', [
-                    'label' => false, 
-                    'value' => $this->request->getQuery('term'),
-                    'placeholder' => 'Search a Location, Restaurant, or Cuisine'
-                    ]
-                ) ?>
-            </div>
-            <?= $this->Form->submit('Search', ['class' => 'btn btn-primary']) ?>
+        <div class="form-row pt-4 pb-2">  
+            <?php echo $this->element('form/search'); ?>
         </div>
+        <?= $this->Form->end() ?>
     </div>
 </div>
 <div class="album py-5 bg-light">
