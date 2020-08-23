@@ -201,7 +201,7 @@ class RestaurantsTable extends Table
                 ->where(['Cuisines.name IN' => $key]);
         }
 
-        $query->where(['Restaurants.status' => 'approved']);
+        $query->where(['Restaurants.status' => ['featured', 'active']]);
     
         return $query->group(['Restaurants.id']);
     }    
@@ -216,7 +216,7 @@ class RestaurantsTable extends Table
 
         $query->innerJoinWith('Cuisines')
             ->where([
-                'Restaurants.status' => 'approved',
+                'Restaurants.status IN' => ['featured', 'active'],
                 'OR' => [
                     ['Restaurants.name LIKE' => '%' . $term . '%'],
                     ['Restaurants.city LIKE' => '%' . $term . '%'],

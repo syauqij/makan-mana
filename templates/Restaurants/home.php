@@ -36,18 +36,19 @@
                         ['action' => 'view', $restaurant->slug]
                     );?>
                 </h5>
-                <p class="cuisines card-text">
+                <div class="card-text">
                     <?= h($restaurant->city) ?>, <?=h($restaurant->state) ?><br/>
                     <?php $count = 0; ?>
                     <?php foreach ($restaurant->cuisines as $cuisine) : ?>
-                        <?php if($count < 3) : ?>
+                        <?php if($count < 5) : ?>
                         <?= $this->Html->link($cuisine->name, 
                             ['action' => 'search', $cuisine->name],
                             ['class' => 'badge badge-secondary']
                         );?>
                         <?php $count++; endif; ?>
                     <?php endforeach; ?>
-                </p>
+                    <?= $this->cell('Booked', array($restaurant->id)) ?>
+                </div>
             </div>
         </div>
         </div>

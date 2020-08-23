@@ -8,6 +8,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\I18n\FrozenTime;
+use Cake\I18n\Date;
+use Cake\I18n\Time;
 
 class ReservationsTable extends Table
 {
@@ -93,7 +95,7 @@ class ReservationsTable extends Table
         return 
             $query->where([
                 'restaurant_id' => $id,
-                'reserved_date' => $date]
+                'reserved_date >=' => $date]
         );
     }        
 
@@ -107,5 +109,22 @@ class ReservationsTable extends Table
                 ->where(['reserved_date >=' => $date])
                 ->contain(['Restaurants'])
                 ->order(['Reservations.reserved_date' => 'ASC']);
+    }
+  
+    public function findBookedToday($query, $options) 
+    {   
+        $restaurant_id = $options['restaurant_id'];
+        
+        $timestart = new Date();
+        $today = new Date();
+        $timeEnd = $today->modify('+1 day');
+        
+        return 
+            $query
+                ->where([
+                    'restaurant_id' => $restaurant_id, 
+                    'created >=' => $timestart,
+                    'created <=' => $timeEnd
+                ]);
     }        
 }

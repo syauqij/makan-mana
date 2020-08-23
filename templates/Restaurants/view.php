@@ -138,12 +138,16 @@
 				<?php if ($restaurant->timeslots) : ?>
 				<div class="timeslots pt-2">
 					<?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
-						<?php $timeFormatted = $this->Time->format($timeslot, 'h:mm a'); ?>
-						<?= $this->Html->link($timeFormatted, [
-							'controller' => 'reservations', 'action' => 'create',
-								'?' => ['restaurant_id' => $restaurant->id, 'total_guests' => 2, 'reserved_date' => $key]],
-							['class' => 'btn btn-danger btn-sm mb-2']
-						);  ?>
+						<?php $timeFormatted = $this->Time->format($key, 'h:mm a'); ?>
+                            <?php if ($timeslot) : ?>
+                                <?= $this->Html->link($timeFormatted, [
+                                    'controller' => 'reservations', 'action' => 'create',
+                                    '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => $guests, 'reserved_date' => $key]],
+                                    ['class' => 'btn btn-danger btn-sm mb-2']
+                                );  ?>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-secondary btn-sm mb-2 disabled"><?= h($timeFormatted) ?></button>
+                            <?php endif; ?>
 					<?php endforeach; ?>
 					</div>
 				<?php else: ?>

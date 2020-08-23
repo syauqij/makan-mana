@@ -139,6 +139,7 @@ class RestaurantsController extends AppController
         $date = $today = $now->i18nFormat('yyyy-MM-dd');
         $timeOptions = $this->getTimeSelections();
         $time = $this->getDefaultTime();
+        $guests = 2;
         
         $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
         $restaurantId = $query['id'];
@@ -160,7 +161,6 @@ class RestaurantsController extends AppController
         $timeslots[] = $this->getTimeslots($selectedDate, $restaurantId);
 
         $merge = (new Collection($restaurant))->insert('timeslots', $timeslots);
-        //dd($merge);
         $restaurant = $merge->first();
         
         $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
@@ -168,11 +168,10 @@ class RestaurantsController extends AppController
             ->contain(['Menus.MenuItems'])
             ->contain('Menus', function (Query $q) use ($restaurantId) {
                 return $q
-                    //->select(['body', 'author_id'])
                     ->where(['Menus.restaurant_id' => $restaurantId]);
             });
 
-        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'timeOptions', 'options'));
+        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'guests', 'timeOptions', 'options'));
     }
 
     public function edit($id = null)
@@ -189,9 +188,12 @@ class RestaurantsController extends AppController
                         
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-  
-            foreach($data['cuisine_ids'] as $cuisine) {
-                $data['restaurant_cuisines'][]['cuisine_id'] = $cuisine;
+            $selectedCuisines = $data['cuisine_ids'];
+
+            if($selectedCuisines){
+                foreach($selectedCuisines as $cuisine) {
+                    $data['restaurant_cuisines'][]['cuisine_id'] = $cuisine;
+                }
             }
 
             $restaurant = $this->Restaurants->patchEntity($restaurant, $data, [
@@ -311,7 +313,7 @@ class RestaurantsController extends AppController
         if ($selectedDate > $now) {
             
             $startTime = $selectedDate->modify('-30 minutes');
-            $endTime = $selectedDate->modify('+45 minutes');
+            $endTime = $selectedDate->modify('+30 minutes');
     
             while ($startTime < $endTime) {
                 if ($startTime > $now->modify('+15 minutes')) {
@@ -324,15 +326,18 @@ class RestaurantsController extends AppController
             $getReservations = $reservations->find('reserved', [
                 'params' => ['restaurant_id' => $restaurantId, 'reserved_date' => $selectedDate],
             ]);
-
-            foreach ($getReservations as $reservation) {
-                $reserved = $reservation['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
-                $key = array_search($reserved, $timeslots);
-
-                if (false !== $key) {
-                    unset($timeslots[$key]);
-                }
-            }            
+            
+            if(!$getReservations->isEmpty()) {
+                foreach ($getReservations as $reservation) {
+                    $reserved = $reservation['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                    $key = array_search($reserved, $timeslots);
+                    
+                    if (false !== $key) {
+                        // /unset($timeslots[$key]);
+                        $timeslots[$key] = null;
+                    }
+                }     
+            }       
         }
 
         return $timeslots;
