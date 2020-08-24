@@ -25,7 +25,8 @@
                 <div><?= h($reservation->reserved_date) ?></div>
                 <div>Table for <?=h($reservation->total_guests) ?> people</div>
                 <?= $this->Html->link(__('Modify'), ['action' => 'edit', $reservation->id], ['class' => 'pr-3']) ?>
-                <?= $this->Html->link(__('Cancel'), ['action' => 'cancel', $reservation->id]) ?>  
+                <?= $this->Form->postLink(__('Cancel'), ['action' => 'updateStatus', 'cancelled', $reservation->id], 
+                        ['class' => '', 'confirm' => __('Confirm cancelling reservation {0}?', $reservation->reserved_date)]) ?>
             </div>
         </li>
         </ul>

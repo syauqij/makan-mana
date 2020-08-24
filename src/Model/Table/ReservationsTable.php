@@ -92,10 +92,18 @@ class ReservationsTable extends Table
         $id = $options['params']['restaurant_id'];
         $date = $options['params']['reserved_date'];
 
+        $today = new Date($date);
+        $timestart = new Date($date);
+        $timestart->modify('- 1 day');
+        $timeEnd = $today->modify('+1 day');
+        
+        //dd($date);
         return 
             $query->where([
                 'restaurant_id' => $id,
-                'reserved_date >=' => $date]
+                'reserved_date >=' => $timestart,
+                'reserved_date <=' => $timeEnd
+            ]
         );
     }        
 
@@ -106,7 +114,7 @@ class ReservationsTable extends Table
         return 
             $query
                 ->limit(3)
-                ->where(['reserved_date >=' => $date])
+                ->where(['reserved_date >=' => $date, 'Reservations.status IN' => ['pending']])
                 ->contain(['Restaurants'])
                 ->order(['Reservations.reserved_date' => 'ASC']);
     }

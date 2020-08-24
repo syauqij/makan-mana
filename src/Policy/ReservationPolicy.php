@@ -39,6 +39,9 @@ class ReservationPolicy implements BeforePolicyInterface
         if ($role == 'admin' || $role == 'owner') {
             return true;
         }
+        else {
+            return $this->isOwner($user, $reservation);
+        }
     }
 
     public function canDelete(IdentityInterface $user, Reservation $reservation)
