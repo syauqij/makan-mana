@@ -27,10 +27,18 @@ class ReservationPolicy implements BeforePolicyInterface
         }
     }
 
-    public function canEdit(IdentityInterface $user, Reservation $reservation)
+    public function canModify(IdentityInterface $user, Reservation $reservation)
     {
         // logged in users can edit their own reservations.
         return $this->isOwner($user, $reservation);
+    }
+
+    public function canUpdateStatus(IdentityInterface $user, Reservation $reservation)
+    {
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin' || $role == 'owner') {
+            return true;
+        }
     }
 
     public function canDelete(IdentityInterface $user, Reservation $reservation)
@@ -40,7 +48,12 @@ class ReservationPolicy implements BeforePolicyInterface
 
     public function canView(IdentityInterface $user, Reservation $reservation)
     {
-        return $this->isOwner($user, $reservation);
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin' || $role == 'owner') {
+            return true;
+        } else {
+            return $this->isOwner($user, $reservation);
+        }
     }
 
     protected function isOwner(IdentityInterface $user, Reservation $reservation)

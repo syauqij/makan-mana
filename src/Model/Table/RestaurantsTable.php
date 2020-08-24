@@ -201,7 +201,7 @@ class RestaurantsTable extends Table
                 ->where(['Cuisines.name IN' => $key]);
         }
 
-        $query->where(['Restaurants.status' => ['featured', 'active']]);
+        $query->where(['Restaurants.status IN' => ['featured', 'active']]);
     
         return $query->group(['Restaurants.id']);
     }    

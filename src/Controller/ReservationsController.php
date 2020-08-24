@@ -62,30 +62,27 @@ class ReservationsController extends AppController
         $restaurant_id = $this->request->getQuery('restaurant_id');
         $reserved_date = $this->request->getQuery('reserved_date');
         $guests = $this->request->getQuery('total_guests');
-
+               
         $restaurants = $this->getTableLocator()->get('Restaurants');            
         $restaurant = $restaurants->get($restaurant_id);
-
+        
         $reservation = $this->Reservations->find()
             ->where(['restaurant_id' => $restaurant_id, 'reserved_date' => $reserved_date])
             ->first();
-
+             
         if ($reservation) {
             $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                 'params' => ['type' => "warning"]
             ]);
             return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
         }
-
+        
         $selectedDate = new FrozenTime($reserved_date);
         $date = $selectedDate->i18nFormat('dd/MM/yyyy');
         $time = $selectedDate->i18nFormat('h:mm a');
-        
+       
         //get logged in user_id
         $user_id = $this->request->getAttribute('identity')->getIdentifier();
-
-        $users = $this->getTableLocator()->get('Users');
-        $user = $users->get($user_id);
 
         $occasions = $this->getOccassions();     
 
@@ -99,6 +96,7 @@ class ReservationsController extends AppController
             $reservation->user_id = $user_id;
             $reservation->total_guests = $guests;
             $reservation->reserved_date = $selectedDate;
+            
 
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->alert(__('The reservation has been saved.'), [
@@ -123,7 +121,7 @@ class ReservationsController extends AppController
             ]);
         }
         
-        $this->set(compact('restaurant', 'date', 'time', 'guests', 'user', 'occasions', 'reservation'));
+        $this->set(compact('restaurant', 'date', 'time', 'guests', 'occasions', 'reservation'));
     }
 
     public function edit($uuid = null)
@@ -171,6 +169,37 @@ class ReservationsController extends AppController
             }
         } else {
             $this->Flash->alert(__('The reservation could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    public function updateStatus($status, $id) {
+        $this->request->allowMethod(['post', 'update']);
+
+        $reservation = $this->Reservations->get($id);
+
+        $user = $this->request->getAttribute('identity');
+
+        // Check authorization on $reservation
+        if ($user->can('updateStatus', $reservation)) {
+            
+            $query = $this->Reservations->query();
+            $updated = $query->update()
+                    ->set(['status' => $status])
+                    ->where(['id' => $id])
+                    ->execute();
+
+            // Do delete operation
+            if ($updated) {
+                $this->Flash->alert(__('The reservation has been ' . $status), [
+                    'params' => ['type' => "success"]
+                ]);
+            } else {
+                $this->Flash->alert(__('The reservation could not be ' . $status . '. Please, try again.'));
+            }
+        } else {
+            $this->Flash->alert(__('Sorry you are not allowed to update this record'));
         }
 
         return $this->redirect(['action' => 'index']);

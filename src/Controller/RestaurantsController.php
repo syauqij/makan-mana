@@ -45,6 +45,7 @@ class RestaurantsController extends AppController
         $date = $now->i18nFormat('yyyy-MM-dd');
         $timeOptions = $this->getTimeSelections();
         $time = $this->getDefaultTime();
+        $guests = 2;
        
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
 
@@ -58,7 +59,7 @@ class RestaurantsController extends AppController
             ->contain([ 'Cuisines'])
             ->where(['Restaurants.status' => 'featured']);
 
-        $this->set(compact('featured', 'cuisines', 'date', 'time', 'timeOptions'));
+        $this->set(compact('featured', 'cuisines', 'date', 'time', 'guests', 'timeOptions'));
     }
 
     public function search()
@@ -94,7 +95,6 @@ class RestaurantsController extends AppController
                 'term' => $cuisines,
                 'contain' => ['Cuisines'],
             ]);
-
         } else {
             return $this->redirect(['action' => 'home']);
         }

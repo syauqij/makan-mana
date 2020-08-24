@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\I18n\FrozenTime;
 
 /**
  * Reservation Entity
@@ -53,6 +54,23 @@ class Reservation extends Entity
         'modified' => true,
         'user' => true,
         'restaurant' => true,
-        'reservation_logs' => true,
+        'reservation_logs' => true
     ];
+
+    protected $_virtual = ['updated_status'];
+
+    protected function _getUpdatedStatus() {
+        $now = FrozenTime::now();
+        $reserved_date = $this->reserved_date;
+        $status = $this->status;
+
+        //dd($now);
+        if ($status != null) {
+            if ($reserved_date < $now && isset($status) == "pending") {
+                return "No Show";
+            } else {
+                return ucwords($status);
+            }
+        }
+    }  
 }

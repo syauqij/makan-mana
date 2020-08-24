@@ -27,20 +27,27 @@
             <tbody>
                 <?php foreach ($reservations as $key => $reservation): ?>
                 <tr>
-                    <th scope="row"><?= h($reservation->user->full_name) ?></th>
-                    <td><?= $reservation->has('restaurant') ? $this->Html->link($reservation->restaurant->name, ['controller' => 'Restaurants', 'action' => 'view', $reservation->restaurant->slug]) : '' ?></td>
+                    <th scope="row"><?= $this->Html->link($reservation->user->full_name, 
+                            ['controller' => 'Reservations', 'action' => 'view', $reservation->id]) ?></th>
+                    <td><?= $reservation->has('restaurant') ? $this->Html->link($reservation->restaurant->name, 
+                            ['controller' => 'Restaurants', 'action' => 'view', $reservation->restaurant->slug]) : '' ?></td>
                     <td><?= h($reservation->reserved_date) ?></td>
                     <td><?= $this->Number->format($reservation->total_guests) ?></td>
-                    <td><?= h($reservation->status) ?></td>
+                    <td><?= h($reservation->get('updated_status')) ?></td>
                     <?php if($this->Identity->get('role') == "owner") : ?>
                     <td class="actions">
                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                             Update
                         </button>
                         <div class="dropdown-menu">
-                            <?= $this->Html->link('Accept', ['controller' => 'Reservation', 'action' => 'update'], ['class' => 'dropdown-item']);?>
-                            <?= $this->Html->link('Decline', ['controller' => 'Restaurants', 'action' => 'update'], ['class' => 'dropdown-item']);?>
-                            <?= $this->Html->link('Complete', ['controller' => 'Menus', 'action' => 'update'], ['class' => 'dropdown-item']);?>
+                            <?= $this->Form->postLink(__('Accept'), ['action' => 'updateStatus', 'accepted', $reservation->id],
+                                    ['class' => 'dropdown-item', 'confirm' => __('Confirm accept reservation at {0}?', $reservation->reserved_date)]) ?>
+
+                            <?= $this->Form->postLink(__('Decline'), ['action' => 'updateStatus', 'declined', $reservation->id], 
+                                    ['class' => 'dropdown-item', 'confirm' => __('Confirm decline reservation at {0}?', $reservation->reserved_date)]) ?>
+
+                            <?= $this->Form->postLink(__('Complete'), ['action' => 'updateStatus', 'completed', $reservation->id], 
+                                    ['class' => 'dropdown-item', 'confirm' => __('Confirm reservation is complete {0}?', $reservation->reserved_date)]) ?>
                         </div>
                     </td>
                     <?php endif; ?>

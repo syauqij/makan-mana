@@ -1,5 +1,9 @@
 <?php
-    $options = ['1' => '1 People', '2' => '2 People'];
+    $no = 1;
+    while($no <= 20) {
+        $options[$no] = $no . ' people';
+        $no++;
+    }
 ?>
     <div class="col-md-2">
         <?= $this->Form->date('date', [
@@ -16,7 +20,7 @@
     </div>
     <div class="col-md-2">
         <?= $this->Form->select('guests', $options, [
-            'value' => '2'
+            'value' => $guests
             ]); ?>
     </div>
     <div class="col-md-4">
