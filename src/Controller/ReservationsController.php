@@ -87,7 +87,15 @@ class ReservationsController extends AppController
         $occasions = $this->getOccassions();     
 
         $reservation = $this->Reservations->newEmptyEntity();
-        $this->Authorization->authorize($reservation);
+       
+        $identity = $this->request->getAttribute('identity');
+        if (!$identity->can('create', $reservation)) {
+            $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
+                'params' => ['type' => "warning"]
+            ]);
+
+            return $this->redirect('/');
+        }
         
         if ($this->request->is('post')) {
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());

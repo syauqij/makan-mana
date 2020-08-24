@@ -223,7 +223,7 @@ class RestaurantsController extends AppController
 
             if ($this->Restaurants->save($restaurant)) {
                 //dd($restaurant);
-                $this->Flash->alert('Restaurant details updated', [
+                $this->Flash->alert($restaurant->name . ' details updated.', [
                     'params' => [
                         'type' => "success",
                         'name' => $restaurant->name
@@ -232,7 +232,7 @@ class RestaurantsController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->alert('Restaurant details could not be saved. Please, try again.', [
+            $this->Flash->alert($restaurant->name . ' details could not be saved. Please, try again.', [
                 'params' => [
                     'type' => "warning",
                     'name' => $restaurant->name

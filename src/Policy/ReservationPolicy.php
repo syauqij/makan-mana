@@ -13,6 +13,8 @@ class ReservationPolicy
         $role = $user->getOriginalData()->role;
         if ($role == 'member') {
             return true;
+        } else {
+            return false;
         }
     }
 

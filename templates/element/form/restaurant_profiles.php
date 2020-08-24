@@ -8,7 +8,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-7 mb-2">
         <?= $this->Form->label('Select Cuisines')?>
         <?= $this->Form->select('cuisine_ids', $cuisines, [
                 'placeholder' => 'Choose at least one',
