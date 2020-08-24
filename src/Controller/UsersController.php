@@ -14,8 +14,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         $this->Authentication->addUnauthenticatedActions(['login', 'register']);
-        //$this->Authorization->skipAuthorization('login', 'logout', 'register');
-        $this->Authorization->skipAuthorization();
+        $this->Authorization->skipAuthorization('login', 'logout', 'register');
     }
 
     public function login()
@@ -99,87 +98,102 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    public function register()
-    {   
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            //generate token for email validation and authenticate user
-            $token = Security::hash(Security::randomBytes(32));
-
-            $user = $this->Users->patchEntity($user, $this->request->getData(),
-            ['validate' => 'passwords']);
-
-            $user->token = $token;
-            $user->role = "member";
-
-            $dir = new Folder(WWW_ROOT . 'img\profile-photos');
-            $attachment = $this->request->getData('attachment');
-            if($attachment) {
-                $fileName = $attachment->getClientFilename();
-                $targetPath = $dir->path . DS . $fileName ;
-
-                if($fileName) {
-                    $attachment->moveTo($targetPath);
-                    $user->photo_path = $fileName;  
-                }
-            }
-
-            if ($this->Users->save($user)) {
-                $user = $this->Users->find('byToken', ['token' => $token])->first();
-
-                $this->Authentication->setIdentity($user);
-
-                $redirect = $this->request->getQuery('redirect');
-
-                //dd($redirect);
-        
-                // regardless of POST or GET, redirect if user is logged in
-                if ($redirect) {
-
-                    $this->Flash->alert('Registration successful. Please, complete your reservation.', [
-                        'params' => ['type' => "success"]
-                    ]);
-
-                    return $this->redirect($redirect);
-                }
-
-                $this->Flash->alert('Registration successful. Please, sign in.', [
-                    'params' => ['type' => "success"]
-                ]);
-
-                return $this->redirect(['controller' => 'Reservations', 'action' => 'index']);
-
-            } else {
-                $this->Flash->alert('Registration not successful. Please, try again.', [
-                    'params' => ['type' => "warning"]
-                ]);
-            }
-
-            //dd($user);
-        }
-        $this->set(compact('user'));
-    }
-
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
             'contain' => ['UserProfiles'],
         ]);
-        
-        //dd($this->Authorization->authorize($user));
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->alert(__('The user has been saved.'), [
-                    'params' => ['type' => "success"]
-                ]);
 
-                return $this->redirect(['action' => 'index']);
+        $identity = $this->request->getAttribute('identity');
+        if ($identity->can('edit', $user)) {
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                
+                $data = $this->request->getData();
+
+                if($data['password'] == "") {
+                    unset($data['password']);
+                }
+
+                $user = $this->Users->patchEntity($user, $data,
+                    ['associated' => 'UserProfiles'], ['validate' => 'passwords']
+                );
+
+                $dir = new Folder(WWW_ROOT . 'img\user-profile-photos');
+                $attachment = $this->request->getData('photo');
+                
+                if($attachment) {
+                    $fileName = $attachment->getClientFilename();
+                    $targetPath = $dir->path . DS . $fileName ;
+                    
+                    if($fileName) {
+                        $attachment->moveTo($targetPath);
+                        $user->image_file = $fileName;
+                    }
+                }
+                
+                //dd($this->Users->save($user));
+                
+                //add new entity user profiles if not exist
+                if($user->user_profile == null) {
+                    $profiles = $this->getTableLocator()->get('UserProfiles');
+                    $profile = $profiles->newEntity($data['user_profile']);
+                    
+                    $profile->user_id = $user->id;
+                    
+                    if($profiles->save($profile)){
+                        $this->Flash->alert(__($user->full_name . ' account profiles has been saved.'), [
+                            'params' => ['type' => "warning"]
+                        ]);
+                    }
+                }
+                    
+                if ($this->Users->save($user)) {
+                        
+                    $this->Flash->alert(__($user->full_name . ' account details has been saved.'), [
+                        'params' => ['type' => "success"]
+                    ]);
+
+                    return $this->redirect(['action' => 'edit', $id]);
+                }
+                $this->Flash->alert(__($user->full_name . ' account details could not be saved. Please, try again.'), [
+                    'params' => ['type' => "warning"]
+                ]);
             }
-            $this->Flash->alert(__('The user could not be saved. Please, try again.'), [
-                'params' => ['type' => "warning"]
-            ]);
+        } else {
+            $this->Flash->alert(__('Sorry you are not allowed to update this record'));
+            return $this->redirect('/');
         }
+
         $this->set(compact('user'));
     }
+
+    public function updateStatus($id = null) {
+        $this->request->allowMethod(['post']);
+
+        $user = $this->Users->get($id);
+
+        $identity = $this->request->getAttribute('identity');
+
+        if ($identity->can('updateStatus', $user)) {
+            $status = ($user->status == 1) ? 0 : 1; 
+            $query = $this->Users->query();
+            $status = $query->update()
+                    ->set(['active' => $status])
+                    ->where(['id' => $id])
+                    ->execute();
+
+            if ($status) {
+                $this->Flash->alert(__('The user status has been updated'), [
+                    'params' => ['type' => "success"]
+                ]);
+            } else {
+                $this->Flash->alert(__('The user status could not be updated. Please, try again.'));
+            }
+        } else {
+            $this->Flash->alert(__('Sorry you are not allowed to update this record'));
+            return $this->redirect('/');
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }    
 }

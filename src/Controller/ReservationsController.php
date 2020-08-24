@@ -151,31 +151,8 @@ class ReservationsController extends AppController
         $this->set(compact('reservation', 'users', 'restaurants', 'restaurantTables'));
     }
 
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $reservation = $this->Reservations->get($id);
-
-        $user = $this->request->getAttribute('identity');
-
-        // Check authorization on $reservation
-        if ($user->can('delete', $reservation)) {
-            // Do delete operation
-            if ($this->Reservations->delete($reservation)) {
-                $this->Flash->alert(__('The reservation has been deleted.'));
-            } else {
-                $this->Flash->alert(__('The reservation could not be deleted. Please, try again.'));
-            }
-        } else {
-            $this->Flash->alert(__('The reservation could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
     public function updateStatus($status, $id) {
-        $this->request->allowMethod(['post', 'update']);
+        $this->request->allowMethod(['patch', 'post', 'put']);
 
         $reservation = $this->Reservations->get($id);
 
@@ -190,7 +167,7 @@ class ReservationsController extends AppController
                     ->where(['id' => $id])
                     ->execute();
 
-            // Do delete operation
+            // Do update operation
             if ($updated) {
                 $this->Flash->alert(__('The reservation has been ' . $status), [
                     'params' => ['type' => "success"]

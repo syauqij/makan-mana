@@ -18,33 +18,26 @@ class UserPolicy
      * @param App\Model\Entity\User $resource
      * @return bool
      */
-    public function canCreate(IdentityInterface $user, User $resource)
-    {
-    }
-
-    /**
-     * Check if $user can update User
-     *
-     * @param Authorization\IdentityInterface $user The user.
-     * @param App\Model\Entity\User $resource
-     * @return bool
-     */
     public function canEdit(IdentityInterface $user, User $resource)
-    {
-        return $this->isOwner($user, $resource);
+    {   
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        } else {
+            return $this->isOwner($user, $resource);
+        }   
     }
 
-    public function canDelete(IdentityInterface $user, User $resource)
+    public function canUpdateStatus(IdentityInterface $user, User $resource)
     {
-    }
-
-    public function canView(IdentityInterface $user, User $resource)
-    {
-        return $this->isOwner($user, $resource);
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        }        
     }
 
     protected function isOwner(IdentityInterface $user, User $resource)
     {
-        return $resource->user_id === $user->getIdentifier();
+        return $resource->id === $user->getIdentifier();
     }
 }

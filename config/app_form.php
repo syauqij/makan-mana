@@ -8,6 +8,8 @@
         'error' => '<div class="invalid-feedback">{{content}}</div>',
         'select' => '<div class="form-group"><select class="form-control select2" name="{{name}}"{{attrs}}>{{content}}</select></div>',
         'textarea' => '<textarea class="form-control" name="{{name}}"{{attrs}}>{{value}}</textarea>',
-        'file' => '<input type="file" class="form-control-file" name="{{name}}"{{attrs}}>'
+        'file' => '<input type="file" class="form-control-file" name="{{name}}"{{attrs}}> ',
+        'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}> <label{{attrs}}>',
+        'radioWrapper' => '<div class="form-check form-check-inline"> {{label}} </div>'
     ];
 ?>

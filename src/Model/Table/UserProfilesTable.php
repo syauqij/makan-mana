@@ -31,11 +31,6 @@ class UserProfilesTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('profile_photo')
-            ->maxLength('profile_photo', 255)
-            ->allowEmptyFile('profile_photo');
-
-        $validator
             ->scalar('phone_no_2')
             ->maxLength('phone_no_2', 15)
             ->allowEmptyString('phone_no_2');

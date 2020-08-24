@@ -41,6 +41,7 @@ class RestaurantsTable extends Table
         ]);
         $this->hasMany('RestaurantCuisines', [
             'foreignKey' => 'restaurant_id',
+            'saveStrategy' => "replace"
         ]);
         $this->hasMany('RestaurantGalleries', [
             'foreignKey' => 'restaurant_id',
