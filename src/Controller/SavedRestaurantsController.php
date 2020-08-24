@@ -27,24 +27,30 @@ class SavedRestaurantsController extends AppController
         $this->set(compact('savedRestaurant'));
     }
 
-    public function add()
+    public function add($restaurant_id = null, $slug)
     {
+        $this->request->allowMethod(['post', 'get']);
+        
+        $user_id = $this->request->getAttribute('identity')->getIdentifier();
+        
         $savedRestaurant = $this->SavedRestaurants->newEmptyEntity();
+        $this->Authorization->authorize($savedRestaurant, 'create');
+
         if ($this->request->is('post')) {
             $savedRestaurant = $this->SavedRestaurants->patchEntity($savedRestaurant, $this->request->getData());
+            $savedRestaurant->user_id = $user_id;
+            $savedRestaurant->restaurant_id = $restaurant_id;
             if ($this->SavedRestaurants->save($savedRestaurant)) {
-                $this->Flash->success(__('The saved restaurant has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->alert(__('Restaurant successfully saved.'));
+            } else {
+                $this->Flash->alert(__('Restaurant could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The saved restaurant could not be saved. Please, try again.'));
         }
-        $users = $this->SavedRestaurants->Users->find('list', ['limit' => 200]);
-        $restaurants = $this->SavedRestaurants->Restaurants->find('list', ['limit' => 200]);
-        $this->set(compact('savedRestaurant', 'users', 'restaurants'));
+
+        return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $slug]);        
     }
 
-    public function delete($id = null)
+    public function delete($id = null, $slug = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         
@@ -57,12 +63,15 @@ class SavedRestaurantsController extends AppController
             if ($this->SavedRestaurants->delete($savedRestaurant)) {
                 $this->Flash->alert(__('The saved restaurant has been deleted.'));
             } else {
-                $this->Flash->alert(__('The saved restaurant could not be deleted. Please, try again.'));
+                $this->Flash->alert(__('Could not delete saved restaurant. Please, try again.'));
             }
         } else {
-            $this->Flash->alert(__('The saved restaurant could not be deleted. Please, try again.'));
+            $this->Flash->alert(__('Could not delete saved restaurant. Please, try again.'));
         }
 
+        if ($slug) {
+            return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $slug]);
+        }
         return $this->redirect(['action' => 'index']);
     }
 }

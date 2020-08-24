@@ -1,5 +1,13 @@
 
-<?php use Cake\I18n\FrozenTime; ?>
+<?php 
+	use Cake\I18n\FrozenTime; 
+
+    $no = 1;
+    while($no <= 20) {
+        $options[$no] = $no . ' people';
+        $no++;
+    }
+?>
 
 <style>
 	/*to fetch image from restaurant data*/
@@ -10,9 +18,26 @@
 
 <section class="jumbotron" id="restaurant-banner">
     <div class="container">
+		<div class="row justify-content-between">
+			<div class="col-auto mr-auto">
+				<h1 class="display-4"><?= h($restaurant->name)?></h1>
+			</div>
+			<div class="col-auto">
+				<?php if(!empty($hasSaved->user_id)) : ?>
+					<?= $this->Form->postLink(__('Restaurant Saved'), 
+						['controller' => 'SavedRestaurants', 'action' => 'delete', $hasSaved->id, $restaurant->slug],
+						['class' => 'btn btn-dark']
+					)?>
+				<?php else: ?>
+					<?= $this->Form->postLink(__('Save Restaurant'), 
+						['controller' => 'SavedRestaurants', 'action' => 'add', $restaurant->id, $restaurant->slug],
+						['class' => 'btn btn-light']
+					)?>
+				<?php endif; ?>
+			</div>
+		</div>
 		<div class="row">
 			<?= $this->Flash->render() ?>
-			<h1 class="display-4"><?= h($restaurant->name)?></h1>
     	</div>
     </div>
 </section>

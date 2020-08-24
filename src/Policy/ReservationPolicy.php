@@ -5,9 +5,8 @@ namespace App\Policy;
 
 use App\Model\Entity\Reservation;
 use Authorization\IdentityInterface;
-use Authorization\Policy\BeforePolicyInterface;
 
-class ReservationPolicy implements BeforePolicyInterface
+class ReservationPolicy
 {  
     public function canCreate(IdentityInterface $user, Reservation $reservation)
     {

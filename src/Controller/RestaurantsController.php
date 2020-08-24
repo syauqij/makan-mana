@@ -131,8 +131,6 @@ class RestaurantsController extends AppController
 
     public function view($slug)
     {   
-        $options = ['1' => '1 People', '2' => '2 People'];
-
         $this->Authorization->skipAuthorization();
         
         $now = FrozenTime::now();
@@ -171,7 +169,16 @@ class RestaurantsController extends AppController
                     ->where(['Menus.restaurant_id' => $restaurantId]);
             });
 
-        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'guests', 'timeOptions', 'options'));
+        $user = $this->request->getAttribute('identity');
+        if($user) {
+            $savedRestaurantsTable = $this->getTableLocator()->get('SavedRestaurants');
+            $hasSaved = $savedRestaurantsTable->find('hasSaved', [
+                'user_id' => $user->get('id'),
+            ])->first();
+            $this->set('hasSaved', $hasSaved);
+        }
+
+        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'guests', 'timeOptions'));
     }
 
     public function edit($id = null)

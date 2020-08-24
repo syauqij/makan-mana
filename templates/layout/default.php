@@ -45,7 +45,7 @@
             <div class="dropdown-menu">
                 <?php if ($this->Identity->get('role') == "member") : ?>
                     <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
-                    <?= $this->Html->link('My Saved Restaurants', ['controller' => 'Restaurants', 'action' => 'favourites'], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link('My Saved Restaurants', ['controller' => 'SavedRestaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
                 <?php elseif ($this->Identity->get('role') == "owner") : ?>
                     <?= $this->Html->link('Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
                     <?= $this->Html->link('Restaurants', ['controller' => 'Restaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>

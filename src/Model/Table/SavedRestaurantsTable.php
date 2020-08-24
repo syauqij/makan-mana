@@ -52,4 +52,10 @@ class SavedRestaurantsTable extends Table
 
         return $rules;
     }
+
+    public function findHasSaved($query, $options) {
+        $user_id = $options['user_id'];
+
+        return $query->where(['SavedRestaurants.user_id' => $user_id]);
+    }
 }
