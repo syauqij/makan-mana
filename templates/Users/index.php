@@ -3,7 +3,7 @@
 
     $this->start('sidebar');
         $role = $this->Identity->get('role');
-        echo $this->element('sidebar/'.$role, ['active' => 'account-details']);
+        echo $this->element('sidebar/'.$role, ['active' => 'users']);
     $this->end(); 
 ?>
 

@@ -16,7 +16,7 @@
 ); ?>
 <?= $this->Html->link('Account Details', [
     'controller' => 'users', 'action' => 'edit', $user_id],
-    ['class' => 'nav-link', 'id' => 'account-details']
+    ['class' => 'nav-link', 'id' => 'users']
 ); ?>
 
 <?php $this->start('script'); ?>
