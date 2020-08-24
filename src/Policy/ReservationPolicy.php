@@ -9,16 +9,6 @@ use Authorization\Policy\BeforePolicyInterface;
 
 class ReservationPolicy implements BeforePolicyInterface
 {  
-    public function before($user, $resource, $action)
-    {
-        //dd($user->getOriginalData());
-        $role = $user->getOriginalData()->role;
-        if ($role == 'admin') {
-            return true;
-        }
-        // fall through
-    }
- 
     public function canCreate(IdentityInterface $user, Reservation $reservation)
     {
         $role = $user->getOriginalData()->role;

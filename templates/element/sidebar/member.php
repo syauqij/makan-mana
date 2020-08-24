@@ -11,8 +11,8 @@
     ['class' => 'nav-link', 'id' => 'reservations']
 ); ?>
 <?= $this->Html->link('Saved Restaurants', [
-    'controller' => 'restaurants', 'action' => 'favourites'],
-    ['class' => 'nav-link', 'id' => 'favourites']
+    'controller' => 'savedRestaurants', 'action' => 'index'],
+    ['class' => 'nav-link', 'id' => 'saved-restaurants']
 ); ?>
 <?= $this->Html->link('Account Details', [
     'controller' => 'users', 'action' => 'edit', $user_id],

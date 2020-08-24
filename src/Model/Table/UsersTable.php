@@ -29,6 +29,10 @@ class UsersTable extends Table
         $this->hasOne('UserProfiles', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('SavedRestaurants', [
+            'foreignKey' => 'user_id',
+        ]);
+
     }
 
     public function validationDefault(Validator $validator): Validator
