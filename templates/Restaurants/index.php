@@ -18,6 +18,7 @@
                 <tr>
                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('full_address') ?></th>
+                    <th scope="col"></th>
                     <th scope="col"><?= $this->Paginator->sort('status') ?></th>
                     <th scope="actions col"></th>
                 </tr>
@@ -27,7 +28,8 @@
                 <tr>
                     <th scope="row"><?= $this->Html->link($restaurant->name, ['controller' => 'Restaurants', 'action' => 'view', $restaurant->slug]) ?></th>
                     <td><?= h($restaurant->full_address) ?></td>
-                    <td><?= h($restaurant->status) ?></td>
+                    <td><?= $this->Html->link('Saved List', ['controller' => 'SavedRestaurants', 'action' => 'index']);?></td>
+                    <td><?= h(ucwords($restaurant->status)) ?></td>
                     <td class="actions">
                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                             Edit

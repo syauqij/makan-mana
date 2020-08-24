@@ -47,7 +47,10 @@ class SavedRestaurantsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+        
         $savedRestaurant = $this->SavedRestaurants->get($id);
+
+        $user = $this->request->getAttribute('identity');
         
         if ($user->can('delete', $savedRestaurant)) {
             // Do delete operation

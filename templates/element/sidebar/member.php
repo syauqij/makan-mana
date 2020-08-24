@@ -12,7 +12,7 @@
 ); ?>
 <?= $this->Html->link('Saved Restaurants', [
     'controller' => 'savedRestaurants', 'action' => 'index'],
-    ['class' => 'nav-link', 'id' => 'saved-restaurants']
+    ['class' => 'nav-link', 'id' => 'restaurants']
 ); ?>
 <?= $this->Html->link('Account Details', [
     'controller' => 'users', 'action' => 'edit', $user_id],

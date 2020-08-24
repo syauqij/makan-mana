@@ -3,7 +3,7 @@
     
     $this->start('sidebar');
         $role = $this->Identity->get('role');
-        echo $this->element('sidebar/'.$role, ['active' => 'saved-restaurants']);
+        echo $this->element('sidebar/'.$role, ['active' => 'restaurants']);
     $this->end(); 
 ?>
 
@@ -18,6 +18,7 @@
                 <tr>
                     <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('restaurant_id') ?></th>
+                    <th scope="col">Phone No</th>
                     <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                     <th scope="actions col"></th>
                 </tr>
@@ -28,6 +29,7 @@
                     <th scope="row"><?= h($saved->user->full_name) ?></th>
                     <td><?= $saved->has('restaurant') ? $this->Html->link($saved->restaurant->name, 
                             ['controller' => 'Restaurants', 'action' => 'view', $saved->restaurant->slug]) : '' ?></td>
+                    <td><?= h($saved->user->phone_no) ?></td>
                     <td><?= h($saved->created) ?></td>
                     <?php if($this->Identity->get('role') == "member") : ?>
                     <td class="actions">
