@@ -12,17 +12,19 @@
 <style>
 	/*to fetch image from restaurant data*/
 	#restaurant-banner {
-		background-image: url("../img/jumbotron_register_member.jpg");
+		<?php echo $this->Html->style([
+			'background-image' => 'url("../img/restaurant-profile-photos/' . $restaurant->image_file . '")'
+		]); ?>
 	}
 </style>
 
 <section class="jumbotron mb-0" id="restaurant-banner">
     <div class="container">
-		<div class="row justify-content-between">
-			<div class="col-auto mr-auto">
+		<div class="row d-flex bd-highlight">
+			<div class="p-2 flex-grow-1 bd-highlight">
 				<h1 class="display-4"><?= h($restaurant->name)?></h1>
 			</div>
-			<div class="col-auto">
+			<div class="p-2 bd-highlight align-self-center">
 				<?php if(!empty($hasSaved->user_id)) : ?>
 					<?= $this->Form->postLink(__('Restaurant Saved'), 
 						['controller' => 'SavedRestaurants', 'action' => 'delete', $hasSaved->id, $restaurant->slug],
@@ -44,10 +46,10 @@
 <div class="album py-3 bg-light">
 <div class="container">
 	<nav id="navbar-restaurant" class="navbar navbar-light bg-light sticky-top pl-0">
-		<div class="col-12 col-md-5 text-truncate pl-0">
+		<div class="col-sm-5 col-lg-5 text-truncate pb-2">
 			<strong><?= h($restaurant->name)?></strong>
 		</div>
-		<div class="col-12 col-md-7">
+		<div class="col-sm-7 col-lg-6 offset-lg-1">
 			<ul class="nav nav-pills">
 				<li class="nav-item">
 					<a class="nav-link active" href="#about">About</a>
@@ -64,22 +66,41 @@
 	</nav>
 	
 	<div class="row">
-		<div class="col-md-9" data-spy="scroll">
-
-			<div id="about" class="py-4">
-				<div class="details pb-4">
-					<?= h($restaurant->city) ?>,<?= h($restaurant->state) ?>
-
+		<div class="col-md-8 col-lg-9" data-spy="scroll">
+			<div id="about" class="py-3">
+			<div class="d-flex bd-highlight">
+				<div class="location flex-grow-1 p-2 bd-highlight">
+					<?= h($restaurant->city) ?>, <?= h($restaurant->state) ?>
+				</div>
+				<div class="cuisines p-2 bd-highlight">
 					<?php foreach ($restaurant->cuisines as $cuisine) : ?>
 						<?= $this->Html->link($cuisine->name, 
 							['action' => 'search', $cuisine->name],
 							['class' => 'badge badge-secondary']
 						);?>
 					<?php endforeach; ?>
-
 				</div>
-				<div class="description">
-					<p><?= printf($restaurant->description) ?></p>
+			</div>
+				<div class="description p-2">
+					<?= h($restaurant->description) ?>
+				</div>
+				<div class="criteria col-md-10 p-2">
+					<dl class="row">
+						<dt class="col-sm-3">Opeation Hours</dt>
+						<dd class="col-sm-9"><?= h($restaurant->operation_hours)?></dd>
+						<dt class="col-sm-3">Price Range</dt>
+						<dd class="col-sm-9"><?= h($restaurant->price_range)?></dd>
+						<dt class="col-sm-3">Payment Options</dt>
+						<dd class="col-sm-9"><?= h($restaurant->payment_options)?></dd>
+						<dt class="col-sm-3">Contact</dt>
+						<dd class="col-sm-9"><?= h($restaurant->contact_no)?></dd>
+						<dt class="col-sm-3">Website</dt>
+						<dd class="col-sm-9"><?= h($restaurant->website)?></dd>
+						<dt class="col-sm-3">Contact</dt>
+						<dd class="col-sm-9"><?= h($restaurant->contact_no)?></dd>
+						<dt class="col-sm-3">Address</dt>
+						<dd class="col-sm-9"><?= h($restaurant->full_address)?></dd>
+					</dl>
 				</div>
 			</div>
 
@@ -123,7 +144,7 @@
 			</div>
 		</div>
 
-		<div class="col-md-3">
+		<div class="col-md-4 col-lg-3">
 			<div id="reservation" class="sticky-top py-2">
 			
 				<?= $this->Form->create(null, [
