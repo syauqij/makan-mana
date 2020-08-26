@@ -16,7 +16,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('user_id', 'Diner') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('restaurant_id') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('reserved_date') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('created', 'Booked On') ?></th>

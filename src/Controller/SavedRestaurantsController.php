@@ -47,7 +47,7 @@ class SavedRestaurantsController extends AppController
                 }
             }
         } else {
-            $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
+            $this->Flash->alert('Sorry you are not allowed to save this restaurant.', [
                 'params' => ['type' => "warning"]
             ]);
             return $this->redirect('/');

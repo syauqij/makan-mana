@@ -16,6 +16,8 @@ class SavedRestaurantPolicy
         $role = $user->getOriginalData()->role;
         if ($role == 'member') {
             return true;
+        } else {
+            return false;
         }
     }
 

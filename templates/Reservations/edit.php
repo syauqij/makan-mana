@@ -24,7 +24,7 @@
             <li class="media">
                 <?php if ($reservation->restaurant->image_file):?>
                     <?= $this->Html->image('restaurant-profile-photos/' . $reservation->restaurant->image_file, [
-                        'url' => ['action' => 'view', $reservation->restaurant->slug],
+                        'url' => ['action' => 'view', $reservation->id],
                         'alt' =>  $reservation->restaurant->image_file,
                         'class' => 'mr-3 restaurant-photo-mini'
                     ]);?>

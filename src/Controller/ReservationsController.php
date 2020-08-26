@@ -53,8 +53,10 @@ class ReservationsController extends AppController
         $selectedDate = new FrozenTime($reservation->reserved_date);
         $date = $selectedDate->i18nFormat('dd/MM/yyyy');
         $time = $selectedDate->i18nFormat('h:mm a');
+
+        $canModify = ($reservation->reserved_date < FrozenTime::now()) ? false : true;
                
-        $this->set(compact('reservation', 'occasions', 'date', 'time'));
+        $this->set(compact('reservation', 'occasions', 'date', 'time', 'canModify'));
     }
 
     public function create()
