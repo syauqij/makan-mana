@@ -88,8 +88,7 @@ class ReservationsController extends AppController
 
         $reservation = $this->Reservations->newEmptyEntity();
        
-        $identity = $this->request->getAttribute('identity');
-        if (!$identity->can('create', $reservation)) {
+        if ($this->request->getAttribute('identity')->can('create', $reservation)) {
             $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
                 'params' => ['type' => "warning"]
             ]);
@@ -156,8 +155,7 @@ class ReservationsController extends AppController
         $selectedDate = new FrozenTime($date . $time); 
         $timeslots = $this->getTimeslots($selectedDate, $restaurantId);
 
-        $identity = $this->request->getAttribute('identity');
-        if ($identity->can('modify', $reservation)) {
+        if ($this->request->getAttribute('identity')->can('modify', $reservation)) {
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $query = $this->Reservations->query();
                 $updated = $query->update()
@@ -172,7 +170,6 @@ class ReservationsController extends AppController
                     return $this->redirect(['action' => 'upcoming']);
                 }
             }
-
         } else {
             $this->Flash->alert('Sorry you are not allowed to modify this reservation.', [
                 'params' => ['type' => "warning"]

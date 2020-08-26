@@ -1,6 +1,6 @@
 <?php use Cake\Utility\Text; ?>
 
-<section class="jumbotron" id="home-banner">
+<section class="jumbotron mb-0" id="home-banner">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
         <?= $this->Form->create(null, [

@@ -34,19 +34,25 @@ class SavedRestaurantsController extends AppController
         $user_id = $this->request->getAttribute('identity')->getIdentifier();
         
         $savedRestaurant = $this->SavedRestaurants->newEmptyEntity();
-        $this->Authorization->authorize($savedRestaurant, 'create');
-
-        if ($this->request->is('post')) {
-            $savedRestaurant = $this->SavedRestaurants->patchEntity($savedRestaurant, $this->request->getData());
-            $savedRestaurant->user_id = $user_id;
-            $savedRestaurant->restaurant_id = $restaurant_id;
-            if ($this->SavedRestaurants->save($savedRestaurant)) {
-                $this->Flash->alert(__('Restaurant successfully saved.'));
-            } else {
-                $this->Flash->alert(__('Restaurant could not be saved. Please, try again.'));
+        
+        if ($this->request->getAttribute('identity')->can('create', $reservation)) {
+            if ($this->request->is('post')) {
+                $savedRestaurant = $this->SavedRestaurants->patchEntity($savedRestaurant, $this->request->getData());
+                $savedRestaurant->user_id = $user_id;
+                $savedRestaurant->restaurant_id = $restaurant_id;
+                if ($this->SavedRestaurants->save($savedRestaurant)) {
+                    $this->Flash->alert(__('Restaurant successfully saved.'));
+                } else {
+                    $this->Flash->alert(__('Restaurant could not be saved. Please, try again.'));
+                }
             }
+            return $this->redirect('/');
+        } else {
+            $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
+                'params' => ['type' => "warning"]
+            ]);
         }
-
+            
         return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $slug]);        
     }
 

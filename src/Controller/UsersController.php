@@ -25,9 +25,7 @@ class UsersController extends AppController
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             
-            $identity = $this->request->getAttribute('identity');
-
-            if($identity->get('status') == 0) {
+            if($this->request->getAttribute('identity')->get('status') == 0) {
                 $this->Authentication->logout();
                 $this->Flash->alert('Your account has been disabled. Contact our Admin for further info.', [
                     'params' => ['type' => "warning"]
@@ -39,13 +37,12 @@ class UsersController extends AppController
             
             if (!$target) {
                 //check user's role and redirect to their respective pages.
-                $role = $identity->get('role');
+                $role = $this->request->getAttribute('identity')->get('role');
                 $this->roleRedirects($role);
             }
             //remove app name if application installed in sub directory.
             $target = str_replace("makan-mana/", "",$target);
-            //dd($target);
-            return $this->redirect($target);            
+            return $this->redirect($target);
         }
 
         // display error if user submitted and authentication failed
@@ -61,10 +58,12 @@ class UsersController extends AppController
     }
     
     public function roleRedirects($role) {
+        $identity = $this->request->getAttribute('identity');
         if ($role == 'member') {
             $contoller = 'Reservations';
             $action = 'upcoming';
         } elseif ($role == 'owner') {
+            //check if owner has completed register a restaurant
             $restaurantsTable = $this->getTableLocator()->get('Restaurants');
             $hasRestaurant = $restaurantsTable->find('hasRestaurant', [
                 'user_id' => $identity->get('id'),
@@ -113,24 +112,13 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
-    public function view($id = null)
-    {   
-        $user = $this->Users->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->Authorization->authorize($user);
-        $this->set(compact('user'));
-    }
-
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
             'contain' => ['UserProfiles'],
         ]);
 
-        $identity = $this->request->getAttribute('identity');
-        if ($identity->can('edit', $user)) {
+        if ($this->request->getAttribute('identity')->can('edit', $user)) {
             if ($this->request->is(['patch', 'post', 'put'])) {
                 
                 $data = $this->request->getData();
@@ -156,8 +144,6 @@ class UsersController extends AppController
                     }
                 }
                 
-                //dd($this->Users->save($user));
-                
                 //add new entity user profiles if not exist
                 if($user->user_profile == null) {
                     $profiles = $this->getTableLocator()->get('UserProfiles');
@@ -167,7 +153,7 @@ class UsersController extends AppController
                     
                     if($profiles->save($profile)){
                         $this->Flash->alert(__($user->full_name . ' account profiles has been saved.'), [
-                            'params' => ['type' => "warning"]
+                            'params' => ['type' => "success"]
                         ]);
                     }
                 }
@@ -197,9 +183,7 @@ class UsersController extends AppController
 
         $user = $this->Users->get($id);
 
-        $identity = $this->request->getAttribute('identity');
-
-        if ($identity->can('updateStatus', $user)) {
+        if ($this->request->getAttribute('identity')->can('updateStatus', $user)) {
             $status = ($user->status == 1) ? 0 : 1; 
             $user = $this->Users->query();
             $status = $user->update()

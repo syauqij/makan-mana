@@ -16,7 +16,7 @@
 	}
 </style>
 
-<section class="jumbotron" id="restaurant-banner">
+<section class="jumbotron mb-0" id="restaurant-banner">
     <div class="container">
 		<div class="row justify-content-between">
 			<div class="col-auto mr-auto">
