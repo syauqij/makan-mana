@@ -17,13 +17,25 @@ body {
   min-height: 60vh;
 }
 
-.bd-placeholder-img {
+.loggedin-user img {
+  border-radius: 50%;
+  height: 70px;
+  width: auto;
+}
+
+.restaurant-photo {
   font-size: 1.125rem;
   text-anchor: middle;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  min-height: 170px;
+  max-height: 200px;
+}
+
+.restaurant-photo-mini{
+  height: 90px;
 }
 
 .jumbotron {
@@ -93,6 +105,8 @@ footer p {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  min-height: 170px;
+  max-height: 200px;
 }
 
 .featured .slick-slide {

@@ -15,7 +15,7 @@ class User extends Entity
         'password' => true,
         'phone_no' => true,
         'image_file' => true,
-        'active' => true,
+        'status' => true,
         'role' => true,
         'created' => true,
         'modified' => true,

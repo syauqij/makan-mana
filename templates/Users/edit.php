@@ -59,6 +59,7 @@
                 'value' => ""
             ])?>
         </div>
+        <?php if($role == "admin") : ?>
         <div class="col-md-6 ">
             <?= $this->Form->label('Role')?> <small>(currently as <?= h($role) ?>)</small><br/>
             <?= $this->Form->select('role', $roleOptions, [
@@ -67,8 +68,9 @@
         </div>
         <div class="col-md-6 ">
             <?= $this->Form->label('Account Status')?><br/>
-            <?= $this->Form->radio('active', [1 => 'Active', 0 => 'Disabled']) ?>
-        </div>        
+            <?= $this->Form->radio('status', [1 => 'Active', 0 => 'Disabled']) ?>
+        </div>
+        <?php endif;?>
     </div><hr/>
     <div class="row">
         <div class="col-md-6 mb-2">
@@ -78,7 +80,7 @@
             ]); ?>
             <?php if ($user->image_file):?>
             <div class="row">
-                <div class="col-md-10 mb-2">
+                <div class="col-md-4 mb-2">
                     <?= $this->Html->image('user-profile-photos/' . $user->image_file, [
                         'alt' =>  $user->image_file,
                         'class' => 'img-fluid img-thumbnail'

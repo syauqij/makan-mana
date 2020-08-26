@@ -8,15 +8,15 @@
     <meta name="generator" content="Makan Mana v0.1">
     <title><?= $this->fetch('title') ?></title>
     <?= $this->Html->meta('icon') ?>
-
+    <?= $this->Html->css('custom.css') ?>
+    
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    
     <!-- Select2 JS CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
     <?= $this->Html->css('select2-bootstrap4.min'); ?>
     
-    <?= $this->Html->css('custom.css') ?>
 </head>
 
 <body data-spy="scroll" data-target="#navbar-restaurant" data-offset="56">
@@ -40,9 +40,24 @@
     <div class="btn-group">
         <?php if ($this->Identity->isLoggedIn()) : ?>
             <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Hi, <?= h($this->Identity->get('first_name')) ?>
+                My Account
             </button>
             <div class="dropdown-menu">
+                <div class="loggedin-user text-center py-1">
+                    <?php if($this->Identity->get('image_file')) : ?>
+                        <?= $this->Html->image('user-profile-photos/' . h($this->Identity->get('image_file')), [
+                            'alt' =>  h($this->Identity->get('image_file')),
+                            'class' => 'img-fluid img-thumbnail'
+                        ]);?>
+                    <?php else: ?>
+                        <?= $this->Html->image('OIP.jfif', [
+                            'alt' =>  'oip',
+                            'class' => 'img-fluid'
+                        ]); ?>
+                    <?php endif; ?>
+
+                    <?= $this->Html->link($this->Identity->get('first_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
+                </div>
                 <?php if ($this->Identity->get('role') == "member") : ?>
                     <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
                     <?= $this->Html->link('My Saved Restaurants', ['controller' => 'SavedRestaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
@@ -51,8 +66,8 @@
                     <?= $this->Html->link('Restaurants', ['controller' => 'Restaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
                 <?php else: ?>
                     <?= $this->Html->link('Manage Restaurants', ['controller' => 'Restaurants', 'action' => 'index'], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link('Manage Users', ['controller' => 'Users', 'action' => 'index'], ['class' => 'dropdown-item']);?>
                 <?php endif; ?>
-                    <?= $this->Html->link('My Account', ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
                     <div class="dropdown-divider"></div>
                     <?= $this->Html->link('Log Out', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']);?>
                 </div>

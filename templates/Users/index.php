@@ -30,11 +30,11 @@
                     <td><?= h($user->email) ?></td>
                     <td><?= h($user->phone_no) ?></td>
                     <td><?= h($user->get('role')) ?></td>
-                    <td><?= h($user->active ? "Active" : "Disabled") ?></td>
-                    <td><?= h($user->created) ?></td>
+                    <td><?= h($user->status ? "Active" : "Disabled") ?></td>
+                    <td><?= h($this->Time->format($user->created, "dd/MM/yy")) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                        <?php if ($user->active) : ?>
+                        <?php if ($user->status) : ?>
                             <?= $this->Form->postLink(__('Disable'), ['action' => 'updateStatus', $user->id], ['confirm' => __('Are you sure you want to disable {0}?', $user->email)]) ?>
                         <?php else: ?>
                             <?= $this->Form->postLink(__('Enable'), ['action' => 'updateStatus', $user->id], ['confirm' => __('Are you sure you want to enable {0}?', $user->email)]) ?>

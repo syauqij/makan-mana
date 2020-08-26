@@ -19,7 +19,7 @@
                     <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('restaurant_id') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('reserved_date') ?></th>
-                    <th scope="col"><?= $this->Paginator->sort('total_guests', 'Guests') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('created', 'Booked On') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('status') ?></th>
                     <th scope="actions col"></th>
                 </tr>
@@ -32,7 +32,7 @@
                     <td><?= $reservation->has('restaurant') ? $this->Html->link($reservation->restaurant->name, 
                             ['controller' => 'Restaurants', 'action' => 'view', $reservation->restaurant->slug]) : '' ?></td>
                     <td><?= h($reservation->reserved_date) ?></td>
-                    <td><?= $this->Number->format($reservation->total_guests) ?></td>
+                    <td><?= $this->Time->format($reservation->created) ?></td>
                     <td><?= h($reservation->get('updated_status')) ?></td>
                     <?php if($this->Identity->get('role') == "owner") : ?>
                     <td class="actions">

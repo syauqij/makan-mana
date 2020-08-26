@@ -23,8 +23,8 @@
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
                     'url' => ['action' => 'view', $restaurant->slug],
                     'alt' =>  $restaurant->image_file,
-                    'class' => 'bd-placeholder-img card-img-top'
-                    ]);?>
+                    'class' => 'card-img-top restaurant-photo'
+                ]);?>
             <?php endif; ?>
             <div class="card-body">
                 <h5 class="card-title">

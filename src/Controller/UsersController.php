@@ -21,42 +21,31 @@ class UsersController extends AppController
     {   
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
-        
+        //debug($result);
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             
             $identity = $this->request->getAttribute('identity');
-            $role = $identity->get('role');
 
-            if ($role == 'member') {
-                $contoller = 'Reservations';
-                $action = 'upcoming';
-            } elseif ($role == 'owner') {
-                $restaurantsTable = $this->getTableLocator()->get('Restaurants');
-                $hasRestaurant = $restaurantsTable->find('hasRestaurant', [
-                    'user_id' => $identity->get('id'),
+            if($identity->get('status') == 0) {
+                $this->Authentication->logout();
+                $this->Flash->alert('Your account has been disabled. Contact our Admin for further info.', [
+                    'params' => ['type' => "warning"]
                 ]);
-                if ($hasRestaurant->isEmpty()) {
-                    $this->Flash->alert('Welcome back. Please continue filling-in your restaurant information.', [
-                        'params' => ['type' => "info"]
-                    ]);
-
-                    $contoller = 'Register';
-                    $action = 'restaurant';
-                } else {
-                    $contoller = 'Reservations';
-                    $action = 'index';
-                }
-            } else {
-                $contoller = 'Restaurants';
-                $action = 'index';
+                return $this->redirect(['controller' => 'Restaurants', 'action' => 'home']);
             }
-
-            $redirect = $this->request->getQuery('redirect', [
-                'controller' => $contoller,
-                'action' => $action,
-            ]);
-            return $this->redirect($redirect);
+            
+            $target = $this->Authentication->getLoginRedirect();
+            
+            if (!$target) {
+                //check user's role and redirect to their respective pages.
+                $role = $identity->get('role');
+                $this->roleRedirects($role);
+            }
+            //remove app name if application installed in sub directory.
+            $target = str_replace("makan-mana/", "",$target);
+            //dd($target);
+            return $this->redirect($target);            
         }
 
         // display error if user submitted and authentication failed
@@ -70,6 +59,42 @@ class UsersController extends AppController
 
         $this->set('redirect', $redirect);
     }
+    
+    public function roleRedirects($role) {
+        if ($role == 'member') {
+            $contoller = 'Reservations';
+            $action = 'upcoming';
+        } elseif ($role == 'owner') {
+            $restaurantsTable = $this->getTableLocator()->get('Restaurants');
+            $hasRestaurant = $restaurantsTable->find('hasRestaurant', [
+                'user_id' => $identity->get('id'),
+            ]);
+            if ($hasRestaurant->isEmpty()) {
+                $this->Flash->alert('Welcome back. Please continue filling-in your restaurant information.', [
+                    'params' => ['type' => "info"]
+                ]);
+                $contoller = 'Register';
+                $action = 'restaurant';
+            } else {
+                $contoller = 'Reservations';
+                $action = 'index';
+            }
+        } elseif($role == "admin") {
+            $contoller = 'Restaurants';
+            $action = 'index';
+        } else {
+            $contoller = 'Users';
+            $action = 'logout';
+        }
+
+        $redirect = $this->request->getQuery('redirect', [
+            'controller' => $contoller,
+            'action' => $action,
+        ]);
+
+        return $this->redirect($redirect);
+    }
+
 
     public function logout()
     {   
@@ -176,9 +201,9 @@ class UsersController extends AppController
 
         if ($identity->can('updateStatus', $user)) {
             $status = ($user->status == 1) ? 0 : 1; 
-            $query = $this->Users->query();
-            $status = $query->update()
-                    ->set(['active' => $status])
+            $user = $this->Users->query();
+            $status = $user->update()
+                    ->set(['status' => $status])
                     ->where(['id' => $id])
                     ->execute();
 

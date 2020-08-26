@@ -16,7 +16,13 @@
         <?php foreach ($reservations as $key => $reservation): ?>
         <ul class="list-unstyled">
         <li class="media">
-            <svg class="bd-placeholder-img mr-3" width="64" height="64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 64x64"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">64x64</text></svg>
+            <?php if ($reservation->restaurant->image_file):?>
+                <?= $this->Html->image('restaurant-profile-photos/' . $reservation->restaurant->image_file, [
+                    'url' => ['action' => 'view', $reservation->restaurant->slug],
+                    'alt' =>  $reservation->restaurant->image_file,
+                    'class' => 'mr-3 restaurant-photo-mini'
+                ]);?>
+            <?php endif; ?>
             <div class="media-body">
                 <h5 class="m-0">
                     <?= $reservation->has('restaurant') ? $this->Html->link($reservation->restaurant->name, 

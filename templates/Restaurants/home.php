@@ -1,3 +1,5 @@
+<?php use Cake\Utility\Text; ?>
+
 <section class="jumbotron" id="home-banner">
     <div class="container">
         <h1 class="display-4">Discover & Book Your Ideal Restaurant</h1>
@@ -17,22 +19,23 @@
 
 <section class="bg-light home-content">
 <div class="py-3">
-    <div class="container">
+    <div class="container-fluid px-4">
         <!-- to replace slick-->
+        <h5 class="pt-3">Our Featured Restaurants</h5><hr/>
         <div class="row ">
         <?php foreach ($featured as $restaurant): ?>
-        <div class="col-sm-3">
-        <div class="card mb-4 shadow-sm">                    
+        <div class="col-sm-4 col-md-3 d-flex align-items-stretch">
+        <div class="card mb-4 shadow-sm">
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
                     'url' => ['action' => 'view', $restaurant->slug],
                     'alt' =>  $restaurant->image_file,
-                    'class' => 'bd-placeholder-img card-img-top'
+                    'class' => 'card-img-top restaurant-photo'
                 ]);?>
             <?php endif; ?>
             <div class="card-body">
                 <h5 class="card-title">
-                    <?= $this->Html->link($restaurant->name, 
+                    <?= $this->Html->link(Text::truncate($restaurant->name, 25), 
                         ['action' => 'view', $restaurant->slug]
                     );?>
                 </h5>

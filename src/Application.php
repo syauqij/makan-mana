@@ -24,6 +24,7 @@ use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Routing\Router;
 
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
@@ -134,13 +135,12 @@ class Application extends BaseApplication
     }
     
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
-    {   
+    {           
         $authenticationService = new AuthenticationService([
-            //to fix url when not using cake server 
-            'unauthenticatedRedirect' => '/users/login',
+            'unauthenticatedRedirect' => Router::url(['controller' => 'users', 'action' => 'login']),
             'queryParam' => 'redirect',
         ]);
-        
+
         // Load identifiers, check email and password
         $authenticationService->loadIdentifier('Authentication.Password', [
             'fields' => [
@@ -157,10 +157,9 @@ class Application extends BaseApplication
                 'username' => 'email',
                 'password' => 'password',
             ],
-            //to fix url when not using cake server
-            'loginUrl' => '/users/login',
+            'loginUrl' => Router::url(['controller' => 'users', 'action' => 'login']),
         ]);
-    
+
         return $authenticationService;
     }
     
