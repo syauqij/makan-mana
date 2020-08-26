@@ -35,7 +35,7 @@ body {
 }
 
 .restaurant-photo-mini{
-  height: 90px;
+  max-width: 150px;
 }
 
 .jumbotron {

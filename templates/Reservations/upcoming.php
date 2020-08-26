@@ -13,9 +13,9 @@
         <p>No Upcoming Reservations. 
             <?=$this->Html->link('Book a Table', '/'); ?></p>
     <?php else: ?>
-        <?php foreach ($reservations as $key => $reservation): ?>
         <ul class="list-unstyled">
-        <li class="media">
+        <?php foreach ($reservations as $key => $reservation): ?>
+        <li class="media pb-3">
             <?php if ($reservation->restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $reservation->restaurant->image_file, [
                     'url' => ['action' => 'view', $reservation->restaurant->slug],
@@ -35,7 +35,7 @@
                         ['class' => '', 'confirm' => __('Confirm cancelling reservation {0}?', $reservation->reserved_date)]) ?>
             </div>
         </li>
-        </ul>
         <?php endforeach; ?>
+        </ul>
     <?php endif; ?>
 <?php $this->end(); ?>

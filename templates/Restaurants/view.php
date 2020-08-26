@@ -140,7 +140,7 @@
 					<div class="col-12">
 						<?= $this->Form->date('date', [
 							'value' => $date,
-							'min' => $date,
+							'min' => $today,
 							'id' => 'date'
 						]); ?>
 					</div>
@@ -160,9 +160,9 @@
 					</div>
 				</div>
 				<?= $this->Form->end() ?>
-				<?php if ($restaurant->timeslots) : ?>
+				<?php if ($timeslots) : ?>
 				<div class="timeslots pt-2">
-					<?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
+					<?php foreach ($timeslots as $key => $timeslot) : ?>
 						<?php $timeFormatted = $this->Time->format($key, 'h:mm a'); ?>
                             <?php if ($timeslot) : ?>
                                 <?= $this->Html->link($timeFormatted, [

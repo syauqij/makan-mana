@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\I18n\FrozenTime;
+
 
 /**
  * Application Controller
@@ -59,9 +61,74 @@ class AppController extends Controller
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
+    }
 
-        // actions public, skipping the authentication check
-        //$this->Authentication->addUnauthenticatedActions(['home', 'search']);
+    public function getDefaultTime()
+    {   
+        $now = FrozenTime::now();
+        $minutes = $now->i18nFormat('mm');
+        $clearMinutes = $now->modify('-' . $minutes . 'minutes');
 
-    }    
+        if ($minutes < 15) {
+            $time = $clearMinutes->modify('+30 minutes')->i18nFormat('HH:mm');
+        } else if ($minutes > 45) {
+            $time = $clearMinutes->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
+        } else {
+            $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
+        }
+
+        return $time;
+    }
+
+    public function getTimeSelections() {
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd');
+
+        $startTime = new FrozenTime($date . ' 00:00:00');
+        $endTime = new FrozenTime($date . ' 24:00:00');
+
+        while ($startTime < $endTime) {
+            $times[$startTime->i18nFormat('HH:mm')] = $startTime->i18nFormat('h:mm a');
+            $startTime = $startTime->modify('+30 minutes');
+        }
+
+        return $times;
+    }
+
+    public function getTimeslots($selectedDate, $restaurantId) {
+        $timeslots = null;
+        $now = FrozenTime::now();
+
+        if ($selectedDate > $now) {
+            
+            $startTime = $selectedDate->modify('-30 minutes');
+            $endTime = $selectedDate->modify('+30 minutes');
+    
+            while ($startTime < $endTime) {
+                if ($startTime > $now->modify('+15 minutes')) {
+                    $timeslots[$startTime->i18nFormat('yyyy-MM-dd HH:mm:ss')] = $startTime->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                }
+                $startTime = $startTime->modify('+15 minutes');
+            }
+           
+            $reservations = $this->getTableLocator()->get('Reservations');
+            $getReservations = $reservations->find('reserved', [
+                'params' => ['restaurant_id' => $restaurantId, 'reserved_date' => $selectedDate],
+            ]);
+            
+            if(!$getReservations->isEmpty()) {
+                foreach ($getReservations as $reservation) {
+                    $reserved = $reservation['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                    $key = array_search($reserved, $timeslots);
+                    
+                    if (false !== $key) {
+                        // /unset($timeslots[$key]);
+                        $timeslots[$key] = null;
+                    }
+                }     
+            }       
+        }
+
+        return $timeslots;
+    } 
 }

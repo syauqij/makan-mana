@@ -20,23 +20,6 @@ class RestaurantsController extends AppController
         //$this->Authorization->skipAuthorization();
     }
 
-    public function getDefaultTime()
-    {   
-        $now = FrozenTime::now();
-        $minutes = $now->i18nFormat('mm');
-        $clearMinutes = $now->modify('-' . $minutes . 'minutes');
-
-        if ($minutes < 15) {
-            $time = $clearMinutes->modify('+30 minutes')->i18nFormat('HH:mm');
-        } else if ($minutes > 45) {
-            $time = $clearMinutes->modify('+1 hour 30 minutes')->i18nFormat('HH:mm');
-        } else {
-            $time = $clearMinutes->modify('+1 hour')->i18nFormat('HH:mm');
-        }
-
-        return $time;
-    }
-
     public function home()
     {     
         $this->Authorization->skipAuthorization();
@@ -154,12 +137,10 @@ class RestaurantsController extends AppController
         
         $restaurant = $this->Restaurants->find()
         ->where(['id' => $restaurantId])
-        ->contain(['Cuisines', 'Menus']);
+        ->contain(['Cuisines', 'Menus'])
+        ->first();
         
-        $timeslots[] = $this->getTimeslots($selectedDate, $restaurantId);
-
-        $merge = (new Collection($restaurant))->insert('timeslots', $timeslots);
-        $restaurant = $merge->first();
+        $timeslots = $this->getTimeslots($selectedDate, $restaurantId);
         
         $tableMenuCategories = $this->getTableLocator()->get('MenuCategories');
         $menuCategories = $tableMenuCategories->find()
@@ -178,7 +159,7 @@ class RestaurantsController extends AppController
             $this->set('hasSaved', $hasSaved);
         }
 
-        $this->set(compact('restaurant', 'menuCategories', 'date', 'time', 'guests', 'timeOptions'));
+        $this->set(compact('restaurant', 'timeslots', 'menuCategories', 'date', 'today', 'time', 'guests', 'timeOptions'));
     }
 
     public function edit($id = null)
@@ -295,59 +276,6 @@ class RestaurantsController extends AppController
             $this->Flash->alert(__('The restaurant could not be saved. Please, try again.'));
         }
         $this->set(compact('restaurant'));        
-    }
-    
-    private function getTimeSelections() {
-        $now = FrozenTime::now();
-        $date = $now->i18nFormat('yyyy-MM-dd');
-
-        //to add startime condition based on tim   
-        $startTime = new FrozenTime($date . ' 00:00:00');
-        $endTime = new FrozenTime($date . ' 24:00:00');
-
-        while ($startTime < $endTime) {
-            $times[$startTime->i18nFormat('HH:mm')] = $startTime->i18nFormat('h:mm a');
-            $startTime = $startTime->modify('+30 minutes');
-        }
-
-        return $times;
-    }
-
-    private function getTimeslots($selectedDate, $restaurantId) {
-        $timeslots = null;
-        $now = FrozenTime::now();
-
-        if ($selectedDate > $now) {
-            
-            $startTime = $selectedDate->modify('-30 minutes');
-            $endTime = $selectedDate->modify('+30 minutes');
-    
-            while ($startTime < $endTime) {
-                if ($startTime > $now->modify('+15 minutes')) {
-                    $timeslots[$startTime->i18nFormat('yyyy-MM-dd HH:mm:ss')] = $startTime->i18nFormat('yyyy-MM-dd HH:mm:ss');
-                }
-                $startTime = $startTime->modify('+15 minutes');
-            }
-           
-            $reservations = $this->getTableLocator()->get('Reservations');
-            $getReservations = $reservations->find('reserved', [
-                'params' => ['restaurant_id' => $restaurantId, 'reserved_date' => $selectedDate],
-            ]);
-            
-            if(!$getReservations->isEmpty()) {
-                foreach ($getReservations as $reservation) {
-                    $reserved = $reservation['reserved_date']->i18nFormat('yyyy-MM-dd HH:mm:ss');
-                    $key = array_search($reserved, $timeslots);
-                    
-                    if (false !== $key) {
-                        // /unset($timeslots[$key]);
-                        $timeslots[$key] = null;
-                    }
-                }     
-            }       
-        }
-
-        return $timeslots;
-    }    
+    }   
 
 }

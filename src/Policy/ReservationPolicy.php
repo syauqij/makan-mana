@@ -34,12 +34,7 @@ class ReservationPolicy
             return $this->isOwner($user, $reservation);
         }
     }
-
-    public function canDelete(IdentityInterface $user, Reservation $reservation)
-    {
-        return $this->isOwner($user, $reservation);
-    }
-
+    
     public function canView(IdentityInterface $user, Reservation $reservation)
     {
         $role = $user->getOriginalData()->role;

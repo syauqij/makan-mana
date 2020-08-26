@@ -46,7 +46,7 @@ class ReservationsController extends AppController
             ->contain(['Users', 'Restaurants'])
             ->first();
 
-            $this->Authorization->authorize($reservation);
+        $this->Authorization->authorize($reservation);
 
         $occasions = $this->getOccassions();
 
@@ -84,7 +84,7 @@ class ReservationsController extends AppController
         //get logged in user_id
         $user_id = $this->request->getAttribute('identity')->getIdentifier();
 
-        $occasions = $this->getOccassions();     
+        $occasions = $this->getOccassions();
 
         $reservation = $this->Reservations->newEmptyEntity();
        
@@ -105,7 +105,6 @@ class ReservationsController extends AppController
             $reservation->total_guests = $guests;
             $reservation->reserved_date = $selectedDate;
             
-
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->alert(__('The reservation has been saved.'), [
                     'params' => ['type' => "success"]
@@ -123,7 +122,6 @@ class ReservationsController extends AppController
                 return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
             }
 
-
             $this->Flash->alert('The reservation could not be saved. Please, try again.', [
                 'params' => ['type' => "danger"]
             ]);
@@ -132,31 +130,57 @@ class ReservationsController extends AppController
         $this->set(compact('restaurant', 'date', 'time', 'guests', 'occasions', 'reservation'));
     }
 
-    public function edit($uuid = null)
+    public function edit($uuid = null, $newReservedDate = null, $newGuests = null)
     {   
         $reservation = $this->Reservations->find()
             ->where(['Reservations.id' => $uuid])
             ->contain('Restaurants')
             ->first();
-        
-        $this->Authorization->authorize($reservation);
+            
+        $date = $reservation->reserved_date->modify('+1 day')->i18nFormat('yyyy-MM-dd');
+        $today = $now = FrozenTime::now();
+        $timeOptions = $this->getTimeSelections();
+        $time = "13:00";
+        $guests = $reservation->total_guests;
 
-         if ($this->request->is(['patch', 'post', 'put'])) {
-            $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
-            if ($this->Reservations->save($reservation)) {
-                $this->Flash->alert(__('The reservation has been saved.'), [
-                    'params' => ['type' => "success"]
-                ]);
+        $restaurantId = $reservation->restaurant_id;
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->alert(__('The reservation could not be saved. Please, try again.'), [
-                'params' => ['type' => "danger"]
-            ]);
+        $params = $this->request->getQuery();
+
+        if ($params) {
+            $date = $params['date'];
+            $time = $params['time'];
+            $guests = $params['guests'];
         }
-        $users = $this->Reservations->Users->find('list', ['limit' => 200]);
-        $restaurants = $this->Reservations->Restaurants->find('list', ['limit' => 200]);
-        $this->set(compact('reservation', 'users', 'restaurants', 'restaurantTables'));
+    
+        $selectedDate = new FrozenTime($date . $time); 
+        $timeslots = $this->getTimeslots($selectedDate, $restaurantId);
+
+        $identity = $this->request->getAttribute('identity');
+        if ($identity->can('modify', $reservation)) {
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $query = $this->Reservations->query();
+                $updated = $query->update()
+                    ->set(['reserved_date' => $newReservedDate, 'total_guests' => $newGuests, 'modified' => $now])
+                    ->where(['id' => $uuid])
+                    ->execute();
+                if($updated) {
+                    $this->Flash->alert(__('This reservation has been updated'), [
+                        'params' => ['type' => "success"]
+                    ]);
+                    
+                    return $this->redirect(['action' => 'upcoming']);
+                }
+            }
+
+        } else {
+            $this->Flash->alert('Sorry you are not allowed to modify this reservation.', [
+                'params' => ['type' => "warning"]
+            ]);
+
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->set(compact('reservation', 'timeOptions', 'date', 'time', 'guests', 'timeslots', 'today'));
     }
 
     public function updateStatus($status, $id) {
