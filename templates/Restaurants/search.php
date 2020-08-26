@@ -17,7 +17,7 @@
     <div class="container">
     <div class="row">
     <?php foreach ($restaurants as $restaurant): ?>
-        <div class="col-sm-4">
+        <div class="d-flex col-sm-4">
         <div class="card mb-4 shadow-sm">                    
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
@@ -43,30 +43,29 @@
                         );?>
                         <?php $count++; endif; ?>
                     <?php endforeach; ?>
-                    <?= $this->cell('Booked', array($restaurant->id)) ?>
-                
-                    <div class="timeslots pt-3">
-                    <?php if ($restaurant->timeslots) : ?>
-                        <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
-                            <?php $timeFormatted = $this->Time->format($key, 'h:mm a'); ?>
-                            <?php if ($timeslot) : ?>
-                                <?= $this->Html->link($timeFormatted, [
-                                    'controller' => 'reservations', 'action' => 'create',
-                                    '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => $guests, 'reserved_date' => $key]],
-                                    ['class' => 'btn btn-danger btn-sm mb-2']
-                                );  ?>
+                    <div class="timeslots pt-2">
+                        <?php if ($restaurant->timeslots) : ?>
+                            <?php foreach ($restaurant->timeslots as $key => $timeslot) : ?>
+                                <?php $timeFormatted = $this->Time->format($key, 'h:mm a'); ?>
+                                <?php if ($timeslot) : ?>
+                                    <?= $this->Html->link($timeFormatted, [
+                                        'controller' => 'reservations', 'action' => 'create',
+                                        '?' => ['restaurant_id' => $restaurant->id, 'total_guests' => $guests, 'reserved_date' => $key]],
+                                        ['class' => 'btn btn-danger btn-sm mb-2']
+                                    );  ?>
                             <?php else: ?>
                                 <button type="button" class="btn btn-secondary btn-sm mb-2 disabled"><?= h($timeFormatted) ?></button>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <strong>Sorry, no available time slots.</strong>
-                    <?php endif;?>
+                                <?php endif; ?>
+                                <?php endforeach; ?>
+                                <?php else: ?>
+                                    <strong>Sorry, no available time slots.</strong>
+                                    <?php endif;?>
+                                </div>
+                            </div>
+                            <?= $this->cell('Booked', array($restaurant->id)) ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        </div>
     <?php endforeach; ?>        
     </div>
     </div>

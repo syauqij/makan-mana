@@ -35,7 +35,7 @@ class SavedRestaurantsController extends AppController
         
         $savedRestaurant = $this->SavedRestaurants->newEmptyEntity();
         
-        if ($this->request->getAttribute('identity')->can('create', $reservation)) {
+        if ($this->request->getAttribute('identity')->can('create', $savedRestaurant)) {
             if ($this->request->is('post')) {
                 $savedRestaurant = $this->SavedRestaurants->patchEntity($savedRestaurant, $this->request->getData());
                 $savedRestaurant->user_id = $user_id;
@@ -46,11 +46,11 @@ class SavedRestaurantsController extends AppController
                     $this->Flash->alert(__('Restaurant could not be saved. Please, try again.'));
                 }
             }
-            return $this->redirect('/');
         } else {
             $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
                 'params' => ['type' => "warning"]
             ]);
+            return $this->redirect('/');
         }
             
         return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $slug]);        

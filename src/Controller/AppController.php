@@ -102,7 +102,7 @@ class AppController extends Controller
         if ($selectedDate > $now) {
             
             $startTime = $selectedDate->modify('-30 minutes');
-            $endTime = $selectedDate->modify('+30 minutes');
+            $endTime = $selectedDate->modify('+1 hours');
     
             while ($startTime < $endTime) {
                 if ($startTime > $now->modify('+15 minutes')) {

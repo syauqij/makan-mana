@@ -26,7 +26,7 @@
                     <?= $this->Html->image('restaurant-profile-photos/' . $reservation->restaurant->image_file, [
                         'url' => ['action' => 'view', $reservation->restaurant->slug],
                         'alt' =>  $reservation->restaurant->image_file,
-                        'class' => 'mr-3 restaurant-photo-mini img-fluid'
+                        'class' => 'mr-3 restaurant-photo-mini'
                     ]);?>
                 <?php endif; ?>
                 <div class="media-body">
@@ -47,21 +47,21 @@
         ]
         ]); ?>
 
-        <div class="row">
-            <div class="col-md-3">
+        <div class="form-row">
+            <div class="col-md-3 form-group">
                 <?= $this->Form->date('date', [
                     'value' => $date,
                     'min' => $today,
                     'id' => 'date'
                 ]); ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 form-group">
                 <?= $this->Form->select('time', $timeOptions, [
                     'value' => $time,
                     'id' => "time"
                 ]); ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 form-group">
                 <?= $this->Form->select('guests', $options, [
                     'value' => $guests  
                 ]); ?>

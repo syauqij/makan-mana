@@ -136,21 +136,21 @@
 						
 				<h4>Make a Resevation</h4><hr/>
 				
-				<div class="row">
-					<div class="col-12">
+				<div class="form-row">
+					<div class="col-12 form-group">
 						<?= $this->Form->date('date', [
 							'value' => $date,
 							'min' => $today,
 							'id' => 'date'
 						]); ?>
 					</div>
-					<div class="col-12">
+					<div class="col-12 form-group">
 						<?= $this->Form->select('time', $timeOptions, [
 							'value' => $time,
 							'id' => "time"
 						]); ?>
 					</div>
-					<div class="col-12">
+					<div class="col-12 form-group">
 						<?= $this->Form->select('guests', $options, [
 							'value' => '2'
 							]); ?>

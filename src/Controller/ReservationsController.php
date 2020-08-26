@@ -88,7 +88,7 @@ class ReservationsController extends AppController
 
         $reservation = $this->Reservations->newEmptyEntity();
        
-        if ($this->request->getAttribute('identity')->can('create', $reservation)) {
+        if (!$this->request->getAttribute('identity')->can('create', $reservation)) {
             $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
                 'params' => ['type' => "warning"]
             ]);
@@ -185,10 +185,8 @@ class ReservationsController extends AppController
 
         $reservation = $this->Reservations->get($id);
 
-        $user = $this->request->getAttribute('identity');
-
         // Check authorization on $reservation
-        if ($user->can('updateStatus', $reservation)) {
+        if ($this->request->getAttribute('identity')->can('updateStatus', $reservation)) {
             
             $query = $this->Reservations->query();
             $updated = $query->update()
