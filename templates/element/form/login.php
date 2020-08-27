@@ -20,8 +20,8 @@
     <div class="col-md-12 mb-2">
         <?= $this->Form->button(__('Sign In'),[
             'id' => "login-button",
-            'class' => 'btn btn-primary btn-lg'
+            'class' => 'btn btn-primary float-right'
         ]) ?>
     </div>
-    <?= $this->Form->end(); ?>
 </div>
+<?= $this->Form->end(); ?>

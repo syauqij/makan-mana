@@ -9,7 +9,14 @@
 
 <?php $this->start('page-content'); ?>
 <div class="users index content">
-    <h3><?= __('Users') ?></h3>
+    <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight"><h3><?= __('Users') ?></h3></div>
+        <div class="p-2 bd-highlight">
+            <?php if($role == 'admin') : ?>
+                <?= $this->Html->link(__('Add New User'), ['action' => 'add'],['class' => 'btn btn-secondary']); ?>
+            <?php endif; ?>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table">
             <thead>

@@ -10,7 +10,7 @@
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-md-5 order-md-2 mb-4">
+            <div class="col-md-5 col-lg-4 offset-lg-1 order-md-2 mb-3">
                 <h4>Sign In</h5 >
                 <p class="mb-3">Please sign in if you own an account</p >
                 <?php echo $this->element('form/login'); ?>
@@ -26,29 +26,25 @@
                         <?= $this->Form->control('first_name', [
                             //'label' => false, 
                             'placeholder' => 'First Name'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('last_name', [
                             //'label' => false, 
                             'placeholder' => 'Last Name'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('email', [
                             //'label' => false,
                             'placeholder' => 'Email address'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('phone_no', [
                             //'label' => false,
                             'placeholder' => 'Phone number'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('password', [
@@ -56,8 +52,7 @@
                             'id' => 'password',
                             'placeholder' => 'Enter password',
                             'autocomplete' => 'new-password'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('confirm_password', [
@@ -67,8 +62,7 @@
                             'placeholder' => 'Re-enter password',
                             'required' => true,
                             'autocomplete' => 'new-password'
-                            ]
-                        ) ?>
+                        ]) ?>
                     </div>
                 </div>
 

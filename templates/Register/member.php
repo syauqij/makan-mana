@@ -10,7 +10,7 @@
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-md-5 order-md-2 mb-4">
+            <div class="col-md-5 col-lg-4 offset-lg-1 order-md-2 mb-3">
                 <h4>Sign In</h5 >
                 <p class="mb-3">Please sign in if you own an account</p >
                 <?php echo $this->element('form/login'); ?>
@@ -21,31 +21,31 @@
                 <p class="mb-3">It's free and only takes a minute.</p >
                 <?php echo $this->Form->create($user);?>
                 <div class="row">
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('first_name', [
                             //'label' => false, 
                             'placeholder' => 'First Name'
                         ]) ?>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('last_name', [
                             //'label' => false, 
                             'placeholder' => 'Last Name'
                         ]) ?>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('email', [
                             //'label' => false,
                             'placeholder' => 'Email address'
                         ]) ?>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('phone_no', [
                             //'label' => false,
                             'placeholder' => 'Phone number'
                         ]) ?>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('password', [
                            // 'label' => false,
                             'id' => 'password',
@@ -53,7 +53,7 @@
                             'autocomplete' => 'new-password'
                         ])?>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6">
                         <?= $this->Form->control('confirm_password', [
                             'id' => 'confirm-password',
                             'type' => 'password',
@@ -64,8 +64,7 @@
                         ])?>
                     </div>
                 </div>
-
-                <hr class="mb-4">
+                <hr/>
                 <?= $this->Form->button(__('Register'),[
                     'class' => 'btn btn-primary btn-lg btn-block'
                 ]) ?>

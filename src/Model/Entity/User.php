@@ -20,7 +20,8 @@ class User extends Entity
         'created' => true,
         'modified' => true,
         'reservations' => true,
-        'restaurants' => true
+        'restaurants' => true,
+        'user_profile' => true,
     ];
 
     protected $_hidden = [

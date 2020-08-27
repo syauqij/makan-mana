@@ -52,7 +52,8 @@
         <div class="col-md-6">
             <?= $this->Form->control('email', [
                 //'label' => false,
-                'placeholder' => 'Email address'
+                'placeholder' => 'Email address',
+                'autocomplete' => 'new-email'
             ]) ?>
         </div>
         <div class="col-md-6 col-lg-3">

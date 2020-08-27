@@ -13,15 +13,14 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->addUnauthenticatedActions(['login', 'register']);
-        $this->Authorization->skipAuthorization('login', 'logout', 'register');
+        $this->Authentication->addUnauthenticatedActions(['login']);
+        $this->Authorization->skipAuthorization('login', 'logout');
     }
 
     public function login()
     {   
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
-        //debug($result);
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
             
@@ -57,7 +56,8 @@ class UsersController extends AppController
         $this->set('redirect', $redirect);
     }
     
-    public function roleRedirects($role) {
+    public function roleRedirects($role)
+    {
         $identity = $this->request->getAttribute('identity');
         if ($role == 'member') {
             $contoller = 'Reservations';
@@ -94,7 +94,6 @@ class UsersController extends AppController
         return $this->redirect($redirect);
     }
 
-
     public function logout()
     {   
         $result = $this->Authentication->getResult();
@@ -111,6 +110,34 @@ class UsersController extends AppController
 
         $this->set(compact('users'));
     }
+
+    public function add()
+    {
+        $user = $this->Users->newEmptyEntity(['associated' => 'UserProfiles']);
+        if ($this->request->getAttribute('identity')->can('create', $user)) {
+            if ($this->request->is('post')) {
+
+                $token = Security::hash(Security::randomBytes(32));
+
+                $user = $this->Users->patchEntity($user, $this->request->getData(),
+                    ['associated' => 'UserProfiles'], ['validate' => 'passwords']
+                );
+
+                $user->token = $token;
+
+                if ($this->Users->save($user)) {
+                    $this->Flash->alert(__('The user has been saved.'));
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->alert(__('The user could not be saved. Please, try again.'), [
+                    'params' => ['type' => "warning"]
+                ]);
+            }
+            $restaurants = $this->Users->Restaurants->find('list', ['limit' => 200]);
+            $this->set(compact('user'));
+        }
+    } 
 
     public function edit($id = null)
     {

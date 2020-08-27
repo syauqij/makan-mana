@@ -22,13 +22,13 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <?= $this->Form->button(__('Sign In'),[
-                        'class' => 'btn btn-primary btn-lg'
+                        'class' => 'btn btn-primary btn-lg mr-2'
                     ]) ?>
-                    <p class="pt-2"><?= $this->Html->link("Create an Account", [
+                    <?= $this->Html->link("Create an Account", [
                         'controller' => 'register',
                         'action' => 'member',
                         '?' => ['redirect' => $redirect]
-                    ]) ?></p>
+                    ]) ?>
                 </div>
                 <?= $this->Form->end(); ?>
             </div>

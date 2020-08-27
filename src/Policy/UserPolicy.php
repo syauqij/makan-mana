@@ -18,6 +18,16 @@ class UserPolicy
      * @param App\Model\Entity\User $resource
      * @return bool
      */
+    public function canCreate(IdentityInterface $user, User $resource)
+    {   
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        } else {
+            return false;
+        }   
+    }
+
     public function canEdit(IdentityInterface $user, User $resource)
     {   
         $role = $user->getOriginalData()->role;
