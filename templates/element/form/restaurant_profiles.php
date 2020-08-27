@@ -13,7 +13,8 @@
         <?= $this->Form->select('cuisine_ids', $cuisines, [
                 'placeholder' => 'Choose at least one',
                 'id' => 'select2-cuisines',
-                'multiple' => 'yes'
+                'multiple' => 'yes',
+                'required' => true
         ]) ?>
     </div>
     <div class="col-md-7">
@@ -21,7 +22,7 @@
             'rows' => 3,
             'default' =>'Tue - Sun: 10:00 am - 11:00 pm
 Closed on Mondays'
-        ]) ?>
+        ]); ?>
     </div>
 </div>
 

@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string|null $description
+ * @property string $description
  * @property int $user_id
  * @property string $address_line_1
  * @property string $address_line_2
@@ -20,22 +20,21 @@ use Cake\ORM\Entity;
  * @property string $state
  * @property string $contact_no
  * @property string|null $website
- * @property string|null $operation_hours
- * @property string|null $price_range
- * @property string|null $payment_options
- * @property string|null $image_file
+ * @property string $operation_hours
+ * @property string $price_range
+ * @property string $payment_options
+ * @property string $image_file
  * @property string $status
- * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Cuisine[] $cuisines
- * @property \App\Model\Entity\BusinessHour[] $business_hours
  * @property \App\Model\Entity\Menu[] $menus
  * @property \App\Model\Entity\Reservation[] $reservations
  * @property \App\Model\Entity\RestaurantCuisine[] $restaurant_cuisines
  * @property \App\Model\Entity\RestaurantGallery[] $restaurant_galleries
- * @property \App\Model\Entity\RestaurantTable[] $restaurant_tables
+ * @property \App\Model\Entity\SavedRestaurant[] $saved_restaurants
  */
 class Restaurant extends Entity
 {
@@ -72,9 +71,9 @@ class Restaurant extends Entity
         'menus' => true,
         'reservations' => true,
         'restaurant_cuisines' => true,
-        'restaurant_galleries' => true
+        'restaurant_galleries' => true,
+        'saved_restaurants' => true,
     ];
-
     protected $_virtual = ['full_address'];
 
     protected function _getFullAddress() {

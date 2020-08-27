@@ -62,6 +62,7 @@
         <?= $this->Form->control('photo', [
             'label' => "Restaurant Profile Photo",
             'type' => 'file',
+            'required' => true
         ]); ?>
         <?php if ($restaurant->image_file):?>
         <div class="row">
