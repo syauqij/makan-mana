@@ -15,26 +15,24 @@ class RestaurantCuisinesTable extends Table
         parent::initialize($config);
 
         $this->setTable('restaurant_cuisines');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
 
         $this->belongsTo('Restaurants', [
             'foreignKey' => 'restaurant_id',
+            'joinType' => 'INNER',
         ]);
         $this->belongsTo('Cuisines', [
             'foreignKey' => 'cuisine_id',
+            'joinType' => 'INNER',
         ]);
     }
 
-    public function validationDefault(Validator $validator): Validator
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        return $validator;
-    }
-
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['restaurant_id'], 'Restaurants'), ['errorField' => 'restaurant_id']);

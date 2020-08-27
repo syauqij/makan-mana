@@ -62,12 +62,11 @@
         <?= $this->Form->control('photo', [
             'label' => "Restaurant Profile Photo",
             'type' => 'file',
-            'required' => true
+            'required' => !empty($restaurant->image_file) ? false : true
         ]); ?>
         <?php if ($restaurant->image_file):?>
         <div class="row">
             <div class="col-md-6 mb-2">
-
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
                     'alt' =>  $restaurant->image_file,
                     'class' => 'img-fluid img-thumbnail'

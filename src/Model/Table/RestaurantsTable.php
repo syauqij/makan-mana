@@ -7,6 +7,9 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Text;
+use Cake\Event\EventInterface;
+
 
 class RestaurantsTable extends Table
 {
@@ -58,12 +61,6 @@ class RestaurantsTable extends Table
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
             ->notEmptyString('name');
-
-        $validator
-            ->scalar('slug')
-            ->maxLength('slug', 191)
-            ->requirePresence('slug', 'create')
-            ->notEmptyString('slug');
 
         $validator
             ->scalar('description')
@@ -154,7 +151,6 @@ class RestaurantsTable extends Table
     public function beforeSave(EventInterface $event, $entity, $options)
     {
         if ($entity->isNew() && !$entity->slug) {
-
             $sluggedName = Text::slug($entity->name);
             // trim slug to maximum length defined in schema
             $trimSlug = substr($sluggedName, 0, 191);

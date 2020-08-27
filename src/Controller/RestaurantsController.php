@@ -169,18 +169,29 @@ class RestaurantsController extends AppController
             ->contain('RestaurantCuisines')
             ->first();
         
-        $this->Authorization->authorize($restaurant);
+        if (!$this->request->getAttribute('identity')->can('edit', $restaurant)) {
+            $this->Flash->alert('Sorry you are not allowed to edit this restaurant.', [
+                'params' => ['type' => "warning"]
+            ]);
+
+            return $this->redirect('/');
+        }
         
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
         $cuisines = $cuisinesTable->find('list');
-                        
+
+        $collection = new Collection($restaurant->restaurant_cuisines);
+        $_cuisines = $collection->extract('cuisine_id');
+        $result = $_cuisines->toList();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $selectedCuisines = $data['cuisine_ids'];
 
             if($selectedCuisines){
-                foreach($selectedCuisines as $cuisine) {
-                    $data['restaurant_cuisines'][]['cuisine_id'] = $cuisine;
+                foreach($selectedCuisines as $key => $cuisine) {
+                    $data['restaurant_cuisines'][$key]['cuisine_id'] = $cuisine;
+                    $data['restaurant_cuisines'][$key]['restaurant_id'] = $id;
                 }
             }
 
@@ -220,7 +231,7 @@ class RestaurantsController extends AppController
                 ]
             ]);
         }
-        $this->set(compact('restaurant', 'cuisines'));
+        $this->set(compact('restaurant', 'cuisines', 'result'));
     }
 
     public function delete($id = null)

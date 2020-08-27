@@ -139,7 +139,7 @@ class RegisterController extends AppController
             }
 
             if ($restaurantsTable->save($restaurant)) {
-
+                
                 $this->Flash->alert('Almost there. Please, complete your restaurant details.', [
                     'params' => ['type' => "success"]
                 ]);
@@ -149,11 +149,11 @@ class RegisterController extends AppController
             } else {
                 $this->Flash->alert('The details could not be saved. Please, try again.', [
                     'params' => [
-                        'type' => "warning",
-                        'name' => $restaurant->name
+                        'type' => "warning"
                     ]
                 ]);
             } 
+            //debug($restaurant);
         }
         $this->set(compact('restaurant', 'cuisines'));        
     }
