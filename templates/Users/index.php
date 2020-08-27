@@ -10,10 +10,10 @@
 <?php $this->start('page-content'); ?>
 <div class="users index content">
     <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight"><h3><?= __('Users') ?></h3></div>
+        <div class="p-2 flex-grow-1 bd-highlight"><h3><?= __('Manage Users') ?></h3></div>
         <div class="p-2 bd-highlight">
             <?php if($role == 'admin') : ?>
-                <?= $this->Html->link(__('Add New User'), ['action' => 'add'],['class' => 'btn btn-secondary']); ?>
+                <?= $this->Html->link(__('New User'), ['action' => 'add'],['class' => 'btn btn-secondary']); ?>
             <?php endif; ?>
         </div>
     </div>

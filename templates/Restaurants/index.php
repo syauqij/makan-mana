@@ -8,7 +8,15 @@
 ?>
 
 <?php $this->start('page-content'); ?>
-    <h3>Manage Restaurants</h3>
+    <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight"><h3>Manage Restaurant</h3></div>
+        <div class="p-2 bd-highlight">
+            <?php if($role != 'member') : ?>
+                <?= $this->Html->link(__('Register New'), 
+                ['controller' => 'Register', 'action' => 'reataurant'],['class' => 'btn btn-secondary']); ?>
+            <?php endif; ?>
+        </div>
+    </div>
     <?php if($restaurants->isEmpty()) : ?>
         <p>No records found.</p>
     <?php else: ?> 

@@ -10,7 +10,7 @@
 ?>
 
 <?php $this->start('page-content'); ?>
-    <h3><?= __('Account Details') ?></h3>
+    <h3><?= __('Edit User') ?></h3>
     <?= $this->Form->create($user, ['type' => 'file']) ?>
 
     <div class="row">
