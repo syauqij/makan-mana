@@ -68,7 +68,7 @@
                 'placeholder' => 'Home Number'
                 ]) ?>
         </div>
-        <?php if($role != "admin") : ?>
+        <?php if($role == "admin") : ?>
         <div class="col-md-4">
             <?= $this->Form->label('Role')?> <small>(currently as <?= h($role) ?>)</small><br/>
             <?= $this->Form->select('role', $roleOptions, [
