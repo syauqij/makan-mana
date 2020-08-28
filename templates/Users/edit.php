@@ -70,7 +70,7 @@
         </div>
         <?php if($role == "admin") : ?>
         <div class="col-md-4">
-            <?= $this->Form->label('Role')?> <small>(currently as <?= h($role) ?>)</small><br/>
+            <?= $this->Form->label('Role')?> <small>(currently as <?= h($user->role) ?>)</small><br/>
             <?= $this->Form->select('role', $roleOptions, [
                 'value' => $user->role
             ]) ?>
