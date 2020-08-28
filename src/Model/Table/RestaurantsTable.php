@@ -106,7 +106,7 @@ class RestaurantsTable extends Table
         $validator
             ->scalar('website')
             ->maxLength('website', 150)
-            ->allowEmptyString('website');
+            ->allowEmptyString('website', null, 'create');
 
         $validator
             ->scalar('operation_hours')
@@ -115,8 +115,7 @@ class RestaurantsTable extends Table
             ->notEmptyString('operation_hours');
 
         $validator
-            ->scalar('price_range')
-            ->maxLength('price_range', 50)
+            ->decimal('price_range')
             ->requirePresence('price_range', 'create')
             ->notEmptyString('price_range');
 
@@ -139,7 +138,6 @@ class RestaurantsTable extends Table
 
         return $validator;
     }
-
 
     public function buildRules(RulesChecker $rules): RulesChecker
     {

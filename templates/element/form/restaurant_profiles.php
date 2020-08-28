@@ -14,7 +14,7 @@
                 'id' => 'select2-cuisines',
                 'multiple' => 'yes',
                 'required' => true,
-                'value' => !empty($result) ? $result : '' 
+                'value' => !empty($currentCuisines) ? $currentCuisines : '' 
         ]); ?>
     </div>
     <div class="col-md-6">
@@ -27,14 +27,14 @@ Closed on Mondays'
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-lg-6">
         <?= $this->Form->control('payment_options', [
             'default' => 'eWallet, MasterCard, Visa, AMEX',
         ]); ?>    
     </div>
-    <div class="col-md-6">
+    <div class="col-lg-6">
         <?= $this->Form->control('price_range', [
-            'default' => 'Avg spending: RM 50 per pax',
+            'placeholder' => 'Avg spending: RM xx per pax',
         ]); ?>
     </div>
 </div>

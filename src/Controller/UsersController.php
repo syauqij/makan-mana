@@ -114,6 +114,8 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEmptyEntity(['associated' => 'UserProfiles']);
+        $stateOptions = $this->getStates();
+
         if ($this->request->getAttribute('identity')->can('create', $user)) {
             if ($this->request->is('post')) {
 
@@ -135,7 +137,7 @@ class UsersController extends AppController
                 ]);
             }
             $restaurants = $this->Users->Restaurants->find('list', ['limit' => 200]);
-            $this->set(compact('user'));
+            $this->set(compact('user', 'stateOptions'));
         }
     } 
 
@@ -144,6 +146,8 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['UserProfiles'],
         ]);
+
+        $stateOptions = $this->getStates();
 
         if ($this->request->getAttribute('identity')->can('edit', $user)) {
             if ($this->request->is(['patch', 'post', 'put'])) {
@@ -202,7 +206,7 @@ class UsersController extends AppController
             return $this->redirect('/');
         }
 
-        $this->set(compact('user'));
+        $this->set(compact('user', 'stateOptions'));
     }
 
     public function updateStatus($id = null) {

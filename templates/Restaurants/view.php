@@ -87,9 +87,9 @@
 				<div class="criteria col-md-10 p-2">
 					<dl class="row">
 						<dt class="col-sm-3">Opeation Hours</dt>
-						<dd class="col-sm-9"><?= h($restaurant->operation_hours)?></dd>
+						<dd class="col-sm-9"><?= nl2br(h($restaurant->operation_hours))?></dd>
 						<dt class="col-sm-3">Price Range</dt>
-						<dd class="col-sm-9"><?= h($restaurant->price_range)?></dd>
+						<dd class="col-sm-9"><?= h($restaurant->get('price_range'))?></dd>
 						<dt class="col-sm-3">Payment Options</dt>
 						<dd class="col-sm-9"><?= h($restaurant->payment_options)?></dd>
 						<dt class="col-sm-3">Contact</dt>

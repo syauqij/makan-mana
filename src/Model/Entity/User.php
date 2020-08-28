@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
+use Cake\Utility\Text;
 
 class User extends Entity
 {
@@ -39,6 +40,15 @@ class User extends Entity
     }
 
     protected function _getFullName() {
-        return $this->first_name . ' ' . $this->last_name;
+        $fullName = $this->first_name . ' ' . $this->last_name;
+        return 
+            Text::truncate(
+                $fullName,
+                25,
+                [
+                    'ellipsis' => '...',
+                    'exact' => false
+                ]
+            );
     }
 }

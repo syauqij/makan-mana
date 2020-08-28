@@ -55,8 +55,9 @@
                             'class' => 'img-fluid'
                         ]); ?>
                     <?php endif; ?>
-
-                    <?= $this->Html->link($this->Identity->get('first_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link($this->Identity->get('full_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], 
+                        ['class' => 'dropdown-item']);?>
+                    <div class='mb-2'><?= h(ucwords($this->Identity->get('role')))?></div>
                 </div>
                 <?php if ($this->Identity->get('role') == "member") : ?>
                     <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>

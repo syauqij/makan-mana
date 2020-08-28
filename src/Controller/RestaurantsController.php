@@ -169,6 +169,8 @@ class RestaurantsController extends AppController
             ->contain('RestaurantCuisines')
             ->first();
         
+        $stateOptions = $this->getStates();
+
         if (!$this->request->getAttribute('identity')->can('edit', $restaurant)) {
             $this->Flash->alert('Sorry you are not allowed to edit this restaurant.', [
                 'params' => ['type' => "warning"]
@@ -181,8 +183,7 @@ class RestaurantsController extends AppController
         $cuisines = $cuisinesTable->find('list');
 
         $collection = new Collection($restaurant->restaurant_cuisines);
-        $_cuisines = $collection->extract('cuisine_id');
-        $result = $_cuisines->toList();
+        $currentCuisines = $collection->extract('cuisine_id')->toList();
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
@@ -231,7 +232,7 @@ class RestaurantsController extends AppController
                 ]
             ]);
         }
-        $this->set(compact('restaurant', 'cuisines', 'result'));
+        $this->set(compact('restaurant', 'cuisines', 'currentCuisines', 'stateOptions'));
     }
 
     public function delete($id = null)

@@ -79,5 +79,9 @@ class Restaurant extends Entity
     protected function _getFullAddress() {
         return $this->address_line_1 . ' ' . $this->address_line_2 . ' ' . 
              $this->city. ', ' . $this->postcode . ', ' . $this->state . '.';
+    }
+
+    protected function _getPriceRange($price_range) {
+        return "Avg Spending: RM " . $price_range . " per pax";
     } 
 }
