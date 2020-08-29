@@ -8,11 +8,10 @@ use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\ORM\Query;
 use Cake\Collection\Collection;
 use Cake\I18n\FrozenTime;
+use Cake\I18n\Number;
 use Cake\Utility\Text;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
-use App\Controller\AppController;
-use Cake\Http\Exception\NotFoundException;
 
 class RestaurantsController extends AppController
 {       
@@ -96,6 +95,7 @@ class RestaurantsController extends AppController
             }
             $restaurants = (new Collection($restaurants))->insert('timeslots', $timeslots);
         }
+        //dd($restaurants);
 
         $this->set(compact('restaurants', 'date', 'today', 'time', 'timeOptions', 'guests')); 
     }
@@ -177,87 +177,70 @@ class RestaurantsController extends AppController
         
         $stateOptions = $this->getStates();
 
-        if (!$this->request->getAttribute('identity')->can('edit', $restaurant)) {
+        if ($this->request->getAttribute('identity')->can('edit', $restaurant)) {       
+            $cuisinesTable = $this->getTableLocator()->get('Cuisines');
+            $cuisines = $cuisinesTable->find('list');
+
+            $collection = new Collection($restaurant->restaurant_cuisines);
+            $currentCuisines = $collection->extract('cuisine_id')->toList();
+
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $data = $this->request->getData();
+
+                $selectedCuisines = $data['cuisine_ids'];
+
+                if($selectedCuisines){
+                    foreach($selectedCuisines as $key => $cuisine) {
+                        $data['restaurant_cuisines'][$key]['cuisine_id'] = $cuisine;
+                        $data['restaurant_cuisines'][$key]['restaurant_id'] = $id;
+                    }
+                }
+
+                $restaurant = $this->Restaurants->patchEntity($restaurant, $data, [
+                    'associated' => 'RestaurantCuisines'
+                ]);
+                
+                $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
+                $attachment = $this->request->getData('photo');
+    
+                if($attachment) {
+                    $fileName = $attachment->getClientFilename();
+                    $targetPath = $dir->path . DS . $fileName ;
+
+                    if($fileName) {
+                        //dd($targetPath);
+                        $attachment->moveTo($targetPath);
+                        $restaurant->image_file = $fileName;  
+                    }
+                }
+
+                if ($this->Restaurants->save($restaurant)) {
+                    //dd($restaurant);
+                    $this->Flash->alert($restaurant->name . ' details updated.', [
+                        'params' => [
+                            'type' => "success",
+                            'name' => $restaurant->name
+                        ]
+                    ]);
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->alert($restaurant->name . ' details could not be saved. Please, try again.', [
+                    'params' => [
+                        'type' => "warning",
+                        'name' => $restaurant->name
+                    ]
+                ]);
+            }
+        } else {
             $this->Flash->alert('Sorry you are not allowed to edit this restaurant.', [
                 'params' => ['type' => "warning"]
             ]);
 
             return $this->redirect('/');
         }
-        
-        $cuisinesTable = $this->getTableLocator()->get('Cuisines');
-        $cuisines = $cuisinesTable->find('list');
-
-        $collection = new Collection($restaurant->restaurant_cuisines);
-        $currentCuisines = $collection->extract('cuisine_id')->toList();
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $data = $this->request->getData();
-            $selectedCuisines = $data['cuisine_ids'];
-
-            if($selectedCuisines){
-                foreach($selectedCuisines as $key => $cuisine) {
-                    $data['restaurant_cuisines'][$key]['cuisine_id'] = $cuisine;
-                    $data['restaurant_cuisines'][$key]['restaurant_id'] = $id;
-                }
-            }
-
-            $restaurant = $this->Restaurants->patchEntity($restaurant, $data, [
-                'associated' => 'RestaurantCuisines'
-            ]);
-            
-            $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
-            $attachment = $this->request->getData('photo');
-  
-            if($attachment) {
-                $fileName = $attachment->getClientFilename();
-                $targetPath = $dir->path . DS . $fileName ;
-
-                if($fileName) {
-                    //dd($targetPath);
-                    $attachment->moveTo($targetPath);
-                    $restaurant->image_file = $fileName;  
-                }
-            }
-
-            if ($this->Restaurants->save($restaurant)) {
-                //dd($restaurant);
-                $this->Flash->alert($restaurant->name . ' details updated.', [
-                    'params' => [
-                        'type' => "success",
-                        'name' => $restaurant->name
-                    ]
-                ]);
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->alert($restaurant->name . ' details could not be saved. Please, try again.', [
-                'params' => [
-                    'type' => "warning",
-                    'name' => $restaurant->name
-                ]
-            ]);
-        }
         $this->set(compact('restaurant', 'cuisines', 'currentCuisines', 'stateOptions'));
     }
-
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $restaurant = $this->Restaurants->get($id);
-        if ($this->Restaurants->delete($restaurant)) {
-            $this->Flash->alert(__('The restaurant has been deleted.'), [
-                'params' => ['type' => "success"]
-            ]);
-        } else {
-            $this->Flash->alert(__('The restaurant could not be deleted. Please, try again.'), [
-                'params' => ['type' => "warning"]
-            ]);
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
     
     public function gallery($id = nul)
     {

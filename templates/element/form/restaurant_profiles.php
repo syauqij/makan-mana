@@ -34,6 +34,7 @@ Closed on Mondays'
     </div>
     <div class="col-lg-6">
         <?= $this->Form->control('price_range', [
+            'type' => 'number',
             'placeholder' => 'Avg spending: RM xx per pax',
         ]); ?>
     </div>

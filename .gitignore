@@ -6,6 +6,7 @@
 /tmp/*
 /vendor/*
 /webroot/img/user-profile-photos/*
+/webroot/img/restaurant-photos/*
 /webroot/img/restaurant-profile-photos/*
 
 # OS generated files #

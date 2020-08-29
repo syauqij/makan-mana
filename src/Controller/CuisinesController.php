@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\I18n\FrozenTime;
+
 
 class CuisinesController extends AppController
 {
@@ -48,6 +50,7 @@ class CuisinesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $cuisine = $this->Cuisines->patchEntity($cuisine, $this->request->getData());
+            $cuisine->modified = FrozenTime::now();
             if ($this->Cuisines->save($cuisine)) {
                 $this->Flash->alert(__('The cuisine has been saved.'));
 

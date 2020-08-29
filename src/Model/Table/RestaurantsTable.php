@@ -8,7 +8,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Utility\Text;
+use Cake\I18n\Number;
 use Cake\Event\EventInterface;
+use Cake\I18n\FrozenTime;
 
 
 class RestaurantsTable extends Table
@@ -186,7 +188,8 @@ class RestaurantsTable extends Table
 
         $selectedDate = new FrozenTime($date . $time);
 
-        $query->innerJoinWith('Cuisines')
+        $query->leftJoinWith('Cuisines')->innerJoinWith('Reservations')
+            ->select(['total_reservations' => $query->func()->count('Reservations.id')])
             ->where([
                 'Restaurants.status IN' => ['featured', 'active'],
                 'OR' => [
@@ -195,7 +198,9 @@ class RestaurantsTable extends Table
                     ['Restaurants.state LIKE' => '%' . $term . '%'],
                     ['Cuisines.name LIKE' => '%' . $term . '%']
                 ],
-            ]);
+            ])
+            ->enableAutoFields(true)
+            ->order(['total_reservations' => "DESC"]);
 
         return $query->group(['Restaurants.id']);
     }

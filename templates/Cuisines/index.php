@@ -33,7 +33,6 @@
                     <td><?= h($cuisine->created) ?></td>
                     <td><?= h($cuisine->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $cuisine->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $cuisine->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $cuisine->id], ['confirm' => __('Are you sure you want to delete # {0}?', $cuisine->name)]) ?>
                     </td>

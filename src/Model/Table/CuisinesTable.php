@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\I18n\FrozenTime;
 
 class CuisinesTable extends Table
 {
@@ -17,6 +18,8 @@ class CuisinesTable extends Table
         $this->setTable('cuisines');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
 
         $this->hasMany('RestaurantCuisines', [
             'foreignKey' => 'cuisine_id',
