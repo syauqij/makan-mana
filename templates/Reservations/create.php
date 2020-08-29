@@ -41,28 +41,26 @@
                 </div>                
             <h5 class="mb-3">Diner details</h5 >
             <?= $this->Form->create($reservation) ?>
-            
                 <div class="row">
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('name', [
                             'disabled' => true,
-                            'label' => false, 
-                            'value' => 'Muhamad Syauqi bin Jamil',
-                            'placeholder' => 'Full Name'
+                            'label' => false,
+                            'placeholder' => 'Full Name',
+                            'value' => $user->full_name
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->control('phone_no', [
-                            'label' => false, 
-                            'value' => '0182569784',
-                            'placeholder' => 'Phone Number'
+                            'label' => false,
+                            'placeholder' => 'Phone Number',
+                            'value' => $user->phone_no
                             ]
                         ) ?>
                     </div>
                     <div class="col-md-6 mb-2">
                         <?= $this->Form->select('occasion', $occasions, [
-                            //'value' => '',
                             'empty' => 'Select Occasion (optional)'
                         ]); ?>
                     </div>

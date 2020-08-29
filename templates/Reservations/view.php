@@ -20,7 +20,8 @@
                         <div class="mb-1 text-muted">
                             Date: <?= h($date)?><br/>
                             Time: <?= h($time)?><br/>
-                            Guests: <?= h($reservation->total_guests)?> people
+                            Guests: <?= h($reservation->total_guests)?> people<br/>
+                            Status: <?= h($reservation->get('UpdatedStatus'))?>
                         </div>
                     </div>
                 <div class="col-auto d-none d-lg-block">
@@ -41,7 +42,7 @@
                 </div>
                 <div class="col-md-6 mb-2">
                     <div><strong>Phone No</strong></div>
-                    <?= h($reservation->user->phone_no)?>
+                    <?= h($reservation->phone_no)?>
                 </div>
                 <div class="col-md-6 mb-2">
                     <div><strong>Ocassion</strong></div>

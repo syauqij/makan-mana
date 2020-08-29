@@ -52,7 +52,8 @@ class ReservationsTable extends Table
 
         $validator
             ->scalar('phone_no')
-            ->maxLength('phone_no', 12)
+            ->minLength('phone_no', 12)
+            ->maxLength('phone_no', 15)
             ->requirePresence('phone_no', 'create')
             ->notEmptyString('phone_no');
 

@@ -43,12 +43,11 @@ class Reservation extends Entity
         'uuid' => true,
         'user_id' => true,
         'restaurant_id' => true,
-        'reserved_date' => true,
         'phone_no' => true,
+        'reserved_date' => true,
         'occasion' => true,
         'request' => true,
         'total_guests' => true,
-        'restaurant_table_id' => true,
         'status' => true,
         'created' => true,
         'modified' => true,
@@ -66,7 +65,7 @@ class Reservation extends Entity
 
         //dd($now);
         if ($status != null) {
-            if (($reserved_date < $now) && $status == "pending") {
+            if ($reserved_date < $now && $status == "pending") {
                 return "No Show";
             } else {
                 return ucwords($status);

@@ -85,6 +85,8 @@ class ReservationsController extends AppController
        
         //get logged in user_id
         $user_id = $this->request->getAttribute('identity')->getIdentifier();
+        $users = $this->getTableLocator()->get('Users');            
+        $user = $users->get($user_id);
 
         $occasions = $this->getOccassions();
 
@@ -102,10 +104,10 @@ class ReservationsController extends AppController
             $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
             $reservation->id = Text::uuid();
             $reservation->restaurant_id = $restaurant->id;
-            $reservation->user_id = $user_id;
             $reservation->total_guests = $guests;
+            $reservation->user_id = $user_id;
             $reservation->reserved_date = $selectedDate;
-            
+
             if ($this->Reservations->save($reservation)) {
                 $this->Flash->alert(__('The reservation has been saved.'), [
                     'params' => ['type' => "success"]
@@ -128,7 +130,7 @@ class ReservationsController extends AppController
             ]);
         }
         
-        $this->set(compact('restaurant', 'date', 'time', 'guests', 'occasions', 'reservation'));
+        $this->set(compact('restaurant', 'date', 'time', 'guests', 'occasions', 'reservation', 'user'));
     }
 
     public function edit($uuid = null, $newReservedDate = null, $newGuests = null)
