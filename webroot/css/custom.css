@@ -1,4 +1,21 @@
 body {
+  font-size: 48px;
+}
+div:nth-child(2) {
+  font-family: 'Oswald', sans-serif;
+}
+div:nth-child(1) {
+  font-family: 'Libre Franklin', sans-serif;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+body {
   position: relative;
 }
 

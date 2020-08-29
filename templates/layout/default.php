@@ -9,15 +9,20 @@
     <title><?= $this->fetch('title') ?></title>
     <?= $this->Html->meta('icon') ?>
     <?= $this->Html->css('custom.css') ?>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,200;0,300;0,700;0,800;1,200;1,700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <!--Tiny Slider 2 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
     
     <!-- Select2 JS CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
     <?= $this->Html->css('select2-bootstrap4.min'); ?>
-    
+   
+    <!-- Dropzone JS css -->
     <?= $this->Html->css('dropzone'); ?>
+
     
 </head>
 
@@ -59,7 +64,7 @@
                     <?php endif; ?>
                     <?= $this->Html->link($this->Identity->get('full_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], 
                         ['class' => 'dropdown-item']);?>
-                    <div class='mb-2'><?= h(ucwords($this->Identity->get('role')))?></div>
+                    <!-- <div class='mb-2'><?= h(ucwords($this->Identity->get('role')))?></div> -->
                 </div>
                 <?php if ($this->Identity->get('role') == "member") : ?>
                     <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
@@ -103,7 +108,14 @@
     <!-- Select2 JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g==" crossorigin="anonymous"></script>
     
+    <!-- For Gallery Photo Uploads -->
     <?= $this->Html->script('dropzone.js') ?>
+
+    <!-- Awesome Icons -->
+    <script src="https://kit.fontawesome.com/9afbc8028b.js" crossorigin="anonymous"></script>
+
+    <!-- Tiny Slider JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
 
     <script>
         $(document).ready(function(){

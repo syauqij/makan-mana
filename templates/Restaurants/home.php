@@ -20,11 +20,9 @@
 <section class="bg-light home-content">
 <div class="py-3">
     <div class="container-fluid px-4">
-        <!-- to replace slick-->
         <h5 class="pt-3">Our Featured Restaurants</h5><hr/>
-        <div class="row ">
+        <div class="my-slider">
         <?php foreach ($featured as $restaurant): ?>
-        <div class="col-sm-4 col-md-3 d-flex align-items-stretch">
         <div class="card mb-4 shadow-sm">
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
@@ -52,7 +50,6 @@
                     <?php endforeach; ?>
                     <?= $this->cell('Booked', array($restaurant->id)) ?>
                 </div>
-            </div>
         </div>
         </div>
         <?php endforeach; ?>   
@@ -72,4 +69,13 @@
         }
     });
 </script>
+
+<script type="module">
+  var slider = tns({
+    container: '.my-slider',
+    items: 3,
+    slideBy: 'page',
+    autoplay: true
+  });
+  </script>
 <?php $this->end(); ?>

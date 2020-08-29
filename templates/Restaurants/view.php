@@ -26,14 +26,14 @@
 			</div>
 			<div class="p-2 bd-highlight align-self-center">
 				<?php if(!empty($hasSaved->user_id)) : ?>
-					<?= $this->Form->postLink(__('Restaurant Saved'), 
+					<?= $this->Form->postLink('<i class="fas fa-bookmark"></i> Restaurant Saved', 
 						['controller' => 'SavedRestaurants', 'action' => 'delete', $hasSaved->id, $restaurant->slug],
-						['class' => 'btn btn-dark']
+						['class' => 'btn btn-dark', 'escape' => false]
 					)?>
 				<?php else: ?>
-					<?= $this->Form->postLink(__('Save Restaurant'), 
+					<?= $this->Form->postLink('<i class="far fa-bookmark"></i> Save Restaurant', 
 						['controller' => 'SavedRestaurants', 'action' => 'add', $restaurant->id, $restaurant->slug],
-						['class' => 'btn btn-light']
+						['class' => 'btn btn-light', 'escape' => false]
 					)?>
 				<?php endif; ?>
 			</div>
@@ -45,8 +45,8 @@
 </section>
 <div class="album py-3 bg-light">
 <div class="container">
-	<nav id="navbar-restaurant" class="navbar navbar-light sticky-top pl-0">
-		<div class="col-sm-5 col-lg-5 text-truncate pb-2 bg-light">
+	<nav id="navbar-restaurant" class="navbar navbar-light bg-light sticky-top pl-0">
+		<div class="col-sm-5 col-lg-5 text-truncate pb-2">
 			<strong><?= h($restaurant->name)?></strong>
 		</div>
 		<div class="col-sm-7 col-lg-6 offset-lg-1">

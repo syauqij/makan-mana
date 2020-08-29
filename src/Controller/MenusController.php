@@ -8,12 +8,10 @@ class MenusController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         $this->Authorization->skipAuthorization();
-        $this->viewBuilder()->setLayout('default_cake');
     }  
     
     public function index()
     {   
-        $this->Authorization->skipAuthorization();
         $this->paginate = [
             'contain' => ['Restaurants', 'MenuCategories'],
         ];
