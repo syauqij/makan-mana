@@ -66,7 +66,7 @@ class Reservation extends Entity
 
         //dd($now);
         if ($status != null) {
-            if ($reserved_date < $now && isset($status) == "pending") {
+            if (($reserved_date < $now) && $status == "pending") {
                 return "No Show";
             } else {
                 return ucwords($status);

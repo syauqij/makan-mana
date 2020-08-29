@@ -51,7 +51,7 @@
             <div class="col-md-3 form-group">
                 <?= $this->Form->date('date', [
                     'value' => $date,
-                    'min' => $today,
+                    'min' => $this->Time->format($today, 'yyyy-MM-dd'),
                     'id' => 'date'
                 ]); ?>
             </div>
