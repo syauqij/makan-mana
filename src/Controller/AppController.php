@@ -130,5 +130,26 @@ class AppController extends Controller
         }
 
         return $timeslots;
-    } 
+    }
+
+    public function getStates() {
+        return $states = [
+            'Melaka' => 'Melaka',
+            'Terengganu' => 'Terengganu',
+            'Selangor' => 'Selangor',
+            'Sarawak' => 'Sarawak',
+            'Sabah' => 'Sabah',
+            'Perlis' => 'Perlis',
+            'Perak' => 'Perak',
+            'Pahang' => 'Pahang',
+            'Negeri Sembilan' => 'Negeri Sembilan',
+            'Kelantan' => 'Kelantan',
+            'Kuala Lumpur' => 'Kuala Lumpur',
+            'Pulau Pinang' => 'Pulau Pinang',
+            'Kedah' => 'Kedah',
+            'Johor' => 'Johor',
+            'Labuan' => 'Labuan',
+            'Putrajaya' => 'Putrajaya'
+        ];  
+    }
 }

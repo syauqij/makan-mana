@@ -87,9 +87,9 @@
 				<div class="criteria col-md-10 p-2">
 					<dl class="row">
 						<dt class="col-sm-3">Opeation Hours</dt>
-						<dd class="col-sm-9"><?= h($restaurant->operation_hours)?></dd>
+						<dd class="col-sm-9"><?= nl2br(h($restaurant->operation_hours))?></dd>
 						<dt class="col-sm-3">Price Range</dt>
-						<dd class="col-sm-9"><?= h($restaurant->price_range)?></dd>
+						<dd class="col-sm-9"><?= h($restaurant->get('price_range'))?></dd>
 						<dt class="col-sm-3">Payment Options</dt>
 						<dd class="col-sm-9"><?= h($restaurant->payment_options)?></dd>
 						<dt class="col-sm-3">Contact</dt>
@@ -106,6 +106,30 @@
 
 			<div id="photos" class="py-4">
 				<h4>Photos</h4><hr/>
+				<div id="restaurant-carousel" class="carousel slide  col-lg-12" data-ride="carousel">
+					<ol class="carousel-indicators">
+						<?php foreach($restaurant->restaurant_photos as $key => $photo): ?>
+						<li data-target="#restaurant-photos" data-slide-to="<?php echo $key; if($key == 0){echo " active";}  ?>"></li>
+						<?php endforeach; ?>
+					</ol>
+					<div class="carousel-inner">
+						<?php foreach($restaurant->restaurant_photos as $key => $photo): ?>
+							<div class="carousel-item <?php echo $key; if($key == 0){echo " active";} ?>">
+								<?= $this->Html->image('restaurant-profile-photos/' . $photo->image_file, [
+									'class' => 'img-fluid'
+								]);?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<a class="carousel-control-prev" href="#restaurant-carousel" role="button" data-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#restaurant-carousel" role="button" data-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>				
 			</div>
 
 			<div id="menu" class="py-4">

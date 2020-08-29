@@ -30,9 +30,9 @@
         ]) ?>
     </div>
     <div class="col-md-6 mb-2">
-        <?= $this->Form->control('state', [
+        <?= $this->Form->select('state', $stateOptions, [
             'label' => false,
-            'placeholder' => 'State'
+            'empty' => 'Select State'
         ]) ?>
     </div>
     <div class="col-md-6 mb-2">

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
     <?= $this->Html->css('select2-bootstrap4.min'); ?>
     
+    <?= $this->Html->css('dropzone'); ?>
+    
 </head>
 
 <body data-spy="scroll" data-target="#navbar-restaurant" data-offset="56">
@@ -55,8 +57,9 @@
                             'class' => 'img-fluid'
                         ]); ?>
                     <?php endif; ?>
-
-                    <?= $this->Html->link($this->Identity->get('first_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], ['class' => 'dropdown-item']);?>
+                    <?= $this->Html->link($this->Identity->get('full_name'), ['controller' => 'Users', 'action' => 'edit', $this->Identity->get('id')], 
+                        ['class' => 'dropdown-item']);?>
+                    <div class='mb-2'><?= h(ucwords($this->Identity->get('role')))?></div>
                 </div>
                 <?php if ($this->Identity->get('role') == "member") : ?>
                     <?= $this->Html->link('My Reservations', ['controller' => 'Reservations', 'action' => 'upcoming'], ['class' => 'dropdown-item']);?>
@@ -99,6 +102,8 @@
     
     <!-- Select2 JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g==" crossorigin="anonymous"></script>
+    
+    <?= $this->Html->script('dropzone.js') ?>
 
     <script>
         $(document).ready(function(){

@@ -11,13 +11,15 @@ use Cake\I18n\FrozenTime;
 use Cake\Utility\Text;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use App\Controller\AppController;
+use Cake\Http\Exception\NotFoundException;
 
 class RestaurantsController extends AppController
 {       
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         $this->Authentication->addUnauthenticatedActions(['home', 'search', 'view']);
-        //$this->Authorization->skipAuthorization();
+        $this->Authorization->skipAuthorization('upload');
     }
 
     public function home()
@@ -110,6 +112,7 @@ class RestaurantsController extends AppController
         $restaurants = $this->paginate($filter);
 
         $this->set(compact('restaurants'));
+        $this->viewBuilder()->setOption('serialize', ['restaurants']);
     }
 
     public function view($slug)
@@ -122,7 +125,10 @@ class RestaurantsController extends AppController
         $time = $this->getDefaultTime();
         $guests = 2;
         
-        $query = $this->Restaurants->findBySlug($slug)->firstOrFail();
+        $query = $this->Restaurants->findBySlug($slug, [
+            'contain' => ['RestaurantPhotos']
+        ])->firstOrFail();
+
         $restaurantId = $query['id'];
 
         $params = $this->request->getQuery();
@@ -137,7 +143,7 @@ class RestaurantsController extends AppController
         
         $restaurant = $this->Restaurants->find()
         ->where(['id' => $restaurantId])
-        ->contain(['Cuisines', 'Menus'])
+        ->contain(['Cuisines', 'Menus', 'RestaurantPhotos'])
         ->first();
         
         $timeslots = $this->getTimeslots($selectedDate, $restaurantId);
@@ -169,6 +175,8 @@ class RestaurantsController extends AppController
             ->contain('RestaurantCuisines')
             ->first();
         
+        $stateOptions = $this->getStates();
+
         if (!$this->request->getAttribute('identity')->can('edit', $restaurant)) {
             $this->Flash->alert('Sorry you are not allowed to edit this restaurant.', [
                 'params' => ['type' => "warning"]
@@ -181,8 +189,7 @@ class RestaurantsController extends AppController
         $cuisines = $cuisinesTable->find('list');
 
         $collection = new Collection($restaurant->restaurant_cuisines);
-        $_cuisines = $collection->extract('cuisine_id');
-        $result = $_cuisines->toList();
+        $currentCuisines = $collection->extract('cuisine_id')->toList();
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
@@ -231,7 +238,7 @@ class RestaurantsController extends AppController
                 ]
             ]);
         }
-        $this->set(compact('restaurant', 'cuisines', 'result'));
+        $this->set(compact('restaurant', 'cuisines', 'currentCuisines', 'stateOptions'));
     }
 
     public function delete($id = null)
@@ -251,42 +258,14 @@ class RestaurantsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    
     public function gallery($id = nul)
     {
         $restaurant = $this->Restaurants->get($id, [
-            'contain' => ['RestaurantCuisines'],
+            'contain' => ['RestaurantPhotos'],
         ]);
 
-        $this->Authorization->authorize($restaurant, 'edit');
-        
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            //dd($this->request);
-            $restaurant = $this->Restaurants->patchEntity($restaurant, $this->request->getData());
-            
-            $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
-            $attachment = $this->request->getData('photo');
-  
-            if($attachment) {
-                $fileName = $attachment->getClientFilename();
-                $targetPath = $dir->path . DS . $fileName ;
-
-                if($fileName) {
-                    //dd($targetPath);
-                    $attachment->moveTo($targetPath);
-                    $restaurant->image_file = $fileName;  
-                }
-            }
-
-            if ($this->Restaurants->save($restaurant)) {
-                $this->Flash->alert('Restaurant details updated.', [
-                    'params' => ['type' => "success"]
-                ]);
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->alert(__('The restaurant could not be saved. Please, try again.'));
-        }
         $this->set(compact('restaurant'));        
-    }   
+    }
 
 }

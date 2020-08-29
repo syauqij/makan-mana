@@ -105,6 +105,7 @@ class RegisterController extends AppController
     {   
         $restaurantsTable = $this->getTableLocator()->get('Restaurants');
         $cuisinesTable = $this->getTableLocator()->get('Cuisines');
+        $stateOptions = $this->getStates();
         
         $restaurant = $restaurantsTable->newEmptyEntity([
             'associated' => 'RestaurantCuisines'
@@ -153,9 +154,8 @@ class RegisterController extends AppController
                     ]
                 ]);
             } 
-            //debug($restaurant);
         }
-        $this->set(compact('restaurant', 'cuisines'));        
+        $this->set(compact('restaurant', 'cuisines', 'stateOptions'));        
     }
 
 }

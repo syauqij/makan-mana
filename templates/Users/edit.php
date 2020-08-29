@@ -114,10 +114,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-6">
-                    <?= $this->Form->control('user_profile.state', [
+                    <?= $this->Form->select('user_profile.state', $stateOptions, [
                         'label' => false,
-                        'placeholder' => 'State'
-                        ]) ?>
+                        'placeholder' => 'State',
+                        'empty' => 'Select State'
+                    ]) ?>
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <?= $this->Form->control('user_profile.country', [
