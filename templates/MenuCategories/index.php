@@ -20,7 +20,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('sequence') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
@@ -31,14 +30,13 @@
             <tbody>
                 <?php foreach ($menuCategories as $menuCategory): ?>
                 <tr>
-                    <td><?= $this->Number->format($menuCategory->id) ?></td>
                     <td><?= h($menuCategory->name) ?></td>
                     <td><?= $this->Number->format($menuCategory->sequence) ?></td>
                     <td><?= h($menuCategory->created) ?></td>
                     <td><?= h($menuCategory->modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $menuCategory->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $menuCategory->id], ['confirm' => __('Are you sure you want to delete # {0}?', $menuCategory->id)]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $menuCategory->id], ['confirm' => __('Are you sure you want to delete # {0}?', $menuCategory->name)]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

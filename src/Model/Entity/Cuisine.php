@@ -28,6 +28,8 @@ class Cuisine extends Entity
     protected $_accessible = [
         'name' => true,
         'description' => true,
+        'created' => true,
+        'modified' => true,
         'restaurant_cuisines' => true,
     ];
 }

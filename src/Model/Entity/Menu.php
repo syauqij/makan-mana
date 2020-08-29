@@ -37,7 +37,7 @@ class Menu extends Entity
         'description' => true,
         'restaurant_id' => true,
         'menu_category_id' => true,
-        'order' => true,
+        'sequence' => true,
         'created' => true,
         'modified' => true,
         'restaurant' => true,

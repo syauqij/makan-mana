@@ -3,19 +3,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-/**
- * Cuisines Controller
- *
- * @property \App\Model\Table\CuisinesTable $Cuisines
- * @method \App\Model\Entity\Cuisine[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class CuisinesController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        $this->Authorization->skipAuthorization('');
+    }
+
     public function index()
     {
         $cuisines = $this->paginate($this->Cuisines);
@@ -23,13 +17,6 @@ class CuisinesController extends AppController
         $this->set(compact('cuisines'));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Cuisine id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null)
     {
         $cuisine = $this->Cuisines->get($id, [
@@ -39,11 +26,6 @@ class CuisinesController extends AppController
         $this->set(compact('cuisine'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $cuisine = $this->Cuisines->newEmptyEntity();
@@ -59,13 +41,6 @@ class CuisinesController extends AppController
         $this->set(compact('cuisine'));
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Cuisine id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $cuisine = $this->Cuisines->get($id, [
@@ -83,13 +58,6 @@ class CuisinesController extends AppController
         $this->set(compact('cuisine'));
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Cuisine id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

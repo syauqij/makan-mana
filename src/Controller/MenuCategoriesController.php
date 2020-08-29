@@ -3,12 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-/**
- * MenuCategories Controller
- *
- * @property \App\Model\Table\MenuCategoriesTable $MenuCategories
- * @method \App\Model\Entity\MenuCategory[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class MenuCategoriesController extends AppController
 {
     public function beforeFilter(\Cake\Event\EventInterface $event)

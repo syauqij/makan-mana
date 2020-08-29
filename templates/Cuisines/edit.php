@@ -1,33 +1,27 @@
 <?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Cuisine $cuisine
- */
+    $this->extend('/Common/registered');
+
+    $this->start('sidebar');
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'setting']);
+    $this->end(); 
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $cuisine->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $cuisine->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Cuisines'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="cuisines form content">
-            <?= $this->Form->create($cuisine) ?>
-            <fieldset>
-                <legend><?= __('Edit Cuisine') ?></legend>
-                <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('description');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
+
+<?php $this->start('page-content'); ?>
+<h3>Edit Cuisine - <?= h($cuisine->name)?></h3><hr/>
+
+<?= $this->Form->create($cuisine) ?>
+<div class="form-row">
+    <div class="col-md-6 form-group">
+        <?= $this->Form->control('name'); ?>
+    </div>
+    <div class="col-md-7 form-group">
+        <?= $this->Form->control('description'); ?>
     </div>
 </div>
+<div class="row">
+<div class="col-md-2">
+    <?= $this->Form->submit('Update', ['class' => 'btn btn-primary']) ?>
+</div>
+<?= $this->Form->end() ?>
+<?php $this->end(); ?>
