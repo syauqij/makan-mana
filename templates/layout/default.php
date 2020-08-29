@@ -49,7 +49,7 @@
                     <?php if($this->Identity->get('image_file')) : ?>
                         <?= $this->Html->image('user-profile-photos/' . h($this->Identity->get('image_file')), [
                             'alt' =>  h($this->Identity->get('image_file')),
-                            'class' => 'img-fluid img-thumbnail'
+                            'class' => ''
                         ]);?>
                     <?php else: ?>
                         <?= $this->Html->image('OIP.jfif', [

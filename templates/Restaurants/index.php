@@ -13,7 +13,7 @@
         <div class="p-2 bd-highlight">
             <?php if($role != 'member') : ?>
                 <?= $this->Html->link(__('Register New'), 
-                ['controller' => 'Register', 'action' => 'reataurant'],['class' => 'btn btn-secondary']); ?>
+                ['controller' => 'Register', 'action' => 'restaurant', $role],['class' => 'btn btn-secondary']); ?>
             <?php endif; ?>
         </div>
     </div>

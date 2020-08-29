@@ -103,7 +103,9 @@ class RestaurantsController extends AppController
     public function index()
     {   
         //filter results based on user's role and authorization
-        $filter = $this->Authorization->applyScope($this->Restaurants->find());
+        $filter = $this->Authorization->applyScope(
+            $this->Restaurants->find()->order(['Restaurants.created' => 'DESC'])
+        );
 
         $this->paginate = [
             'contain' => ['Users'],
@@ -205,6 +207,7 @@ class RestaurantsController extends AppController
     
                 if($attachment) {
                     $fileName = $attachment->getClientFilename();
+                    $fileName = Text::slug($fileName, ['preserve' => '.']);
                     $targetPath = $dir->path . DS . $fileName ;
 
                     if($fileName) {
@@ -225,7 +228,7 @@ class RestaurantsController extends AppController
 
                     return $this->redirect(['action' => 'index']);
                 }
-                $this->Flash->alert($restaurant->name . ' details could not be saved. Please, try again.', [
+                $this->Flash->alert(h($restaurant->name) . ' details could not be saved. Please, try again.', [
                     'params' => [
                         'type' => "warning",
                         'name' => $restaurant->name

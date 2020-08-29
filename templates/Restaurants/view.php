@@ -115,7 +115,7 @@
 					<div class="carousel-inner">
 						<?php foreach($restaurant->restaurant_photos as $key => $photo): ?>
 							<div class="carousel-item <?php echo $key; if($key == 0){echo " active";} ?>">
-								<?= $this->Html->image('restaurant-profile-photos/' . $photo->image_file, [
+								<?= $this->Html->image('restaurant-photos/' . $photo->image_file, [
 									'class' => 'img-fluid'
 								]);?>
 							</div>

@@ -39,3 +39,12 @@ Closed on Mondays'
         ]); ?>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-lg-6">
+    <?= $this->Form->label('Restaurant Status')?><br/>
+    <?= $this->Form->select(
+        'status', ['pending' => 'Pending', 'active' => 'Active', 
+        'featured' => 'Featured', 'disabled' => 'Disabled']) ?>
+    </div>
+</div>

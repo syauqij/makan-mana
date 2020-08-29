@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\Utility\Text;
 
 class RestaurantPhotosController extends AppController
 {
@@ -30,6 +31,7 @@ class RestaurantPhotosController extends AppController
             if($attachment) {
                 //debug($attachment);
                 $fileName = $attachment->getClientFilename();
+                $fileName = Text::slug($fileName, ['preserve' => '.']);
                 $targetPath = $dir->path . DS . $fileName ;
 
                 if($fileName) {

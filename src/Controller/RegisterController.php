@@ -7,6 +7,7 @@ use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 use Cake\Utility\Security;
 use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\Utility\Text;
 
 class RegisterController extends AppController
 {
@@ -131,6 +132,7 @@ class RegisterController extends AppController
            
             if($attachment) {
                 $fileName = $attachment->getClientFilename();
+                $fileName = Text::slug($fileName, ['preserve' => '.']);
                 $targetPath = $dir->path . DS . $fileName ;
 
                 if($fileName) {
