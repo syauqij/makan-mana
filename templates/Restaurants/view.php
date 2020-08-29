@@ -45,8 +45,8 @@
 </section>
 <div class="album py-3 bg-light">
 <div class="container">
-	<nav id="navbar-restaurant" class="navbar navbar-light bg-light sticky-top pl-0">
-		<div class="col-sm-5 col-lg-5 text-truncate pb-2">
+	<nav id="navbar-restaurant" class="navbar navbar-light sticky-top pl-0">
+		<div class="col-sm-5 col-lg-5 text-truncate pb-2 bg-light">
 			<strong><?= h($restaurant->name)?></strong>
 		</div>
 		<div class="col-sm-7 col-lg-6 offset-lg-1">
