@@ -71,7 +71,7 @@ class ReservationsController extends AppController
         $reservation = $this->Reservations->find()
             ->where(['restaurant_id' => $restaurant_id, 'reserved_date' => $reserved_date])
             ->first();
-             
+
         if ($reservation) {
             $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                 'params' => ['type' => "warning"]
@@ -114,15 +114,6 @@ class ReservationsController extends AppController
                 ]);
 
                 return $this->redirect(['action' => 'upcoming']);
-            }
-
-            if($reservation->getErrors('reserved_date')) {
-               
-                $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
-                    'params' => ['type' => "warning"]
-                ]);
-
-                return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
             }
 
             $this->Flash->alert('The reservation could not be saved. Please, try again.', [

@@ -20,7 +20,7 @@ body {
 .loggedin-user img {
   border-radius: 50%;
   height: 70px;
-  width: auto;
+  width: 80px;
 }
 
 .restaurant-photo {
