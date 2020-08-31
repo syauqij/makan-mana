@@ -61,66 +61,66 @@ class ReservationsController extends AppController
 
     public function create()
     {   
-        $restaurant_id = $this->request->getQuery('restaurant_id');
-        $reserved_date = $this->request->getQuery('reserved_date');
+        $restaurantId = $this->request->getQuery('restaurant_id');
+        $reservedDate = $this->request->getQuery('reserved_date');
         $guests = $this->request->getQuery('total_guests');
                
         $restaurants = $this->getTableLocator()->get('Restaurants');            
-        $restaurant = $restaurants->get($restaurant_id);
-        
-        $reservation = $this->Reservations->find()
-            ->where(['restaurant_id' => $restaurant_id, 'reserved_date' => $reserved_date])
-            ->first();
+        $restaurant = $restaurants->get($restaurantId);
 
+        $reservation = $this->Reservations->find('available', [
+            'params' => ['restaurant_id' => $restaurantId, 'reserved_date' => $reservedDate],
+        ])->first();
+        
         if ($reservation) {
             $this->Flash->alert('Sorry the timeslot is no longer available. Please, try again.', [
                 'params' => ['type' => "warning"]
             ]);
+            $this->Authorization->skipAuthorization('create');
             return $this->redirect(['controller' => 'restaurants', 'action' => 'view', $restaurant->slug]);
-        }
-        
-        $selectedDate = new FrozenTime($reserved_date);
-        $date = $selectedDate->i18nFormat('dd/MM/yyyy');
-        $time = $selectedDate->i18nFormat('h:mm a');
-       
-        //get logged in user_id
-        $user_id = $this->request->getAttribute('identity')->getIdentifier();
-        $users = $this->getTableLocator()->get('Users');            
-        $user = $users->get($user_id);
-
-        $occasions = $this->getOccassions();
-
-        $reservation = $this->Reservations->newEmptyEntity();
-       
-        if (!$this->request->getAttribute('identity')->can('create', $reservation)) {
-            $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
-                'params' => ['type' => "warning"]
-            ]);
-
-            return $this->redirect('/');
-        }
-        
-        if ($this->request->is('post')) {
-            $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
-            $reservation->id = Text::uuid();
-            $reservation->restaurant_id = $restaurant->id;
-            $reservation->total_guests = $guests;
-            $reservation->user_id = $user_id;
-            $reservation->reserved_date = $selectedDate;
-
-            if ($this->Reservations->save($reservation)) {
-                $this->Flash->alert(__('The reservation has been saved.'), [
-                    'params' => ['type' => "success"]
+        } else {
+            $selectedDate = new FrozenTime($reservedDate);
+            $date = $selectedDate->i18nFormat('dd/MM/yyyy');
+            $time = $selectedDate->i18nFormat('h:mm a');
+           
+            //get logged in user_id
+            $user_id = $this->request->getAttribute('identity')->getIdentifier();
+            $users = $this->getTableLocator()->get('Users');            
+            $user = $users->get($user_id);
+    
+            $occasions = $this->getOccassions();
+    
+            $reservation = $this->Reservations->newEmptyEntity();
+           
+            if (!$this->request->getAttribute('identity')->can('create', $reservation)) {
+                $this->Flash->alert('Sorry you are not allowed to make a reservation.', [
+                    'params' => ['type' => "warning"]
                 ]);
-
-                return $this->redirect(['action' => 'upcoming']);
+    
+                return $this->redirect('/');
             }
-
-            $this->Flash->alert('The reservation could not be saved. Please, try again.', [
-                'params' => ['type' => "danger"]
-            ]);
+            
+            if ($this->request->is('post')) {
+                $reservation = $this->Reservations->patchEntity($reservation, $this->request->getData());
+                $reservation->id = Text::uuid();
+                $reservation->restaurant_id = $restaurant->id;
+                $reservation->total_guests = $guests;
+                $reservation->user_id = $user_id;
+                $reservation->reserved_date = $selectedDate;
+    
+                if ($this->Reservations->save($reservation)) {
+                    $this->Flash->alert(__('The reservation has been saved.'), [
+                        'params' => ['type' => "success"]
+                    ]);
+    
+                    return $this->redirect(['action' => 'upcoming']);
+                }
+    
+                $this->Flash->alert('The reservation could not be saved. Please, try again.', [
+                    'params' => ['type' => "danger"]
+                ]);
+            }
         }
-        
         $this->set(compact('restaurant', 'date', 'time', 'guests', 'occasions', 'reservation', 'user'));
     }
 

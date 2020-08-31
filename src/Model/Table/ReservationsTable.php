@@ -83,9 +83,21 @@ class ReservationsTable extends Table
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
         $rules->add($rules->existsIn(['restaurant_id'], 'Restaurants'), ['errorField' => 'restaurant_id']);
-        $rules->add($rules->isUnique(['reserved_date', 'restaurant_id']));
+        $rules->add($rules->isUnique(['reserved_date', 'restaurant_id', 'status']));
 
         return $rules;
+    }
+
+    public function findAvailable($query, $options) 
+    {   
+        $id = $options['params']['restaurant_id'];
+        $date = $options['params']['reserved_date'];
+        return 
+        $query->where([
+            'restaurant_id' => $id,
+            'reserved_date' => $date,
+            'Reservations.status NOT IN' => ['cancelled', 'declined']
+        ]);
     }
 
     public function findReserved($query, $options) 
@@ -103,7 +115,8 @@ class ReservationsTable extends Table
             $query->where([
                 'restaurant_id' => $id,
                 'reserved_date >=' => $timestart,
-                'reserved_date <=' => $timeEnd
+                'reserved_date <=' => $timeEnd,
+                'Reservations.status NOT IN' => ['cancelled', 'declined']
             ]
         );
     }        
