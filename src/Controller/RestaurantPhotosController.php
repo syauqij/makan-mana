@@ -49,6 +49,7 @@ class RestaurantPhotosController extends AppController
 
             if ($this->RestaurantPhotos->save($gallery)) {
                 $this->Flash->alert('Photo successfully uploded.', [
+                    'clear' => true,
                     'params' => ['type' => "success"]
                 ]);
             } else {
@@ -59,16 +60,16 @@ class RestaurantPhotosController extends AppController
         $this->viewBuilder()->setOption('serialize', ['gallery']);
     }
 
-    public function delete($id = null)
+    public function delete($id = null, $restaurant_id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $restaurantGallery = $this->RestaurantPhotos->get($id);
         if ($this->RestaurantPhotos->delete($restaurantGallery)) {
-            $this->Flash->success(__('The restaurant gallery has been deleted.'));
+            $this->Flash->alert(__('The restaurant photo has been deleted.'));
         } else {
-            $this->Flash->error(__('The restaurant gallery could not be deleted. Please, try again.'));
+            $this->Flash->alert(__('The restaurant photo could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'Restaurants', 'action' => 'gallery', $restaurant_id]);
     }
 }
