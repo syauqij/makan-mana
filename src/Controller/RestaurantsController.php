@@ -48,8 +48,6 @@ class RestaurantsController extends AppController
 
     public function search()
     {   
-        $this->Authorization->skipAuthorization();
-
         $now = FrozenTime::now();
         $date = $today = $now->i18nFormat('yyyy-MM-dd');
         $timeOptions = $this->getTimeSelections();

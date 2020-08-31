@@ -1,11 +1,46 @@
-body {
-  font-size: 48px;
+div {
+  font-family: 'Libre Franklin', sans-serif;
 }
-div:nth-child(2) {
+
+.h2, .h3, .h4, .h6, h2, h3, h4 {
+  font-weight: 400;
   font-family: 'Oswald', sans-serif;
 }
-div:nth-child(1) {
-  font-family: 'Libre Franklin', sans-serif;
+
+.card-title {
+  font-family: 'Oswald', sans-serif;
+}
+
+.cuisines {
+  font-weight: 600;
+}
+
+#reservation-time, .timeslots {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+}
+
+.submit .btn {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+#navbar-restaurant {
+  font-weight: 500;
+}
+
+#about dt, .location {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+}
+
+#about dd {
+  font-weight: lighter;
 }
 
 a {
@@ -41,14 +76,7 @@ body {
 }
 
 .restaurant-photo {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  min-height: 170px;
-  max-height: 200px;
+  height: 200px;
 }
 
 .restaurant-photo-mini{

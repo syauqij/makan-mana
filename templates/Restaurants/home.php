@@ -19,11 +19,11 @@
 
 <section class="bg-light home-content">
 <div class="py-3">
-    <div class="container-fluid px-4">
+    <div class="container-lg px-5">
         <h5 class="pt-3">Our Featured Restaurants</h5><hr/>
-        <div class="my-slider">
+        <div class="my-slider card-group">
         <?php foreach ($featured as $restaurant): ?>
-        <div class="card mb-4 shadow-sm">
+        <div class="card mr-4">
             <?php if ($restaurant->image_file):?>
                 <?= $this->Html->image('restaurant-profile-photos/' . $restaurant->image_file, [
                     'url' => ['action' => 'view', $restaurant->slug],
@@ -33,7 +33,7 @@
             <?php endif; ?>
             <div class="card-body">
                 <h5 class="card-title">
-                    <?= $this->Html->link(Text::truncate($restaurant->name, 25), 
+                    <?= $this->Html->link(Text::truncate($restaurant->name, 30), 
                         ['action' => 'view', $restaurant->slug]
                     );?>
                 </h5>
@@ -44,13 +44,13 @@
                         <?php if($count < 5) : ?>
                         <?= $this->Html->link($cuisine->name, 
                             ['action' => 'search', $cuisine->name],
-                            ['class' => 'badge badge-secondary']
+                            ['class' => 'badge badge-secondary cuisines']
                         );?>
                         <?php $count++; endif; ?>
                     <?php endforeach; ?>
                     <?= $this->cell('Booked', array($restaurant->id)) ?>
                 </div>
-        </div>
+            </div>
         </div>
         <?php endforeach; ?>   
         </div>        
@@ -73,9 +73,27 @@
 <script type="module">
   var slider = tns({
     container: '.my-slider',
-    items: 3,
-    slideBy: 'page',
-    autoplay: true
+    fixedWidth : 320,
+    controls: false,
+    nav: false,
+    items: 4,
+    mouseDrag: true,
+    autoplay: false,
+    rewind: true,
+    responsive: {
+      576: {
+        items: 2
+      },  
+      768: {
+        items: 3
+      },
+      992: {
+        items: 4
+      },
+      1200: {
+        items: 5
+      }
+    }
   });
   </script>
 <?php $this->end(); ?>

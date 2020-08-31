@@ -33,7 +33,34 @@
                             ['controller' => 'Restaurants', 'action' => 'view', $reservation->restaurant->slug]) : '' ?></td>
                     <td><?= h($reservation->reserved_date) ?></td>
                     <td><?= $this->Time->format($reservation->created) ?></td>
-                    <td><?= h($reservation->get('updated_status')) ?></td>
+                    <?php $status = $reservation->get('updated_status'); ?>
+                    <?php 
+                        $type = null;
+                        
+                        switch($status) {
+                            case 'Pending' :
+                                $type = 'primary';
+                                break;
+                            case 'Accepted' :
+                                $type = 'success';
+                                break;
+                            case 'No Show' :
+                                $type = 'danger'; 
+                                break;
+                            case "Declined" :
+                                $type = 'secondary';
+                                break;
+                            case 'Cancelled' :
+                                $type = 'warning';
+                                break;
+                            case 'Completed' :
+                                $type = 'info';
+                                break;
+                            default :
+                                $type = null;
+                        }
+                    ?> 
+                    <td><span class="badge badge-<?=$type?>"><?= $reservation->get('updated_status'); ?></span></td>
                     <?php if($this->Identity->get('role') == "owner") : ?>
                     <td class="actions">
                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">

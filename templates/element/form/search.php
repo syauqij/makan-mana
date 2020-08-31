@@ -15,7 +15,7 @@
     <div class="col-md-2">
         <?= $this->Form->select('time', $timeOptions, [
             'value' => $time,
-            'id' => "time"
+            'id' => "reservation-time"
             ]); ?>
     </div>
     <div class="col-md-2">

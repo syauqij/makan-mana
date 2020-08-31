@@ -63,6 +63,21 @@ class AppController extends Controller
         parent::beforeFilter($event);
     }
 
+    public function getTimeSelections() {
+        $now = FrozenTime::now();
+        $date = $now->i18nFormat('yyyy-MM-dd');
+
+        $startTime = new FrozenTime($date . ' 00:00:00');
+        $endTime = new FrozenTime($date . ' 24:00:00');
+
+        while ($startTime < $endTime) {
+            $times[$startTime->i18nFormat('HH:mm')] = $startTime->i18nFormat('h:mm a');
+            $startTime = $startTime->modify('+30 minutes');
+        }
+
+        return $times;
+    }    
+
     public function getDefaultTime()
     {   
         $now = FrozenTime::now();
@@ -78,21 +93,6 @@ class AppController extends Controller
         }
 
         return $time;
-    }
-
-    public function getTimeSelections() {
-        $now = FrozenTime::now();
-        $date = $now->i18nFormat('yyyy-MM-dd');
-
-        $startTime = new FrozenTime($date . ' 00:00:00');
-        $endTime = new FrozenTime($date . ' 24:00:00');
-
-        while ($startTime < $endTime) {
-            $times[$startTime->i18nFormat('HH:mm')] = $startTime->i18nFormat('h:mm a');
-            $startTime = $startTime->modify('+30 minutes');
-        }
-
-        return $times;
     }
 
     public function getTimeslots($selectedDate, $restaurantId) {
@@ -122,7 +122,6 @@ class AppController extends Controller
                     $key = array_search($reserved, $timeslots);
                     
                     if (false !== $key) {
-                        // /unset($timeslots[$key]);
                         $timeslots[$key] = null;
                     }
                 }     
