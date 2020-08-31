@@ -199,8 +199,14 @@ class RestaurantsController extends AppController
                 $restaurant = $this->Restaurants->patchEntity($restaurant, $data, [
                     'associated' => 'RestaurantCuisines'
                 ]);
-                
-                $dir = new Folder(WWW_ROOT . 'img\restaurant-profile-photos');
+
+                //create folder if not exist
+                $folder = WWW_ROOT . 'img\restaurant-profile-photos';
+                if (!file_exists($folder)) {
+                    mkdir($folder, 0777, true);
+                }
+
+                $dir = new Folder($folder);
                 $attachment = $this->request->getData('photo');
     
                 if($attachment) {

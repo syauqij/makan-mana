@@ -24,12 +24,17 @@ class RestaurantPhotosController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $gallery = $this->RestaurantPhotos->patchEntity($gallery, $this->request->getData());
             //debug($this->request->getData());
-            
-            $dir = new Folder(WWW_ROOT . 'img\restaurant-photos');
+
+            //create folder if not exist
+            $folder = WWW_ROOT . 'img\restaurant-photos';
+            if (!file_exists($folder)) {
+                mkdir($folder, 0777, true);
+            }
+
+            $dir = new Folder($folder);
             $attachment = $this->request->getData('file');
             
             if($attachment) {
-                //debug($attachment);
                 $fileName = $attachment->getClientFilename();
                 $fileName = Text::slug($fileName, ['preserve' => '.']);
                 $targetPath = $dir->path . DS . $fileName ;

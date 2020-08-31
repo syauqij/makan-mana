@@ -164,7 +164,13 @@ class UsersController extends AppController
                     ['associated' => 'UserProfiles'], ['validate' => 'passwords']
                 );
 
-                $dir = new Folder(WWW_ROOT . 'img\user-profile-photos');
+                //create folder if not exist
+                $folder = WWW_ROOT . 'img\user-profile-photos';
+                if (!file_exists($folder)) {
+                    mkdir($folder, 0777, true);
+                }
+
+                $dir = new Folder($folder);
                 $attachment = $this->request->getData('photo');
                 
                 if($attachment) {
