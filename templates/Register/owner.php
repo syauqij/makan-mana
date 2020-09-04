@@ -67,7 +67,7 @@
                 </div>
 
                 <hr class="mb-4">
-                <?= $this->Form->button(__('Register'),[
+                <?= $this->Form->button(__('Next'),[
                     'class' => 'btn btn-primary btn-lg btn-block'
                 ]) ?>
                 <?= $this->Form->end(); ?>

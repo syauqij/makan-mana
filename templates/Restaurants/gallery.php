@@ -16,11 +16,7 @@
                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                     Edit
                 </button>
-                <div class="dropdown-menu">
-                    <?= $this->Html->link('Details', ['controller' => 'Restaurants', 'action' => 'edit', $restaurant->id], ['class' => 'dropdown-item']);?>
-                    <?= $this->Html->link('Gallery', ['controller' => 'Restaurants', 'action' => 'gallery', $restaurant->id], ['class' => 'dropdown-item']);?>
-                    <?= $this->Html->link('Menus', ['controller' => 'Menus', 'action' => 'index', $restaurant->id], ['class' => 'dropdown-item']);?>
-                </div>
+                <?php echo $this->element('button/restaurant_dropdown'); ?>
             <?php endif; ?>
         </div>
     </div><hr/>
