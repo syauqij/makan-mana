@@ -18,7 +18,7 @@
     'controller' => 'users', 'action' => 'edit', $user_id],
     ['class' => 'nav-link', 'id' => 'users']
 ); ?>
-<?php $this->start('script'); ?>
+<?php $this->start('from_sidebar'); ?>
 <script>
     $(document).ready(function() {
         $("#<?=h($active)?>").addClass('active');

@@ -33,7 +33,7 @@ class Menu extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
+        'title' => true,
         'description' => true,
         'restaurant_id' => true,
         'menu_category_id' => true,

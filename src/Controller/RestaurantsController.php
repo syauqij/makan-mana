@@ -143,7 +143,7 @@ class RestaurantsController extends AppController
         
         $restaurant = $this->Restaurants->find()
         ->where(['id' => $restaurantId])
-        ->contain(['Cuisines', 'Menus', 'RestaurantPhotos'])
+        ->contain(['Cuisines', 'RestaurantPhotos'])
         ->first();
         
         $timeslots = $this->getTimeslots($selectedDate, $restaurantId);

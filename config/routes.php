@@ -81,6 +81,13 @@ $routes->scope('/', function (RouteBuilder $builder) {
         $builder->connect('/register/restaurant-step-2/*', ['controller' => 'Register', 'action' => 'restaurant']);
     });
 
+    $builder->scope('/restaurant-menus', function (RouteBuilder $builder) { 
+        $builder->connect('/*', ['controller' => 'Menus', 'action' => 'index']);
+        $builder->connect('/add/*', ['controller' => 'Menus', 'action' => 'add']);
+        $builder->connect('/edit/*', ['controller' => 'Menus', 'action' => 'edit']);
+        $builder->connect('/delete/*', ['controller' => 'Menus', 'action' => 'delete']);
+    });
+
     /*
      * Connect catchall routes for all controllers.
      *

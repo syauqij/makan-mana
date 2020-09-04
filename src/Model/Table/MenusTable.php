@@ -15,7 +15,7 @@ class MenusTable extends Table
         parent::initialize($config);
 
         $this->setTable('menus');
-        $this->setDisplayField('name');
+        $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -30,6 +30,7 @@ class MenusTable extends Table
         ]);
         $this->hasMany('MenuItems', [
             'foreignKey' => 'menu_id',
+            'saveStrategy' => 'replace',
         ]);
     }
 
@@ -40,10 +41,10 @@ class MenusTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('name')
-            ->maxLength('name', 255)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->scalar('title')
+            ->maxLength('title', 255)
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title');
 
         $validator
             ->scalar('description')
@@ -64,5 +65,14 @@ class MenusTable extends Table
         $rules->add($rules->existsIn(['menu_category_id'], 'MenuCategories'));
 
         return $rules;
+    }
+
+    public function findRestaurantMenu($query, $options) 
+    {   
+        $id = $options['params']['restaurant_id'];
+
+        return $query->where([
+            'restaurant_id' => $id,
+        ]);
     }
 }

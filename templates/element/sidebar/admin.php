@@ -29,7 +29,7 @@
         ); ?>
     </div>
   </li>
-<?php $this->start('script'); ?>
+<?php $this->start('from_sidebar'); ?>
 <script>
     $(document).ready(function() {
         $("#<?=h($active)?>").addClass('active');

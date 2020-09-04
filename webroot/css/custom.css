@@ -113,6 +113,35 @@ body {
   line-height: 1.2rem;
 }
 
+div #menu-items {
+  overflow-y: scroll; 
+  height: 260px;
+}
+
+#menu-desc {
+  font-weight: 300;
+  font-size: 14px;
+  color: cadetblue;
+}
+
+#menu-item-name {
+  font-size: 17px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+}
+
+#menu-item-desc {
+  font-size: 14px;
+  color: cadetblue;
+}
+
+#menu-item-price {
+  font-size: 16px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  text-align: right;
+}
+
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;

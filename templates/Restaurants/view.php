@@ -52,7 +52,7 @@
 		<div class="col-sm-7 col-lg-6 offset-lg-1">
 			<ul class="nav nav-pills">
 				<li class="nav-item">
-					<a class="nav-link active" href="#about">About</a>
+					<a class="nav-link" href="#about">About</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#photos">Photos</a>
@@ -133,29 +133,38 @@
 			</div>
 
 			<div id="menu" class="py-4">
-				<h4>Menu</h4><hr/>
+				<h4 class="pb-2">Menu</h4>
 				<nav>
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<?php foreach($menuCategories as $key => $category) : ?>
-							<a class="nav-link id=" nav-<?=h($category->id)?>-tab 
-							data-toggle="tab" href="#nav-<?=h($category->id)?>" role="tab" aria-controls="nav-<?=h($category->id)?>" 
-							aria-selected="<?php echo ($key < 1) ? 'true' : "false"?>">
-							<?= h($category->name)?></a>
+							<?php if($category->menus != null) : ?>
+								<a class="nav-link <?php echo ($key < 1) ? 'active' : ""?>" id="nav-<?=h($category->id)?>-tab" 
+								data-toggle="tab" href="#nav-<?=h($category->id)?>" role="tab" aria-controls="nav-<?=h($category->id)?>" 
+								aria-selected="<?php echo ($key < 1) ? 'true' : "false"?>">
+								<?= h($category->name)?></a>
+							<?php endif; ?>
 						<?php endforeach; ?>
 					</div>
 				</nav>
 
 				<div class="tab-content" id="nav-tabContent">
 					<?php foreach($menuCategories as  $key => $category) : ?>
-						<div class="tab-pane fade <?php echo ($key < 1) ? 'show active' : ""?>" id="nav-<?=h($category->id)?>" role="tabpanel" aria-labelledby="nav-<?=h($category->id)?>-tab">
+						<div class="tab-pane <?php echo ($key == 0) ? 'active' : ""?>" id="nav-<?=h($category->id)?>" role="tabpanel" aria-labelledby="nav-<?=h($category->id)?>-tab">
 						<?php foreach($category->menus as $menu) : ?>
-								<h4 class="py-3"><?= h($menu->name)?></h3>
+								<h4 id="menu-title" class="pt-3"><?= h($menu->title)?></h4>
+								<div id="menu-desc" class="pb-3"><?= h($menu->description)?></div>
 								<div class="row">
 								<?php foreach($menu->menu_items as $item) : ?>
-									<div class="col-6">
-										<h5><?= h($item->name)?> </h5>
-										<p><?= h($item->description)?> </p>
-										<p>RM <?= h($item->price)?> </p>
+									<div class="col-md-6 mb-3">
+										<div class="d-flex bd-highlight">
+											<div class="flex-grow-1 bd-highlight">
+												<h5 id="menu-item-name"><?= h($item->name)?> </h5>
+											</div>
+											<div class="bd-highlight">
+												<div id="menu-item-price">RM <?= h($item->price)?> </div>
+											</div>
+										</div>
+										<div id="menu-item-desc"><?= h($item->description)?> </div>
 									</div> 
 								<?php endforeach; ?>
 								</div>

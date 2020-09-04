@@ -21,6 +21,17 @@ class RestaurantPolicy
         }
     }
 
+    //check if user can create restaurant menu
+    public function canCreateMenu(IdentityInterface $user, Restaurant $restaurant)
+    {
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        } else {
+            return $this->isOwner($user, $restaurant);
+        }
+    }
+
     public function canChangeStatus(IdentityInterface $user, Restaurant $restaurant)
     {
         if ($role == 'admin') {

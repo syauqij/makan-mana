@@ -1,36 +1,40 @@
 <?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Menu $menu
- */
+    $this->extend('/Common/registered');
+
+    $this->start('sidebar');
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'restaurants']);
+    $this->end(); 
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $menu->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $menu->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Menus'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+
+<?php $this->start('page-content'); ?>
+
+<?= $this->Form->create($menu) ?>
+    <div class="d-flex bd-highlight pb-2">
+        <div class="flex-grow-1 bd-highlight">
+            <h3>Edit Menu <?= !empty($restaurant) ? $restaurant->name : '' ?></h3>
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="menus form content">
-            <?= $this->Form->create($menu) ?>
-            <fieldset>
-                <legend><?= __('Edit Menu') ?></legend>
-                <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('restaurant_id', ['options' => $restaurants]);
-                    echo $this->Form->control('menu_category_id', ['options' => $menuCategories]);
-                    echo $this->Form->control('order');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
+        <div class="bd-highlight">
+            <?= $this->Html->link(__('Back'), 
+            ['controller' => 'Menus', 'action' => 'index', $restaurant->id],['class' => 'btn btn-secondary']); ?>
         </div>
     </div>
-</div>
+
+    <?php echo $this->element('form/restaurant_menu'); ?>
+
+    <div class="row" id="menu-items">
+        <?php if($menu->has('menu_items')) : ?>
+            <?php foreach ($menu->menu_items as $key => $item) : ?>
+                <?php echo $this->element('form/menu_items', ['key' => $key]); ?>
+            <?php endforeach; ?>
+        <?php else:?>
+            <?php echo $this->element('form/menu_items', ['key' => '0']); ?>
+        <?php endif; ?>
+    </div>
+
+    <hr/>
+    <button type="type" class="btn btn-primary mb-2">Update</button>
+    <button type="button" class="add-item btn btn-info btn-sm mb-2 float-right"> 
+        <i class="fas fa-plus add-item "></i> Menu Item
+    </button>
+<?php $this->end(); ?>

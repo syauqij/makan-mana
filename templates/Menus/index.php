@@ -1,22 +1,43 @@
 <?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Menu[]|\Cake\Collection\CollectionInterface $menus
- */
+    $this->extend('/Common/registered');
+    
+    $this->start('sidebar');
+        $role = $this->Identity->get('role');
+        echo $this->element('sidebar/'.$role, ['active' => 'restaurants']);
+    $this->end(); 
 ?>
-<div class="menus index content">
-    <?= $this->Html->link(__('New Menu'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Menus') ?></h3>
-    <div class="table-responsive">
-        <table>
+
+<?php $this->start('page-content'); ?>
+    <div class="d-flex bd-highlight pb-2">
+        <div class="flex-grow-1 bd-highlight">
+            <h3>Manage Menu 
+                <?php if($restaurant) : ?>
+                   <?= $this->Html->link(__($restaurant->name), 
+                        ['controller' => 'Restaurants','action' => 'view', $restaurant->slug], 
+                        ['target' => ['_blank']
+                    ]) ?>
+                <?php endif;?>
+            </h3>
+        </div>
+        <div class="bd-highlight">
+            <?php if($restaurant) : ?>
+                <?= $this->Html->link(__('New Menu'), 
+                ['controller' => 'Menus', 'action' => 'add', (!empty($restaurant) ? $restaurant->id : '')],['class' => 'btn btn-secondary']); ?>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php if($menus->isEmpty()) : ?>
+        <p>No records found.</p>
+    <?php else: ?> 
+        <div class="table-responsive">
+        <table class="table">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('name') ?></th>
-                    <th><?= $this->Paginator->sort('description') ?></th>
-                    <th><?= $this->Paginator->sort('restaurant_id') ?></th>
-                    <th><?= $this->Paginator->sort('menu_category_id') ?></th>
-                    <th><?= $this->Paginator->sort('sequence') ?></th>
+                    <?php if (empty($restaurant)) : ?>
+                        <th><?= $this->Paginator->sort('restaurant_id') ?></th>
+                    <?php endif; ?>
+                    <th><?= $this->Paginator->sort('menu_category_id', 'Category') ?></th>
+                    <th><?= $this->Paginator->sort('title', 'Title') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -25,16 +46,14 @@
             <tbody>
                 <?php foreach ($menus as $menu): ?>
                 <tr>
-                    <td><?= $this->Number->format($menu->id) ?></td>
-                    <td><?= h($menu->name) ?></td>
-                    <td><?= h($menu->description) ?></td>
-                    <td><?= $menu->has('restaurant') ? $this->Html->link($menu->restaurant->name, ['controller' => 'Restaurants', 'action' => 'view', $menu->restaurant->id]) : '' ?></td>
-                    <td><?= $menu->has('menu_category') ? $this->Html->link($menu->menu_category->name, ['controller' => 'MenuCategories', 'action' => 'view', $menu->menu_category->id]) : '' ?></td>
-                    <td><?= $this->Number->format($menu->sequence) ?></td>
+                    <?php if(empty($restaurant) ) : ?>
+                    <td><?= $menu->has('restaurant') ? $this->Html->link($menu->restaurant->name, ['controller' => 'Menus', 'action' => 'index', $menu->restaurant->id]) : '' ?></td>
+                    <?php endif; ?>
+                    <td><?= $menu->has('menu_category') ? h($menu->menu_category->name) : '' ?></td>
+                    <td><?= $this->Html->link($menu->title, ['action' => 'view', $menu->id]) ?></td>
                     <td><?= h($menu->created) ?></td>
                     <td><?= h($menu->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $menu->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $menu->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $menu->id], ['confirm' => __('Are you sure you want to delete # {0}?', $menu->id)]) ?>
                     </td>
@@ -53,4 +72,5 @@
         </ul>
         <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
     </div>
-</div>
+    <?php endif; ?>
+<?php $this->end(); ?>

@@ -110,6 +110,7 @@
 
     <!-- fetches custom scripts from the other pages (if any). -->
     <?= $this->fetch('script'); ?>
+    <?= $this->fetch('from_sidebar'); ?>
 
     <script>
         $(document).ready(function(){
