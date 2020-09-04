@@ -10,10 +10,6 @@
     'controller' => 'restaurants', 'action' => 'index'],
     ['class' => 'nav-link', 'id' => 'restaurants']
 ); ?>
-<?= $this->Html->link('Reports', [
-    'controller' => 'reports', 'action' => 'index'],
-    ['class' => 'nav-link', 'id' => 'reports']
-); ?>
 <?= $this->Html->link('Account Details', [
     'controller' => 'users', 'action' => 'edit', $user_id],
     ['class' => 'nav-link', 'id' => 'users']

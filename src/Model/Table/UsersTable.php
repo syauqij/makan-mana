@@ -61,13 +61,14 @@ class UsersTable extends Table
         $validator
             ->scalar('phone_no')
             ->requirePresence('phone_no', 'create')
-            ->minLength('phone_no', 10)
-            ->maxLength('phone_no', 12)
+            ->minLength('phone_no', 10, 'Phone No must be at least 10 digits')
+            ->maxLength('phone_no', 12, 'Phone No must be at maximum 12 characters')
             ->notEmptyString('phone_no');
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
+            ->minLength('password', 6, 'Password must be at least 6 characters')
+            ->maxLength('password', 20, 'Password must be at maximum 20 characters')
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
 
@@ -82,42 +83,12 @@ class UsersTable extends Table
             ->requirePresence('role', 'create')
             ->notEmptyString('role');
 
-            $validator
-            ->notEmptyFile('image_file')
-            ->uploadedFile('image_file', [
-                'types' => ['image/png'], // only PNG image files
-                'minSize' => 1024, // Min 1 KB
-                'maxSize' => 1024 * 1024 // Max 1 MB
-            ])
-        /*     ->add('image_file', 'minImageSize', [
-                'rule' => ['imageSize', [
-                    // Min 10x10 pixel
-                    'width' => [Validation::COMPARE_GREATER_OR_EQUAL, 10],
-                    'height' => [Validation::COMPARE_GREATER_OR_EQUAL, 10],
-                ]]
-            ])
-            ->add('image_file', 'maxImageSize', [
-                'rule' => ['imageSize', [
-                    // Max 100x100 pixel
-                    'width' => [Validation::COMPARE_LESS_OR_EQUAL, 100],
-                    'height' => [Validation::COMPARE_LESS_OR_EQUAL, 100],
-                ]]
-            ]) */
-            ->add('image_file', 'filename', [
-                'rule' => function (UploadedFileInterface $file) {
-                    // filename must not be a path
-                    $filename = $file->getClientFilename();
-                    if (strcmp(basename($filename), $filename) === 0) {
-                        return true;
-                    }
-        
-                    return false;
+            $validator->add('image_file', 'file', [
+                'rule' => ['mimeType', ['image/jpeg', 'image/png']],
+                'on' => function ($context) {
+                    return !empty($context['data']['photo']);
                 }
-            ])
-            ->add('image_file', 'extension', [
-                'rule' => ['extension', ['png', 'jpeg', 'jpg']] // .png file extension only
             ]);
-
 
         $validator
             ->boolean('active')
@@ -138,7 +109,7 @@ class UsersTable extends Table
     {
         $validator->add('confirm_password', 'no-misspelling', [
             'rule' => ['compareWith', 'password'],
-            'message' => 'Passwords are not equal',
+            'message' => 'Passwords does not match',
         ]);
         
         return $validator;

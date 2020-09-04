@@ -160,10 +160,6 @@ class UsersController extends AppController
                     unset($data['password']);
                 }
 
-                $user = $this->Users->patchEntity($user, $data,
-                    ['associated' => 'UserProfiles'], ['validate' => 'passwords']
-                );
-
                 //create folder if not exist
                 $folder = WWW_ROOT . 'img\user-profile-photos';
                 if (!file_exists($folder)) {
@@ -183,6 +179,10 @@ class UsersController extends AppController
                         $user->image_file = $fileName;
                     }
                 }
+
+                $user = $this->Users->patchEntity($user, $data,
+                    ['associated' => 'UserProfiles', 'validate' => 'passwords']
+                );
                 
                 //add new entity user profiles if not exist
                 if($user->user_profile == null) {
