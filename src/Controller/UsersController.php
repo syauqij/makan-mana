@@ -158,6 +158,7 @@ class UsersController extends AppController
 
                 if($data['password'] == "") {
                     unset($data['password']);
+                    unset($data['confirm_password']);
                 }
 
                 //create folder if not exist

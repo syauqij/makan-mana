@@ -83,7 +83,7 @@ class UsersTable extends Table
             ->requirePresence('role', 'create')
             ->notEmptyString('role');
 
-            $validator->add('image_file', 'file', [
+        $validator->add('image_file', 'file', [
                 'rule' => ['mimeType', ['image/jpeg', 'image/png']],
                 'on' => function ($context) {
                     return !empty($context['data']['photo']);

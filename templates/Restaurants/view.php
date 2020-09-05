@@ -132,7 +132,7 @@
 				</div>				
 			</div>
 
-			<div id="menu" class="py-4">
+			<div id="menu" class="py-5">
 				<h4 class="pb-2">Menu</h4>
 				<nav>
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">

@@ -31,12 +31,6 @@ class ReservationsTable extends Table
             'foreignKey' => 'restaurant_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('RestaurantTables', [
-            'foreignKey' => 'restaurant_table_id',
-        ]);
-        $this->hasMany('ReservationLogs', [
-            'foreignKey' => 'reservation_id',
-        ]);
     }
 
     public function validationDefault(Validator $validator): Validator

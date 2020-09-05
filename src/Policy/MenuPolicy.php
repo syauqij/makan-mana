@@ -14,7 +14,12 @@ class MenuPolicy
     //Check if $user can update menu
     public function canUpdate(IdentityInterface $user, menu $menu)
     {
-        return $this->isOwner($user, $menu);
+        $role = $user->getOriginalData()->role;
+        if ($role == 'admin') {
+            return true;
+        } else {
+            return $this->isOwner($user, $menu);
+        }
     }
 
     //Check if $user can delete menu
